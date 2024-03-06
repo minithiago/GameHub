@@ -51,9 +51,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     super.initState();
     _tabController = TabController(vsync: this, length: tabs.length);
     _controller = YoutubePlayerController(
-      initialVideoId: game.videos!.isNotEmpty
-          ? game.videos![0].videoId
-          : '', // Asegúrate de manejar el caso en que no haya videos
+      initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
@@ -109,36 +107,32 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                 child: Container(
                   height: 55,
                   width: 55,
-                  child: SleekCircularSlider(
-                    appearance: CircularSliderAppearance(
-                        angleRange: 360,
-                        customColors: customColors,
-                        customWidths: CustomSliderWidths(
-                            progressBarWidth: 4, trackWidth: 2)),
-                    min: 0,
-                    max: 100,
-                    initialValue: game.rating,
-                    innerWidget: (double value) {
-                      return Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Hero(
-                                tag: game.id,
-                                child: ClipOval(
-                                    child: Image.network(
-                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                  fit: BoxFit.cover,
-                                  width: 50.0,
-                                  height: 50.0,
-                                )),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Style.Colors.mainColor,
+                      width: 2.0,
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Hero(
+                            tag: game.id,
+                            child: ClipOval(
+                              child: Image.network(
+                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                fit: BoxFit.cover,
+                                width: 50.0,
+                                height: 50.0,
                               ),
                             ),
                           ),
-                        ],
-                      );
-                    },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -178,15 +172,64 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                 children: <Widget>[
                   ListView(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          "Summary".toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Container(
+                              height: 100,
+                              width: 100,
+                              alignment: Alignment.centerLeft,
+                              child: SleekCircularSlider(
+                                appearance: CircularSliderAppearance(
+                                  angleRange: 360,
+                                  customColors: customColors,
+                                  customWidths: CustomSliderWidths(
+                                    progressBarWidth: 8,
+                                    trackWidth: 4,
+                                  ),
+                                ),
+                                min: 0,
+                                max: 100,
+                                initialValue: game.rating,
+                                innerWidget: (double value) {
+                                  return Column(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Hero(
+                                            tag: game.id,
+                                            child: Text(
+                                              (game.rating)
+                                                  .toString()
+                                                  .substring(0, 2),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 40,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Add your buy logic here
+                              },
+                              child: Text("Buy Now"),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -198,10 +241,10 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                        padding: const EdgeInsets.only(
+                            left: 10.0, bottom: 10.0, top: 15.0),
                         child: Text(
-                          "perspectives".toUpperCase(),
+                          "Platforms".toUpperCase(),
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -213,7 +256,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         padding: EdgeInsets.only(left: 10.0, top: 5.0),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: game.perspectives!.length,
+                          itemCount: game.platforms!.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: EdgeInsets.only(right: 10.0),
@@ -225,7 +268,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                     border: Border.all(
                                         width: 1.0, color: Colors.white)),
                                 child: Text(
-                                  game.perspectives![index].name,
+                                  game.platforms![index].name,
                                   maxLines: 2,
                                   style: TextStyle(
                                       height: 1.4,
@@ -242,7 +285,48 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         padding: const EdgeInsets.only(
                             left: 10.0, bottom: 10.0, top: 15.0),
                         child: Text(
-                          "Genres".toUpperCase(),
+                          "Release date".toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        height: 30.0,
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0)),
+                                    border: Border.all(
+                                        width: 1.0, color: Colors.white)),
+                                child: Text(
+                                  game.firstRelease.toString(),
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      height: 1.4,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, bottom: 10.0, top: 15.0),
+                        child: Text(
+                          "Genre".toUpperCase(),
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -293,7 +377,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                 crossAxisSpacing: 10.0,
                                 mainAxisSpacing: 10.0,
                                 childAspectRatio: 1.33,
-                                crossAxisCount: 3,
+                                crossAxisCount: 1,
                                 children: List.generate(
                                   game.screenshots!.length,
                                   (int index) {
@@ -353,5 +437,38 @@ class _GameDetailScreenState extends State<GameDetailScreen>
               ),
             ))
         .toList();
+  }
+}
+
+class MillisecondsToDateConverter extends StatelessWidget {
+  final int milliseconds;
+
+  MillisecondsToDateConverter({required this.milliseconds});
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime fecha = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Conversor de Milisegundos a Fecha'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Fecha correspondiente a $milliseconds milisegundos:',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '${fecha.toLocal()}',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

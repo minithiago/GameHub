@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "Popular games right now".toUpperCase(),
+                        "Best Games all time".toUpperCase(),
                         style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.bold,
@@ -192,7 +192,7 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavyBarItem(
               activeColor: Color(0xFF010101),
               title: Text(
-                ' Console',
+                ' Library',
                 style: TextStyle(color: Style.Colors.mainColor, fontSize: 13.0),
               ),
               icon: Padding(
