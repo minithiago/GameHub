@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "718532286870",
+    "project_id": "gamehub-78bfc",
+    "storage_bucket": "gamehub-78bfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718532286870:android:25847ba7c87d87d48065b7",
+        "android_client_info": {
+          "package_name": "com.example.procecto2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2mXnfzPNI04T3F1NEIJ9jMimyNMR3DbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
