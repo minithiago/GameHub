@@ -12,6 +12,16 @@ class GetGamesBloc {
     _subject.sink.add(response);
   }
 
+  getGames2() async {
+    GameResponse response = await _repository.getGames2();
+    _subject.sink.add(response);
+  }
+
+  getBestGames() async {
+    GameResponse response = await _repository.getBestGames();
+    _subject.sink.add(response);
+  }
+
   getSearchedGames(String query) async {
     GameResponse response = await _repository.searchGame(query);
     _subject.sink.add(response);

@@ -10,19 +10,19 @@ import 'package:procecto2/screens/game_detail_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:page_indicator/page_indicator.dart';
 
-class HomeSlider extends StatefulWidget {
+class HomeSlider2 extends StatefulWidget {
   @override
-  _HomeSliderState createState() => _HomeSliderState();
+  _HomeSliderState2 createState() => _HomeSliderState2();
 }
 
-class _HomeSliderState extends State<HomeSlider> {
+class _HomeSliderState2 extends State<HomeSlider2> {
   PageController pageController =
       PageController(viewportFraction: 1, keepPage: true);
   int currentPage = 0;
 
   @override
   void initState() {
-    getSliderBloc.getSlider();
+    getSliderBloc.getSlider2();
     super.initState();
     // Inicia el temporizador para cambiar automáticamente las páginas cada 3 segundos
   }
@@ -72,7 +72,12 @@ class _HomeSliderState extends State<HomeSlider> {
       );
     });
 
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius:
+            BorderRadius.circular(10.0), // Ajusta el radio según sea necesario
+        // Color de fondo del contenedor
+      ),
       height: 220,
       child: PageIndicatorContainer(
         align: IndicatorAlign.bottom,
@@ -109,7 +114,10 @@ class _HomeSliderState extends State<HomeSlider> {
                       width: MediaQuery.of(context).size.width,
                       height: 220.0,
                       decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(
+                            20), // Ajusta el radio según sea necesario
+                        //
+
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
@@ -121,6 +129,7 @@ class _HomeSliderState extends State<HomeSlider> {
                   ),
                   Container(
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,

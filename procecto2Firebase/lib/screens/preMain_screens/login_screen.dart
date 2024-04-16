@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
-import 'package:procecto2/services/auth_service.dart';
 //import 'package:procecto2/services/auth_service.dart';
 
 //import 'package:procecto2/widgets/gameHub_logo.dart';
@@ -28,7 +27,6 @@ class LoginScreen extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LoginFormProvider()),
-          ChangeNotifierProvider(create: (_) => AuthService(), lazy: false),
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,

@@ -9,7 +9,6 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
-import 'package:procecto2/screens/games_screens/library_screen_grid.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 
@@ -79,7 +78,6 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                           HapticFeedback.lightImpact();
                           game.favorite = true;
                           favoriteGamesProvider.addToFavorites(game);
-
                           Navigator.of(context).pop();
                         },
                         child: const Row(
@@ -103,6 +101,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         onPressed: () {
                           Navigator.pop(context);
                           HapticFeedback.lightImpact();
+                          favoriteGamesProvider.addToFavorites(game);
                         },
                         child: const Row(
                           children: [
@@ -165,7 +164,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withOpacity(0.8),
+                              Colors.black.withOpacity(0.7),
                               Colors.black.withOpacity(0.0)
                             ],
                             stops: const [

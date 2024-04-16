@@ -19,7 +19,7 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
   @override
   void initState() {
     super.initState();
-    getGamesBloc.getGames();
+    getGamesBloc.getGames2();
   }
 
   @override

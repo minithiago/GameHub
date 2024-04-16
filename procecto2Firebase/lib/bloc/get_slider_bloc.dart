@@ -12,6 +12,11 @@ class GetSliderBloc {
     _subject.sink.add(response);
   }
 
+  getSlider2() async {
+    GameResponse response = await _repository.getSlider2();
+    _subject.sink.add(response);
+  }
+
   getSliderSearch(String query) async {
     GameResponse response = await _repository.searchGame(query);
     _subject.sink.add(response);

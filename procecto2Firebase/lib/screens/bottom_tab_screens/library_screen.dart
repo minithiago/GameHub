@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-import 'package:procecto2/model/game.dart';
+import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
+import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/librarygames.dart';
 
@@ -35,6 +36,33 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /*
+    if (LoginProvider.currentUser.email == "Guest") {
+      return Scaffold(
+        backgroundColor: Style.Colors.backgroundColor,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Not Available without account',
+                style: TextStyle(fontSize: 20.0, color: Colors.white),
+              ),
+              SizedBox(height: 20), // Espacio entre el texto y el botón
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => IntroScreen()),
+                  );
+                },
+                child: Text('Register'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }*/
     return Scaffold(
       backgroundColor: Style.Colors.backgroundColor,
       body: Column(
@@ -68,28 +96,24 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
               ),
             ]),
           ),
-          Container(
+          Center(
+            child: Container(
               //color: Colors.amber,
               height: 70,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  const OptionCard(title: 'Favorites'),
+                children: const <Widget>[
+                  OptionCard(title: 'Favorites'),
                   OptionCard(title: 'Wishlist'),
                   OptionCard(title: 'Owned'),
-                  IconButton(
-                    onPressed: () => AccountScreen(),
-                    icon: const Icon(
-                      Icons.add,
-                      size: 30, // Tamaño más grande del icono
-                      color: Colors.white, // Color blanco del icono
-                    ),
-                  ),
                 ],
-              )),
+              ),
+            ),
+          ),
+
           SizedBox(
-            height: MediaQuery.of(context).size.height -
-                279, // Altura del contenedor hasta abajo de la pantalla
+            height:
+                600, //MediaQuery.of(context).size.height - 280, // Altura del contenedor hasta abajo de la pantalla
             child: LibraryScreenWidget(
               switchBloc,
             ),
@@ -123,7 +147,7 @@ class _OptionCardState extends State<OptionCard> {
         });
       },
       child: Container(
-        width: 95, // Ancho de cada tarjeta de opción
+        width: 110, // Ancho de cada tarjeta de opción
         margin: const EdgeInsets.all(10.0),
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
@@ -137,7 +161,7 @@ class _OptionCardState extends State<OptionCard> {
           children: [
             Text(
               widget.title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,

@@ -1,9 +1,10 @@
-import 'package:procecto2/model/game_models/companies.dart';
+import 'package:procecto2/model/game_models/company.dart';
+import 'package:procecto2/model/game_models/dlcs.dart';
 import 'package:procecto2/model/game_models/genre.dart';
-import 'package:procecto2/model/game_models/keyword.dart';
+//import 'package:procecto2/model/game_models/keyword.dart';
 import 'package:procecto2/model/game_models/mode.dart';
 import 'package:procecto2/model/game_models/platform.dart';
-import 'package:procecto2/model/game_models/player_perspective.dart';
+//import 'package:procecto2/model/game_models/player_perspective.dart';
 import 'package:procecto2/model/game_models/screenshot.dart';
 import 'package:procecto2/model/game_models/video.dart';
 import 'game_models/cover.dart';
@@ -19,7 +20,8 @@ class GameModel {
   final List<PlatformModel>? platforms;
   //final List<PlayerPerspectiveModel>? perspectives;
   final List<ScreenshotModel>? screenshots;
-  //final List<CompaniesModel>? companies;
+  final List<CompanyModel>? companies;
+  final List<dlcModel>? dlc;
   final String summary;
   final List<VideoModel>? videos;
   final double rating;
@@ -38,13 +40,40 @@ class GameModel {
       this.platforms,
       //this.perspectives,
       this.screenshots,
-      //this.companies,
+      this.companies,
+      this.dlc,
       this.summary,
       this.videos,
       this.rating,
       this.slug,
       this.name,
       this.favorite);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'id': id,
+      'createdAt': createdAt,
+      'firstRelease': firstRelease,
+      'summary': summary,
+      'rating': rating,
+      'name': name,
+      'slug': slug,
+      'favorite': favorite,
+      'cover': cover?.toJson(),
+      'modes': modes?.map((mode) => mode.toJson()).toList(),
+      'genres': genres?.map((genre) => genre.toJson()).toList(),
+      //'keywords': this.keywords?.map((keyword) => keyword.toJson()).toList(),
+      'platforms': platforms?.map((platform) => platform.toJson()).toList(),
+      //'perspectives': this.perspectives?.map((perspective) => perspective.toJson()).toList(),
+      'screenshots':
+          screenshots?.map((screenshot) => screenshot.toJson()).toList(),
+      'involved_companies':
+          companies?.map((company) => company.toJson()).toList(),
+      'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
+      'videos': videos?.map((video) => video.toJson()).toList(),
+    };
+    return data;
+  }
 
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
@@ -83,13 +112,18 @@ class GameModel {
             : (json["screenshots"] as List?)
                 ?.map((i) => ScreenshotModel.fromJson(i))
                 .toList(),
-        //json["involved_companies"] == null
-        //    ? null
-        //    : (json["screenshots"] as List?)
-        //        ?.map((i) => CompaniesModel.fromJson(i))
-        //        .toList(),
+        json["involved_companies"] == null
+            ? null
+            : (json["involved_companies"] as List?)
+                ?.map((i) => CompanyModel.fromJson(i))
+                .toList(),
+        json["dlcs"] == null
+            ? null
+            : (json["dlcs"] as List?)
+                ?.map((i) => dlcModel.fromJson(i))
+                .toList(),
         json["summary"] ??
-            "No hay descripcion", // Cambiar en juegos poco conocidos
+            "No summary available", // Cambiar en juegos poco conocidos
         json["videos"] == null
             ? null
             : (json["videos"] as List?)

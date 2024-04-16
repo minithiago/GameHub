@@ -5,8 +5,16 @@ class VideoModel {
 
   VideoModel(this.id, this.name, this.videoId);
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'video_id': videoId,
+    };
+  }
+
   VideoModel.fromJson(Map<String, dynamic> json)
-   : id = json["id"],
-     name = json["name"],
-     videoId = json["video_id"];
+      : id = json["id"],
+        name = json["name"],
+        videoId = json["video_id"];
 }

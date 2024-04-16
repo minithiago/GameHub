@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/searchPlatform.dart';
+
 import 'package:procecto2/widgets/searchGame.dart';
 
 class SearchSlider3 extends StatefulWidget {
@@ -219,7 +219,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
         child: Stack(
           children: [
             Container(
-              width: 200,
+              width: 170,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(

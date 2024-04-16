@@ -220,7 +220,7 @@ class _SearchSliderState extends State<SearchSlider> {
         child: Stack(
           children: [
             Container(
-              width: 200,
+              width: 170,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:procecto2/bloc/get_games_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
@@ -11,20 +11,20 @@ import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
+
 import '../game_detail_screen.dart';
 
-class LibraryScreenGrid extends StatefulWidget {
-  LibraryScreenGrid();
+class SearchScreenScroll extends StatefulWidget {
+  SearchScreenScroll({super.key});
 
   @override
-  _LibraryScreenGridState createState() => _LibraryScreenGridState();
+  _SearchScreenScroll createState() => _SearchScreenScroll();
 }
 
-class _LibraryScreenGridState extends State<LibraryScreenGrid> {
-  _LibraryScreenGridState();
-
+class _SearchScreenScroll extends State<SearchScreenScroll> {
   @override
   void initState() {
+    getGamesBloc.getBestGames();
     super.initState();
   }
 
@@ -38,7 +38,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
           if (gameResponse.error.isNotEmpty) {
             return buildErrorWidget(gameResponse.error);
           } else {
-            return _buildGameGridWidget();
+            return _buildGameGridWidget(gameResponse);
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
@@ -49,10 +49,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     );
   }
 
-  Widget _buildGameGridWidget() {
+  Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    var favoriteGames = favoriteGamesProvider.favoriteGames;
-
+    List<GameModel> games = data.games;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
@@ -62,9 +61,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
           childAspectRatio: 0.75,
           crossAxisCount: 3,
         ),
-        itemCount: favoriteGames.length,
+        itemCount: games.length,
         itemBuilder: (BuildContext context, int index) {
-          GameModel game = favoriteGames[index];
+          GameModel game = games[index];
           return GestureDetector(
             onLongPress: () {
               HapticFeedback.lightImpact();
@@ -75,30 +74,22 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                     actions: <CupertinoActionSheetAction>[
                       CupertinoActionSheetAction(
                         onPressed: () {
-                          Navigator.pop(context);
+                          //Navigator.pop(context);
                           HapticFeedback.lightImpact();
-                          //favoriteGames.remove(game);
-                          favoriteGamesProvider.removeFavorite(game);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Removed ${game.name} from library"),
-                            action: SnackBarAction(
-                              label: "Undo",
-                              onPressed: () {
-                                favoriteGamesProvider.addToFavorites(game);
-                              },
-                            ),
-                          ));
+                          game.favorite = true;
+                          favoriteGamesProvider.addToFavorites(game);
+                          Navigator.of(context).pop();
                         },
                         child: const Row(
                           children: [
                             Icon(
-                              Icons.remove_circle_outline,
+                              Icons.add,
                               color: Colors.black, // Color del icono
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
-                              "Remove from library",
+                              "Add to library",
                               style: TextStyle(
                                 color: Colors.black, // Color del texto
                               ),
@@ -110,11 +101,12 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                         onPressed: () {
                           Navigator.pop(context);
                           HapticFeedback.lightImpact();
+                          favoriteGamesProvider.addToFavorites(game);
                         },
                         child: const Row(
                           children: [
                             Icon(
-                              Icons.favorite,
+                              Icons.star,
                               color: Colors.black, // Color del icono
                             ),
                             SizedBox(
@@ -147,7 +139,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
             child: Stack(
               children: [
                 Hero(
-                  tag: favoriteGames[index].id,
+                  tag: games[index].id,
                   child: AspectRatio(
                     aspectRatio: 3 / 4,
                     child: Container(
@@ -156,7 +148,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                               const BorderRadius.all(Radius.circular(5.0)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGames[index].cover!.imageId}.jpg",
+                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${games[index].cover!.imageId}.jpg",
                               ),
                               fit: BoxFit.cover)),
                     ),

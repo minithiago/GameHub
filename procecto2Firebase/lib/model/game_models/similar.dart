@@ -1,4 +1,3 @@
-import 'package:procecto2/model/game_models/companies.dart';
 import 'package:procecto2/model/game_models/cover.dart';
 import 'package:procecto2/model/game_models/genre.dart';
 import 'package:procecto2/model/game_models/keyword.dart';

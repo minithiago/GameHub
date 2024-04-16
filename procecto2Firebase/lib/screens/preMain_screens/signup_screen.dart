@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,7 +5,7 @@ import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/utils.dart';
-import 'package:procecto2/widgets/gameHub_logo.dart';
+
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 
@@ -40,13 +39,13 @@ class _SignupScreenState extends State<SignupScreen> {
       appBar: AppBar(
         backgroundColor: Style.Colors.introGrey,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('Register'),
+        title: const Text('Register'),
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -127,8 +126,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Color.fromARGB(128, 255, 255, 255),
-                            prefixIcon: Icon(Icons.person),
+                            fillColor: const Color.fromARGB(128, 255, 255, 255),
+                            prefixIcon: const Icon(Icons.person),
                             prefixIconColor: Colors.white,
                             labelText: "Username",
                             border: OutlineInputBorder(

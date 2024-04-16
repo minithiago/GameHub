@@ -4,16 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-import 'package:procecto2/model/game.dart';
 //import 'package:procecto2/screens/bottom_tab_screens/search_screen_grid.dart';
 //import 'package:procecto2/screens/bottom_tab_screens/search_screen_list.dart';
 import 'package:procecto2/screens/bottom_tab_screens/discover_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/library_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/search_screen.dart';
-import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/searchGame.dart';
+import 'package:provider/provider.dart';
 //import 'package:procecto2/widgets/home_slider.dart';
 //import 'bottom_tab_screens/discover_screen_grid.dart';
 //import 'bottom_tab_screens/discover_screen_list.dart';
@@ -58,8 +56,6 @@ class MainScreenState extends State<MainScreen> {
     _switchBlocSearch.showListSearch();
   }
 
-  List<GameModel> favoriteGames = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,8 +83,7 @@ class MainScreenState extends State<MainScreen> {
             //aqui van las paginas del bottomBar
             DiscoverScreen(SwitchBloc()),
             const SearchScreen(),
-            LibraryScreen(),
-            //DiscoverScreenWidget2(SwitchBlocSearch()),
+            const LibraryScreen(),
             const AccountScreen(),
           ],
         ),

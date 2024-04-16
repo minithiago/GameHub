@@ -4,7 +4,6 @@ import 'package:procecto2/providers/login_form_provider.dart';
 import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
-import 'package:procecto2/services/auth_service.dart';
 import 'package:procecto2/widgets/formatted_message.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginFormProvider = Provider.of<LoginFormProvider>(context);
 
-    final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<LoginProvider>(context);
 
     return Form(
       key: loginFormProvider.formKey,

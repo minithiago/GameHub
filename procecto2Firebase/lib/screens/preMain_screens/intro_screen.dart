@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:procecto2/providers/providers.dart';
 //import 'package:procecto2/model/user_log_data.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
-import 'package:procecto2/services/config.dart';
 import 'package:procecto2/widgets/gameHub_logo.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/widgets.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
@@ -16,6 +17,7 @@ class IntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: Style.Colors.introGrey,
       resizeToAvoidBottomInset: false,
@@ -177,11 +179,8 @@ class IntroScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(builder: (context) => MainScreen()),
                       );
-                      currentAccount.email = "Guest";
-                      currentAccount.nickname = "Guest";
-                      currentAccount.id = 99;
-                      currentAccount.token = "dasd";
-                      currentAccount.type = "as";
+                      loginProvider.signup("nickname", "Guest", "password");
+                      loginProvider.login("Guest", "password");
                     },
                     child: const Text(
                       "Continue without account",

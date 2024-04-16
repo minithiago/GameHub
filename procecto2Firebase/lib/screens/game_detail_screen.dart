@@ -69,7 +69,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
       // Usar una imagen estándar si no hay vídeos disponibles
       _controller = YoutubePlayerController(
         initialVideoId: '', // No hay vídeo
-        flags: YoutubePlayerFlags(
+        flags: const YoutubePlayerFlags(
           autoPlay: false,
           mute: true,
         ),
@@ -121,7 +121,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                   gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      stops: [
+                      stops: const [
                         0.0,
                         0.9
                       ],
@@ -143,9 +143,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
             isScrollable: false,
             tabs: tabs.map((Item genre) {
               return Container(
-                  padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
-                  child: new Text(genre.name,
-                      style: TextStyle(
+                  padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  child: Text(genre.name,
+                      style: const TextStyle(
                           fontSize: 13.0, fontFamily: "SFPro-Medium")));
             }).toList(),
           ),
@@ -169,7 +169,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                 width: 130.0,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                                 width:
                                     16.0), // Espacio entre la imagen y el texto
                             Expanded(
@@ -281,15 +281,19 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                             onPressed: () {
                                               //print(DateTime.now());
                                               //print(now.millisecondsSinceEpoch);
-                                              favoriteGames.add(game);
+                                              favoriteGamesProvider
+                                                  .addToFavorites(game);
+                                              //LoginProvider.setGames(favoriteGames);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
-                                                content:
-                                                    Text("Added to library"),
+                                                content: Text("Added " +
+                                                    game.name +
+                                                    " to library"),
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
-                                                    favoriteGames.remove(game);
+                                                    favoriteGamesProvider
+                                                        .removeFavorite(game);
                                                   },
                                                 ),
                                               ));
@@ -411,6 +415,127 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 9.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, bottom: 10.0, top: 15.0),
+                        child: Text(
+                          "Companies".toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        height: 30.0,
+                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.companies!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0)),
+                                    border: Border.all(
+                                        width: 1.0, color: Colors.white)),
+                                child: Text(
+                                  game.companies![index].company![0].name,
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                      height: 1.4,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, bottom: 10.0, top: 15.0),
+                        child: Text(
+                          "Game modes".toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        height: 30.0,
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.modes!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0)),
+                                    border: Border.all(
+                                        width: 1.0, color: Colors.white)),
+                                child: Text(
+                                  game.modes![index].name,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      height: 1.4,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, bottom: 10.0, top: 15.0),
+                        child: Text(
+                          "DLCs".toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        height: 30.0,
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.dlc!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                  border: Border.all(
+                                      width: 1.0, color: Colors.white),
+                                ),
+                                child: Image.network(
+                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.dlc!.cover!.imageId}.jpg",
+                                  fit: BoxFit.cover,
+                                  height: 400,
+                                  width: 130.0,
                                 ),
                               ),
                             );

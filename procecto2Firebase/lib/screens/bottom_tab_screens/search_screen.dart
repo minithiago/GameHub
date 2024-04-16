@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/searchPlatform.dart';
+import 'package:procecto2/widgets/home_slider.dart';
+import 'package:procecto2/widgets/home_slider2.dart';
+import 'package:procecto2/widgets/searchGamesScroll.dart';
+
 import 'package:procecto2/widgets/searchGame.dart';
 import 'package:procecto2/widgets/search_slider.dart';
 import 'package:procecto2/widgets/search_slider2.dart';
@@ -19,13 +23,16 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextField(
+    return Scaffold(
+      backgroundColor: Style.Colors.backgroundColor,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: false, //que se mantenga fija
+            floating: true,
+            backgroundColor: Style.Colors.backgroundColor,
+            // Color de fondo de la barra de búsqueda
+            title: TextField(
               controller: _searchController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
@@ -53,56 +60,111 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 32),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "Browse by genre",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Browse by genre",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                        SearchSlider(),
+                        const SizedBox(height: 10),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Incoming games",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                        HomeSlider2(),
+                        const SizedBox(height: 10),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Search by platform",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                        SearchSlider2(),
+                        const SizedBox(height: 10),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Popular franchises",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                        SearchSlider3(),
+                        const SizedBox(height: 10),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Top rated games",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 600,
+                          child: DiscoverScreenWidget5(SwitchBlocSearch()),
+                        )
+                        //DiscoverScreenWidget2(SwitchBlocSearch(), "fifa")
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-              ],
+                ],
+              ),
             ),
-            SearchSlider(),
-            const SizedBox(height: 10),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "Exclusives by platform",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-              ],
-            ),
-            SearchSlider2(),
-            const SizedBox(height: 10),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "Popular franchises",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-              ],
-            ),
-            SearchSlider3(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
