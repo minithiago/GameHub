@@ -6,6 +6,7 @@ import 'package:procecto2/model/game_models/mode.dart';
 import 'package:procecto2/model/game_models/platform.dart';
 //import 'package:procecto2/model/game_models/player_perspective.dart';
 import 'package:procecto2/model/game_models/screenshot.dart';
+import 'package:procecto2/model/game_models/similar.dart';
 import 'package:procecto2/model/game_models/video.dart';
 import 'game_models/cover.dart';
 
@@ -21,7 +22,8 @@ class GameModel {
   //final List<PlayerPerspectiveModel>? perspectives;
   final List<ScreenshotModel>? screenshots;
   final List<CompanyModel>? companies;
-  final List<dlcModel>? dlc;
+  final List<SimilarModel>? similar;
+  //final List<dlcModel>? dlc;
   final String summary;
   final List<VideoModel>? videos;
   final double rating;
@@ -41,7 +43,8 @@ class GameModel {
       //this.perspectives,
       this.screenshots,
       this.companies,
-      this.dlc,
+      this.similar,
+      //this.dlc,
       this.summary,
       this.videos,
       this.rating,
@@ -69,7 +72,9 @@ class GameModel {
           screenshots?.map((screenshot) => screenshot.toJson()).toList(),
       'involved_companies':
           companies?.map((company) => company.toJson()).toList(),
-      'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
+      'similar_games':
+          similar?.map((game) => game.toJson()).toList(),
+      //'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
       'videos': videos?.map((video) => video.toJson()).toList(),
     };
     return data;
@@ -117,11 +122,16 @@ class GameModel {
             : (json["involved_companies"] as List?)
                 ?.map((i) => CompanyModel.fromJson(i))
                 .toList(),
-        json["dlcs"] == null
+        json["similar_games"] == null
             ? null
-            : (json["dlcs"] as List?)
-                ?.map((i) => dlcModel.fromJson(i))
-                .toList(),
+            : (json["similar_games"] as List?)
+                ?.map((i) => SimilarModel.fromJson(i))
+                .toList(),        
+        //json["dlcs"] == null
+        //    ? null
+        //    : (json["dlcs"] as List?)
+        //        ?.map((i) => dlcModel.fromJson(i))
+        //        .toList(),
         json["summary"] ??
             "No summary available", // Cambiar en juegos poco conocidos
         json["videos"] == null
@@ -133,5 +143,19 @@ class GameModel {
         json["slug"] ?? "",
         json["name"] ?? "",
         false);
+  }
+}
+class SimilarGamesModel {
+  final String name;
+  final int id;
+
+  SimilarGamesModel(this.id, this.name);
+
+  SimilarGamesModel.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        name = json["name"];
+
+  Map<String, dynamic> toJson() {
+    return {'name': name, 'id': id};
   }
 }

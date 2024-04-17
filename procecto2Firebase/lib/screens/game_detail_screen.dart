@@ -241,7 +241,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                       ),
                                       const SizedBox(
                                           width:
-                                              16.0), // Espacio entre la puntuación y el botón
+                                              5.0), // Espacio entre la puntuación y el botón
                                       Column(
                                         children: [
                                           ElevatedButton(
@@ -507,7 +507,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         padding: const EdgeInsets.only(
                             left: 10.0, bottom: 10.0, top: 15.0),
                         child: Text(
-                          "DLCs".toUpperCase(),
+                          "Similar Games".toUpperCase(),
                           style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -515,11 +515,11 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         ),
                       ),
                       Container(
-                        height: 30.0,
+                        height: 200.0,
                         padding: EdgeInsets.only(left: 10.0, top: 5.0),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: game.dlc!.length,
+                          itemCount: game.similar!.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: EdgeInsets.only(right: 10.0),
@@ -532,9 +532,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                       width: 1.0, color: Colors.white),
                                 ),
                                 child: Image.network(
-                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.dlc!.cover!.imageId}.jpg",
-                                  fit: BoxFit.cover,
-                                  height: 400,
+                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId/*game.dlc!.cover!.imageId*/}.jpg",
+                                  fit: BoxFit.cover,  //game.companies![index].company![0].name,
                                   width: 130.0,
                                 ),
                               ),

@@ -19,10 +19,11 @@ class GameRepository {
             'Client-ID':
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
-          body:
-              "fields *,cover.*,dlcs.*,involved_companies.*,involved_companies.company.*,game_modes.*, genres.*,platforms.*,screenshots.*,videos.*;where cover.image_id != null & dlcsçç != null & total_rating >= 80 ; limit 33; sort first_release_date desc;");
+          body://"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
+              "fields *,cover.*,dlcs.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_modes.*, genres.*,platforms.*,screenshots.*,videos.*;where cover.image_id != null & dlcs != null & similar_games != null & similar_games.cover.image_id != null & total_rating >= 80 ; limit 33; sort first_release_date desc;");
       print("Juegos: ${response.statusCode}");
       print(response.body);
+      
 
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
