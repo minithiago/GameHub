@@ -39,8 +39,6 @@ class SimilarModel {
     
 }
 
-
-
 class CoverModel2 {
   final int id;
   final int height;

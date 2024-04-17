@@ -23,7 +23,7 @@ class GameModel {
   final List<ScreenshotModel>? screenshots;
   final List<CompanyModel>? companies;
   final List<SimilarModel>? similar;
-  //final List<dlcModel>? dlc;
+  final List<dlcModel>? dlc;
   final String summary;
   final List<VideoModel>? videos;
   final double rating;
@@ -44,7 +44,7 @@ class GameModel {
       this.screenshots,
       this.companies,
       this.similar,
-      //this.dlc,
+      this.dlc,
       this.summary,
       this.videos,
       this.rating,
@@ -74,7 +74,7 @@ class GameModel {
           companies?.map((company) => company.toJson()).toList(),
       'similar_games':
           similar?.map((game) => game.toJson()).toList(),
-      //'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
+      'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
       'videos': videos?.map((video) => video.toJson()).toList(),
     };
     return data;
@@ -127,11 +127,11 @@ class GameModel {
             : (json["similar_games"] as List?)
                 ?.map((i) => SimilarModel.fromJson(i))
                 .toList(),        
-        //json["dlcs"] == null
-        //    ? null
-        //    : (json["dlcs"] as List?)
-        //        ?.map((i) => dlcModel.fromJson(i))
-        //        .toList(),
+        json["dlcs"] == null
+            ? null
+            : (json["dlcs"] as List?)
+                ?.map((i) => dlcModel.fromJson(i))
+                .toList(),
         json["summary"] ??
             "No summary available", // Cambiar en juegos poco conocidos
         json["videos"] == null

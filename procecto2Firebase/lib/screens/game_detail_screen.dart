@@ -502,6 +502,43 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             );
                           },
                         ),
+                      ),Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, bottom: 10.0, top: 15.0),
+                        child: Text(
+                          "DLCs".toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        height: 200.0,
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.dlc!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                  border: Border.all(
+                                      width: 1.0, color: Colors.white),
+                                ),
+                                child: Image.network(
+                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.dlc![index].cover![0].imageId/*game.dlc!.cover!.imageId*/}.jpg",
+                                  fit: BoxFit.cover,  //game.companies![index].company![0].name,
+                                  width: 130.0,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
