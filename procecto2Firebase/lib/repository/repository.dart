@@ -20,7 +20,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body://"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_modes.*, genres.*,platforms.*,screenshots.*,videos.*;where cover.image_id != null & dlcs != null & similar_games != null & similar_games.cover.image_id != null & total_rating >= 80 ; limit 33; sort first_release_date desc;");
+              "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_modes.*, genres.*,platforms.*,screenshots.*,videos.*;where cover.image_id != null & similar_games != null & total_rating != null & similar_games.cover.image_id != null & total_rating >= 80 ; limit 33; sort first_release_date desc;");
       print("Juegos: ${response.statusCode}");
       print(response.body);
       
@@ -48,7 +48,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *,cover.*,dlcs.*,game_modes.*, genres.*,platforms.*,screenshots.*,videos.*;where cover.image_id != null & total_rating >= 90 ; limit 33; sort follows desc;");
+              "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_modes.*, genres.*,platforms.*,screenshots.*,videos.*;where cover.image_id != null & total_rating >= 90 ; limit 33; sort follows desc;");
       print("Juegos: ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -74,7 +74,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *,cover.*,game_engines.*,involved_companies.*,involved_companies.company.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & first_release_date <= $nowDate & hypes > 3 & total_rating >= 60 ; limit 10; sort first_release_date desc; ");
+            "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_engines.*,involved_companies.*,involved_companies.company.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & first_release_date <= $nowDate & hypes > 3 & total_rating >= 60 ; limit 10; sort first_release_date desc; ");
     print("Slider: ${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
@@ -82,7 +82,7 @@ class GameRepository {
   Future<GameResponse> getSlider2() async {
     final now = DateTime.parse(DateTime.now().toString());
     var nowDate = now.millisecondsSinceEpoch;
-    //proximos juegos
+    //Incoming Games
     var response = await http.post(Uri.parse(mainUrl),
         headers: {
           'Authorization': 'Bearer $apiKey',
@@ -90,7 +90,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *,cover.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots!= null & first_release_date >= $nowDate & hypes >= 3; limit 10; sort first_release_date desc; ");
+            "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots!= null & first_release_date >= $nowDate & hypes >= 3; limit 10; sort first_release_date desc; ");
     print("Slider: ${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
@@ -105,7 +105,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *,cover.*,game_engines.*,game_modes.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots != null & videos != null & aggregated_rating >= 80 & rating >= 80; limit 33; sort first_release_date desc;");
+              "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_engines.*,game_modes.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots != null & videos != null & aggregated_rating >= 80 & rating >= 80; limit 33; sort first_release_date desc;");
       print("Juegos: ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -128,7 +128,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *,cover.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots != null & videos != null & rating > 20; limit 99; search \"$query\";");
+            "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots != null & videos != null & rating > 20; limit 99; search \"$query\";");
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
@@ -141,7 +141,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *,cover.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots != null & videos != null & rating > 20 & genres = $query ; limit 99;");
+            "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & screenshots != null & videos != null & rating > 20 & genres = $query ; limit 99;");
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
@@ -156,7 +156,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *,cover.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & rating > 20 & platforms = $query ; limit 99;");
+            "fields *,cover.*,dlcs.*,dlcs.cover.*,similar_games.*,similar_games.cover.*,involved_companies.*,involved_companies.company.*,game_engines.*,game_modes.*,release_dates.*, genres.*,keywords.*,platforms.*, platforms.platform_logo.*, player_perspectives.*,screenshots.*,videos.*;where cover.image_id != null & rating > 20 & platforms = $query ; limit 99;");
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }

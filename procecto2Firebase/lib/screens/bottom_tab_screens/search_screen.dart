@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/home_slider.dart';
+//import 'package:procecto2/widgets/home_slider.dart';
 import 'package:procecto2/widgets/home_slider2.dart';
 import 'package:procecto2/widgets/searchGamesScroll.dart';
 
@@ -28,6 +28,8 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            automaticallyImplyLeading: false,
+             
             pinned: false, //que se mantenga fija
             floating: true,
             backgroundColor: Style.Colors.backgroundColor,

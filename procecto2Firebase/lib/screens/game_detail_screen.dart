@@ -502,7 +502,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             );
                           },
                         ),
-                      ),Padding(
+                      ),
+                      Padding(
                         padding: const EdgeInsets.only(
                             left: 10.0, bottom: 10.0, top: 15.0),
                         child: Text(
@@ -513,33 +514,52 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                               color: Colors.white),
                         ),
                       ),
-                      Container(
-                        height: 200.0,
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: game.dlc!.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
-                                  border: Border.all(
-                                      width: 1.0, color: Colors.white),
-                                ),
-                                child: Image.network(
-                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.dlc![index].cover![0].imageId/*game.dlc!.cover!.imageId*/}.jpg",
-                                  fit: BoxFit.cover,  //game.companies![index].company![0].name,
-                                  width: 130.0,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      Visibility(
+  visible: game.dlc != null && game.dlc!.isNotEmpty,
+  child: Container(
+    height: 200.0,
+    padding: EdgeInsets.only(left: 10.0, top: 5.0),
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: game.dlc?.length ?? 0,
+      itemBuilder: (context, index) {
+        final dlc = game.dlc![index];
+        return dlc.cover != null
+            ? Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    border: Border.all(width: 1.0, color: Colors.white),
+                  ),
+                  child: Image.network(
+                    "https://images.igdb.com/igdb/image/upload/t_cover_big/${dlc.cover![0].imageId}.jpg",
+                    fit: BoxFit.cover,
+                    width: 130.0,
+                  ),
+                ),
+              )
+            : Container(); // No muestra el DLC si no tiene portada
+      },
+    ),
+  ),
+),
+Visibility(
+  visible: game.dlc == null || game.dlc!.isEmpty,
+  child: Padding(
+    padding: const EdgeInsets.only(left: 10.0, top: 5.0),
+    child: Text(
+      "No DLCs available",
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  ),
+),
+
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10.0, bottom: 10.0, top: 15.0),
@@ -581,50 +601,62 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                     ],
                   ),
                   Column(
-                    children: [
-                      Expanded(
-                        child: AnimationLimiter(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, left: 10.0, right: 10.0),
-                            child: GridView.count(
-                              crossAxisSpacing: 10.0,
-                              mainAxisSpacing: 10.0,
-                              childAspectRatio: 1.33,
-                              crossAxisCount: 1,
-                              children: List.generate(
-                                game.screenshots!.length,
-                                (int index) {
-                                  return AnimationConfiguration.staggeredGrid(
-                                    position: index,
-                                    duration: const Duration(milliseconds: 375),
-                                    columnCount: 3,
-                                    child: ScaleAnimation(
-                                      child: FadeInAnimation(
-                                        child: AspectRatio(
-                                          aspectRatio: 4 / 3,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5.0)),
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
-                                                    ),
-                                                    fit: BoxFit.cover)),
-                                          ),
+  children: [
+    Expanded(
+      child: AnimationLimiter(
+        child: Padding(
+          padding: const EdgeInsets.only(
+              top: 10.0, left: 10.0, right: 10.0),
+          child: game.screenshots != null && game.screenshots!.isNotEmpty
+              ? GridView.count(
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  childAspectRatio: 1.33,
+                  crossAxisCount: 1,
+                  children: List.generate(
+                    game.screenshots!.length,
+                    (int index) {
+                      return AnimationConfiguration.staggeredGrid(
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        columnCount: 3,
+                        child: ScaleAnimation(
+                          child: FadeInAnimation(
+                            child: AspectRatio(
+                              aspectRatio: 4 / 3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(5.0)),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                },
+                                        fit: BoxFit.cover)),
                               ),
                             ),
                           ),
                         ),
-                      )
-                    ],
-                  )
+                      );
+                    },
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    "Screenshots not available",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+        ),
+      ),
+    )
+  ],
+)
+
                 ]),
           ),
         ],
