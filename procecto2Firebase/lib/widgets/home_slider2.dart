@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:procecto2/bloc/get_slider_bloc.dart';
+import 'package:procecto2/bloc/get_slider2_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
@@ -22,7 +22,7 @@ class _HomeSliderState2 extends State<HomeSlider2> {
 
   @override
   void initState() {
-    getSliderBloc.getSlider2();
+    getSliderBloc2.getSlider2();
     super.initState();
     // Inicia el temporizador para cambiar automáticamente las páginas cada 3 segundos
   }
@@ -30,7 +30,7 @@ class _HomeSliderState2 extends State<HomeSlider2> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getSliderBloc.subject.stream,
+      stream: getSliderBloc2.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           GameResponse gameResponse =
@@ -67,7 +67,7 @@ class _HomeSliderState2 extends State<HomeSlider2> {
       // Cambia automáticamente la página
       pageController.animateToPage(
         currentPage,
-        duration: const Duration(milliseconds: 1000),
+        duration: const Duration(milliseconds: 2000),
         curve: Curves.ease,
       );
     });

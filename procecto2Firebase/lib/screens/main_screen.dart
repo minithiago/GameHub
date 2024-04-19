@@ -11,7 +11,7 @@ import 'package:procecto2/screens/bottom_tab_screens/library_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/search_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 //import 'package:procecto2/widgets/home_slider.dart';
 //import 'bottom_tab_screens/discover_screen_grid.dart';
 //import 'bottom_tab_screens/discover_screen_list.dart';
@@ -27,7 +27,7 @@ class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   late PageController _pageController;
   late SwitchBloc _switchBloc;
-  late SwitchBlocSearch _switchBlocSearch;
+  //late SwitchBlocSearch _switchBlocSearch;
 
   GlobalKey bottomNavigationKey = GlobalKey();
   @override
@@ -35,7 +35,7 @@ class MainScreenState extends State<MainScreen> {
     super.initState();
     _pageController = PageController();
     _switchBloc = SwitchBloc();
-    _switchBlocSearch = SwitchBlocSearch();
+    //_switchBlocSearch = SwitchBlocSearch();
   }
 
   @override
@@ -47,13 +47,13 @@ class MainScreenState extends State<MainScreen> {
   void _showGrid() {
     print("Grid Clicked");
     _switchBloc.showGrid();
-    _switchBlocSearch.showGridSearch();
+    //_switchBlocSearch.showGridSearch();
   }
 
   void _showList() {
     print("List Clicked");
     _switchBloc.showList();
-    _switchBlocSearch.showListSearch();
+    //_switchBlocSearch.showListSearch();
   }
 
   @override
