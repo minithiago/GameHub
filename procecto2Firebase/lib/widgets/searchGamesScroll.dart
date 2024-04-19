@@ -5,13 +5,13 @@ import 'package:procecto2/screens/games_screens/search_screen_grid.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
 class DiscoverScreenWidget5 extends StatelessWidget {
-  final SwitchBlocSearch _switchBlocSearch;
+  final SwitchBloc _switchBloc;
 
-  DiscoverScreenWidget5(this._switchBlocSearch);
+  DiscoverScreenWidget5(this._switchBloc);
 
   void _showGrid() {
     print("Single Clicked");
-    _switchBlocSearch.showGridSearch();
+    _switchBloc.showGrid();
   }
 
   @override
@@ -25,8 +25,8 @@ class DiscoverScreenWidget5 extends StatelessWidget {
         children: [
           Expanded(
             child: StreamBuilder<SwitchItem>(
-              stream: _switchBlocSearch.itemStream,
-              initialData: _switchBlocSearch.defaultItem,
+              stream: _switchBloc.itemStream,
+              initialData: _switchBloc.defaultItem,
               builder:
                   (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
                 switch (snapshot.data) {

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:procecto2/bloc/get_games_bloc.dart';
+import 'package:procecto2/bloc/get_games2_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
@@ -24,14 +24,14 @@ class SearchScreenScroll extends StatefulWidget {
 class _SearchScreenScroll extends State<SearchScreenScroll> {
   @override
   void initState() {
-    getGamesBloc.getBestGames();
+    getGamesBloc2.getBestGames();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc.subject.stream,
+      stream: getGamesBloc2.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data!;

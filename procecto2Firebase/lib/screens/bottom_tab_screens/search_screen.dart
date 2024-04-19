@@ -156,7 +156,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                         const SizedBox(height: 10),
                         SizedBox(
                           height: 600,
-                          child: DiscoverScreenWidget5(SwitchBlocSearch()),
+                          child: DiscoverScreenWidget5(SwitchBloc()),
                         )
                         //DiscoverScreenWidget2(SwitchBlocSearch(), "fifa")
                       ],
