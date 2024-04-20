@@ -18,7 +18,7 @@ class DiscoverScreenWidget4 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Genre',
           style: TextStyle(
             color: Colors.white,
@@ -26,7 +26,7 @@ class DiscoverScreenWidget4 extends StatelessWidget {
         ),
         backgroundColor: Style.Colors.introGrey,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),

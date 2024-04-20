@@ -4,6 +4,7 @@ import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 //import 'package:procecto2/widgets/home_slider.dart';
 import 'package:procecto2/widgets/home_slider2.dart';
+import 'package:procecto2/widgets/home_slider3.dart';
 import 'package:procecto2/widgets/searchGamesScroll.dart';
 
 import 'package:procecto2/widgets/searchGame.dart';
@@ -29,7 +30,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
         slivers: <Widget>[
           SliverAppBar(
             automaticallyImplyLeading: false,
-             
+
             pinned: false, //que se mantenga fija
             floating: true,
             backgroundColor: Style.Colors.backgroundColor,
@@ -61,6 +62,14 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                   color: Colors.white,
                 ),
               ),
+              onSubmitted: (_) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DiscoverScreenWidget2(
+                          SwitchBlocSearch(), _searchController.text)),
+                );
+              },
             ),
           ),
           SliverPadding(
@@ -122,6 +131,21 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           ],
                         ),
                         SearchSlider2(),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Incoming expansions",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                        HomeSlider3(),
                         const SizedBox(height: 10),
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,

@@ -37,8 +37,13 @@ class FavoriteGamesProvider with ChangeNotifier {
       // Convierte el JSON de la lista de juegos a una lista de objetos GameModel
       List<Map<String, dynamic>> gameListJson =
           jsonDecode(favoriteGamesJson).cast<Map<String, dynamic>>();
-      _favoriteGames =
-          gameListJson.map((json) => GameModel.fromJson(json)).toList();
+      _favoriteGames = gameListJson.map((json) {
+        // Convierte el JSON en un objeto GameModel
+        GameModel game = GameModel.fromJson(json);
+        // Establece la propiedad favorite en true para cada juego cargado
+        game.favorite = true;
+        return game;
+      }).toList();
     }
     notifyListeners();
   }

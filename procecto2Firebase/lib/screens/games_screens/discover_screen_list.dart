@@ -145,7 +145,8 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                                   children: [
                                     RatingBar.builder(
                                       itemSize: 8.0,
-                                      initialRating: games[index].rating / 20,
+                                      initialRating:
+                                          games[index].total_rating / 20,
                                       minRating: 1,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
@@ -164,7 +165,7 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                                       width: 3.0,
                                     ),
                                     Text(
-                                      (games[index].rating / 20)
+                                      (games[index].total_rating / 20)
                                           .toString()
                                           .substring(0, 3),
                                       style: TextStyle(

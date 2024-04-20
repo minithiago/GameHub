@@ -19,14 +19,14 @@ class DiscoverScreenWidget2 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Search',
-          style: TextStyle(
+          'Results by $query',
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
         backgroundColor: Style.Colors.introGrey,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),

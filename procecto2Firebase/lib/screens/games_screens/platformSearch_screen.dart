@@ -1,13 +1,17 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:procecto2/bloc/get_games_bloc.dart';
+import 'package:procecto2/bloc/get_gamesPltfrm_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
+import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
+import 'package:provider/provider.dart';
 
 import '../game_detail_screen.dart';
 
@@ -23,14 +27,14 @@ class PlatformSearchScreen extends StatefulWidget {
 class _PlatformSearchScreenState extends State<PlatformSearchScreen> {
   @override
   void initState() {
-    getGamesBloc.getPlatformSearchedGames(widget.query);
+    getGamesBlocPlatform.getPlatformSearchedGames(widget.query);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc.subject.stream,
+      stream: getGamesBlocPlatform.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data;
@@ -49,6 +53,7 @@ class _PlatformSearchScreenState extends State<PlatformSearchScreen> {
   }
 
   Widget _buildGameGridWidget(GameResponse data) {
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     List<GameModel> games = data.games;
 
     return AnimationLimiter(
@@ -63,6 +68,7 @@ class _PlatformSearchScreenState extends State<PlatformSearchScreen> {
             children: List.generate(
               games.length,
               (int index) {
+                GameModel game = games[index];
                 return AnimationConfiguration.staggeredGrid(
                   position: index,
                   duration: const Duration(milliseconds: 375),
@@ -70,6 +76,97 @@ class _PlatformSearchScreenState extends State<PlatformSearchScreen> {
                   child: ScaleAnimation(
                     child: FadeInAnimation(
                       child: GestureDetector(
+                        onLongPress: () {
+                          HapticFeedback.lightImpact();
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoActionSheet(
+                                actions: <CupertinoActionSheetAction>[
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      //Navigator.pop(context);
+                                      HapticFeedback.lightImpact();
+                                      game.favorite = true;
+                                      favoriteGamesProvider
+                                          .addToFavorites(game);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            "${game.name} added to library"),
+                                        action: SnackBarAction(
+                                          label: "Undo",
+                                          onPressed: () {
+                                            favoriteGamesProvider
+                                                .removeFavorite(game);
+                                          },
+                                        ),
+                                      ));
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color:
+                                              Colors.black, // Color del icono
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                8), // Espacio entre el icono y el texto
+                                        Text(
+                                          "Add to library",
+                                          style: TextStyle(
+                                            color:
+                                                Colors.black, // Color del texto
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            "${game.name} added to library"),
+                                        action: SnackBarAction(
+                                          label: "Undo",
+                                          onPressed: () {
+                                            favoriteGamesProvider
+                                                .removeFavorite(game);
+                                          },
+                                        ),
+                                      ));
+                                      Navigator.pop(context);
+                                      HapticFeedback.lightImpact();
+                                      favoriteGamesProvider
+                                          .addToFavorites(game);
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color:
+                                              Colors.black, // Color del icono
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                8), // Espacio entre el icono y el texto
+                                        Text(
+                                          "Add to favorites",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         onTap: () {
                           Navigator.push(
                             context,
@@ -141,7 +238,8 @@ class _PlatformSearchScreenState extends State<PlatformSearchScreen> {
                                 children: [
                                   RatingBar.builder(
                                     itemSize: 8.0,
-                                    initialRating: games[index].rating / 20,
+                                    initialRating:
+                                        games[index].total_rating / 20,
                                     minRating: 0,
                                     direction: Axis.horizontal,
                                     allowHalfRating: true,
@@ -160,7 +258,7 @@ class _PlatformSearchScreenState extends State<PlatformSearchScreen> {
                                     width: 3.0,
                                   ),
                                   Text(
-                                    (games[index].rating / 20)
+                                    (games[index].total_rating / 20)
                                         .toString()
                                         .substring(0, 3),
                                     style: const TextStyle(

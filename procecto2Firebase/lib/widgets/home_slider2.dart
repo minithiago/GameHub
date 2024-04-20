@@ -16,10 +16,6 @@ class HomeSlider2 extends StatefulWidget {
 }
 
 class _HomeSliderState2 extends State<HomeSlider2> {
-  PageController pageController =
-      PageController(viewportFraction: 1, keepPage: true);
-  int currentPage = 0;
-
   @override
   void initState() {
     getSliderBloc2.getSlider2();
@@ -53,24 +49,13 @@ class _HomeSliderState2 extends State<HomeSlider2> {
   }
 
   Widget _buildHomeSliderWidget(GameResponse data) {
-    PageController pageController = PageController(
+    List<GameModel> games = data.games;
+    PageController pageController2 = PageController(
       viewportFraction: 1,
       keepPage: true,
     );
-    List<GameModel> games = data.games;
-    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentPage < games.take(10).length - 1) {
-        currentPage++;
-      } else {
-        currentPage = 0;
-      }
-      // Cambia automáticamente la página
-      pageController.animateToPage(
-        currentPage,
-        duration: const Duration(milliseconds: 2000),
-        curve: Curves.ease,
-      );
-    });
+
+    int currentPage = 0; // Asegúrate de inicializar currentPage fuera del Timer
 
     return Container(
       decoration: BoxDecoration(
@@ -88,7 +73,7 @@ class _HomeSliderState2 extends State<HomeSlider2> {
         indicatorSelectorColor: Colors.orange,
         shape: IndicatorShape.circle(size: 5.0),
         child: PageView.builder(
-          controller: pageController,
+          controller: pageController2,
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           itemCount: games.take(10).length,

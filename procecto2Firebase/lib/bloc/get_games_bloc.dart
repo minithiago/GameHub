@@ -12,6 +12,8 @@ class GetGamesBloc {
     _subject.sink.add(response);
   }
 
+  /*
+
   getGames2() async {
     GameResponse response = await _repository.getGames2();
     _subject.sink.add(response);
@@ -36,6 +38,7 @@ class GetGamesBloc {
     GameResponse response = await _repository.searchGenreGame(query);
     _subject.sink.add(response);
   }
+  */
 
   dispose() {
     _subject.close();

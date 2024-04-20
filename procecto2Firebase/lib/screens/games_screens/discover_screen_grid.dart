@@ -82,10 +82,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         },
                         child: const Row(
                           children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.black, // Color del icono
-                            ),
+                            Icon(Icons.add_circle, color: Colors.black),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
@@ -196,7 +193,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                     children: [
                       RatingBar.builder(
                         itemSize: 8.0,
-                        initialRating: game.rating / 20,
+                        initialRating: game.total_rating / 20,
                         minRating: 0,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -215,7 +212,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         width: 3.0,
                       ),
                       Text(
-                        (game.rating / 20).toStringAsFixed(2),
+                        (game.total_rating / 20).toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,

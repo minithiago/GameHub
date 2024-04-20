@@ -13,7 +13,7 @@ import 'game_models/cover.dart';
 class GameModel {
   final int id;
   final CoverModel? cover;
-  final int createdAt;
+  //final int createdAt;
   final int firstRelease;
   final List<ModeModel>? modes;
   final List<GenreModel>? genres;
@@ -26,7 +26,7 @@ class GameModel {
   final List<dlcModel>? dlc;
   final String summary;
   final List<VideoModel>? videos;
-  final double rating;
+  final double total_rating;
   final String name;
   final String slug;
   bool favorite;
@@ -34,7 +34,7 @@ class GameModel {
   GameModel(
       this.id,
       this.cover,
-      this.createdAt,
+      //this.createdAt,
       this.firstRelease,
       this.modes,
       this.genres,
@@ -47,7 +47,7 @@ class GameModel {
       this.dlc,
       this.summary,
       this.videos,
-      this.rating,
+      this.total_rating,
       this.slug,
       this.name,
       this.favorite);
@@ -55,10 +55,10 @@ class GameModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
       'id': id,
-      'createdAt': createdAt,
-      'firstRelease': firstRelease,
+      //'createdAt': createdAt,
+      'first_release_date': firstRelease,
       'summary': summary,
-      'rating': rating,
+      'total_rating': total_rating,
       'name': name,
       'slug': slug,
       'favorite': favorite,
@@ -72,8 +72,7 @@ class GameModel {
           screenshots?.map((screenshot) => screenshot.toJson()).toList(),
       'involved_companies':
           companies?.map((company) => company.toJson()).toList(),
-      'similar_games':
-          similar?.map((game) => game.toJson()).toList(),
+      'similar_games': similar?.map((game) => game.toJson()).toList(),
       'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
       'videos': videos?.map((video) => video.toJson()).toList(),
     };
@@ -84,8 +83,7 @@ class GameModel {
     return GameModel(
         json["id"],
         json["cover"] == null ? null : CoverModel.fromJson(json["cover"]),
-        json["created_at"] ??
-            0, // Ajusta el valor predeterminado según tus necesidades
+        //json["created_at"] ??    0, // Ajusta el valor predeterminado según tus necesidades
         json["first_release_date"] ?? 0,
         json["game_modes"] == null
             ? null
@@ -126,7 +124,7 @@ class GameModel {
             ? null
             : (json["similar_games"] as List?)
                 ?.map((i) => SimilarModel.fromJson(i))
-                .toList(),        
+                .toList(),
         json["dlcs"] == null
             ? null
             : (json["dlcs"] as List?)
@@ -139,12 +137,13 @@ class GameModel {
             : (json["videos"] as List?)
                 ?.map((i) => VideoModel.fromJson(i))
                 .toList(),
-        json["total_rating"]?.toDouble() ?? 0.0,
+        json["total_rating"] ?? 0.0,
         json["slug"] ?? "",
         json["name"] ?? "",
         false);
   }
 }
+
 class SimilarGamesModel {
   final String name;
   final int id;

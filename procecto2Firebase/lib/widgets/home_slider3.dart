@@ -1,7 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:procecto2/bloc/get_slider_bloc.dart';
+import 'package:procecto2/bloc/get_slider2_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
@@ -10,19 +8,15 @@ import 'package:procecto2/screens/game_detail_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:page_indicator/page_indicator.dart';
 
-class HomeSlider extends StatefulWidget {
+class HomeSlider3 extends StatefulWidget {
   @override
-  _HomeSliderState createState() => _HomeSliderState();
+  _HomeSliderState3 createState() => _HomeSliderState3();
 }
 
-class _HomeSliderState extends State<HomeSlider> {
-  PageController pageController =
-      PageController(viewportFraction: 1, keepPage: true);
-  int currentPage = 0;
-
+class _HomeSliderState3 extends State<HomeSlider3> {
   @override
   void initState() {
-    getSliderBloc.getSlider();
+    getSliderBloc3.getSlider3();
     super.initState();
     // Inicia el temporizador para cambiar automáticamente las páginas cada 3 segundos
   }
@@ -30,7 +24,7 @@ class _HomeSliderState extends State<HomeSlider> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getSliderBloc.subject.stream,
+      stream: getSliderBloc3.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           GameResponse gameResponse =
@@ -54,28 +48,19 @@ class _HomeSliderState extends State<HomeSlider> {
 
   Widget _buildHomeSliderWidget(GameResponse data) {
     List<GameModel> games = data.games;
-    // Crear el PageController fuera del cuerpo de la función
-    PageController pageController = PageController(
+    PageController pageController2 = PageController(
       viewportFraction: 1,
       keepPage: true,
     );
 
-// Iniciar el temporizador dentro de la función initState o dentro de un StatefulWidget
-    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentPage < games.take(10).length - 1) {
-        currentPage++;
-      } else {
-        currentPage = 0;
-      }
-      // Cambia automáticamente la página
-      pageController.animateToPage(
-        currentPage,
-        duration: const Duration(milliseconds: 2000),
-        curve: Curves.ease,
-      );
-    });
+    int currentPage = 0; // Asegúrate de inicializar currentPage fuera del Timer
 
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius:
+            BorderRadius.circular(10.0), // Ajusta el radio según sea necesario
+        // Color de fondo del contenedor
+      ),
       height: 220,
       child: PageIndicatorContainer(
         align: IndicatorAlign.bottom,
@@ -86,7 +71,7 @@ class _HomeSliderState extends State<HomeSlider> {
         indicatorSelectorColor: Colors.orange,
         shape: IndicatorShape.circle(size: 5.0),
         child: PageView.builder(
-          controller: pageController,
+          controller: pageController2,
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           itemCount: games.take(10).length,
@@ -112,7 +97,10 @@ class _HomeSliderState extends State<HomeSlider> {
                       width: MediaQuery.of(context).size.width,
                       height: 220.0,
                       decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(
+                            20), // Ajusta el radio según sea necesario
+                        //
+
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
@@ -124,6 +112,7 @@ class _HomeSliderState extends State<HomeSlider> {
                   ),
                   Container(
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,

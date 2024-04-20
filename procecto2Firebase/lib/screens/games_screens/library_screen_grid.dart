@@ -77,14 +77,15 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                         onPressed: () {
                           Navigator.pop(context);
                           HapticFeedback.lightImpact();
-                          //favoriteGames.remove(game);
+                          game.favorite = false;
                           favoriteGamesProvider.removeFavorite(game);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Removed ${game.name} from library"),
+                            content: Text("${game.name} removed from library"),
                             action: SnackBarAction(
                               label: "Undo",
                               onPressed: () {
                                 favoriteGamesProvider.addToFavorites(game);
+                                game.favorite = true;
                               },
                             ),
                           ));
@@ -204,7 +205,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                     children: [
                       RatingBar.builder(
                         itemSize: 8.0,
-                        initialRating: game.rating / 20,
+                        initialRating: game.total_rating / 20,
                         minRating: 0,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -223,7 +224,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                         width: 3.0,
                       ),
                       Text(
-                        (game.rating / 20).toStringAsFixed(2),
+                        (game.total_rating / 20).toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,

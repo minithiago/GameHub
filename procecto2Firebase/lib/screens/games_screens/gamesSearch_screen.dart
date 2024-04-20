@@ -78,6 +78,15 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                           HapticFeedback.lightImpact();
                           game.favorite = true;
                           favoriteGamesProvider.addToFavorites(game);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("${game.name} added to library"),
+                            action: SnackBarAction(
+                              label: "Undo",
+                              onPressed: () {
+                                favoriteGamesProvider.removeFavorite(game);
+                              },
+                            ),
+                          ));
                           Navigator.of(context).pop();
                         },
                         child: const Row(
@@ -99,9 +108,18 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                       ),
                       CupertinoActionSheetAction(
                         onPressed: () {
-                          Navigator.pop(context);
                           HapticFeedback.lightImpact();
                           favoriteGamesProvider.addToFavorites(game);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("${game.name} added to library"),
+                            action: SnackBarAction(
+                              label: "Undo",
+                              onPressed: () {
+                                favoriteGamesProvider.removeFavorite(game);
+                              },
+                            ),
+                          ));
+                          Navigator.pop(context);
                         },
                         child: const Row(
                           children: [
@@ -196,7 +214,7 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                     children: [
                       RatingBar.builder(
                         itemSize: 8.0,
-                        initialRating: game.rating / 20,
+                        initialRating: game.total_rating / 20,
                         minRating: 0,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -215,7 +233,7 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                         width: 3.0,
                       ),
                       Text(
-                        (game.rating / 20).toStringAsFixed(2),
+                        (game.total_rating / 20).toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,

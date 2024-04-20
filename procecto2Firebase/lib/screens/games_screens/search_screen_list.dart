@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:procecto2/bloc/get_gamesSearch_bloc.dart';
 import 'package:procecto2/bloc/get_games_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
@@ -21,7 +22,7 @@ class SearchScreenListState extends State<SearchScreenList> {
   @override
   void initState() {
     super.initState();
-    getGamesBloc.getSearchedGames(query);
+    getGamesBlocSearch.getSearchedGames(query);
   }
 
   @override
@@ -147,7 +148,8 @@ class SearchScreenListState extends State<SearchScreenList> {
                                   children: [
                                     RatingBar.builder(
                                       itemSize: 8.0,
-                                      initialRating: games[index].rating / 20,
+                                      initialRating:
+                                          games[index].total_rating / 20,
                                       minRating: 1,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
@@ -166,7 +168,7 @@ class SearchScreenListState extends State<SearchScreenList> {
                                       width: 3.0,
                                     ),
                                     Text(
-                                      (games[index].rating / 20)
+                                      (games[index].total_rating / 20)
                                           .toString()
                                           .substring(0, 3),
                                       style: TextStyle(

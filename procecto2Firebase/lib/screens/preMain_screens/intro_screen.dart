@@ -81,7 +81,7 @@ class IntroScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 10, //100
+                height: 50, //100
               ),
               const Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -98,7 +98,7 @@ class IntroScreen extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    "Most popular games, new releases, incoming games \n add games to your library all of this in one app ",
+                    "Popular games, new releases, incoming games \n explore and add games to your library to \n show it to your friends all of this in one app ",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 15,
