@@ -24,8 +24,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
         children: [
           _buildGameContainer(
             gameName: "PS5",
-            imageUrl:
-                "https://images.stockx.com/360/Sony-PS5-Playstation-5-Blu-Ray-Edition-Console-White/Images/Sony-PS5-Playstation-5-Blu-Ray-Edition-Console-White/Lv2/img01.jpg?fm=webp&auto=compress&w=480&dpr=2&updated_at=1635746961&h=320&q=60",
+            imageUrl: "assets/images/platform_images/ps5.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -37,8 +36,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "XBOX",
-            imageUrl:
-                "https://www.esdorado.com/3821-large_default/consolas-xbox-de-la-serie-x-de-microsoft.jpg",
+            imageUrl: "assets/images/platform_images/xbox.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -50,8 +48,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "PC",
-            imageUrl:
-                "https://www.neobyte.es/107280-home_default/pc-neo-powered-by-asus-i5-14600k-rtx-4060ti-ssd-2tb-32gb.jpg",
+            imageUrl: "assets/images/platform_images/pc.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -63,8 +60,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "Nintendo Switch",
-            imageUrl:
-                "https://cdn1.coppel.com/images/catalog/mkp/7532/3000/75321008-1.jpg",
+            imageUrl: "assets/images/platform_images/switch.avif",
             onTap: () {
               Navigator.push(
                 context,
@@ -76,8 +72,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "PS4",
-            imageUrl:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sony-PlayStation-4-PS4-wDualShock-4.jpg/640px-Sony-PlayStation-4-PS4-wDualShock-4.jpg",
+            imageUrl: "assets/images/platform_images/ps4.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -89,7 +84,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "PSP",
-            imageUrl: "https://m.media-amazon.com/images/I/51OozvqUYpS.jpg",
+            imageUrl: "assets/images/platform_images/psp.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -101,8 +96,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "Wii",
-            imageUrl:
-                "https://www.backmarket.es/cdn-cgi/image/format%3Dauto%2Cquality%3D75%2Cwidth%3D260/https://d2e6ccujb3mkqf.cloudfront.net/9d8040aa-3cc5-4d84-8a3f-dac513264d55-1_c429371b-6867-46a0-a2a5-c4cc65465f77.jpg",
+            imageUrl: "assets/images/platform_images/wii.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -114,8 +108,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
           ),
           _buildGameContainer(
             gameName: "PS3",
-            imageUrl:
-                "https://i5.walmartimages.com/asr/7348e500-9536-4ee6-9117-1bc0949fe008.4d224836742f0cc1d9529023d521e2cf.jpeg",
+            imageUrl: "assets/images/platform_images/ps3.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -126,9 +119,80 @@ class _SearchSliderState2 extends State<SearchSlider2> {
             },
           ),
           _buildGameContainer(
+            gameName: "Nintendo 64",
+            imageUrl: "assets/images/platform_images/n64.webp",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget3(
+                        SwitchBlocSearch(), 4.toString())),
+              );
+            },
+          ),
+          _buildGameContainer(
+            gameName: "PS2",
+            imageUrl: "assets/images/platform_images/ps2.png",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget3(
+                        SwitchBlocSearch(), 8.toString())),
+              );
+            },
+          ),
+          _buildGameContainer(
+            gameName: "XBOX 360",
+            imageUrl: "assets/images/platform_images/xbox360.webp",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget3(
+                        SwitchBlocSearch(), 12.toString())),
+              );
+            },
+          ),
+          _buildGameContainer(
+            gameName: "Nintendo DS",
+            imageUrl: "assets/images/platform_images/ds.jpg",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget3(
+                        SwitchBlocSearch(), 20.toString())),
+              );
+            },
+          ),
+          _buildGameContainer(
+            gameName: "PlayStation",
+            imageUrl: "assets/images/platform_images/ps1.webp",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget3(
+                        SwitchBlocSearch(), 7.toString())),
+              );
+            },
+          ),
+          _buildGameContainer(
+            gameName: "Nintendo 3DS",
+            imageUrl: "assets/images/platform_images/3ds.jpg",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget3(
+                        SwitchBlocSearch(), 37.toString())),
+              );
+            },
+          ),
+          _buildGameContainer(
             gameName: "Mobile",
-            imageUrl:
-                "https://cdndailyexcelsior.b-cdn.net/wp-content/uploads/2021/11/Best-Free-Android-Games.jpg",
+            imageUrl: "assets/images/platform_images/mobile.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -161,7 +225,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
+                  image: AssetImage(
                     imageUrl,
                   ),
                 ),

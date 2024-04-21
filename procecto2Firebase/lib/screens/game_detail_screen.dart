@@ -57,7 +57,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
       _controller = YoutubePlayerController(
         initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
         flags: const YoutubePlayerFlags(
-          autoPlay: true,
+          autoPlay: false,
           mute: false,
           hideThumbnail: true,
         ),
@@ -80,15 +80,14 @@ class _GameDetailScreenState extends State<GameDetailScreen>
         new DateTime.fromMillisecondsSinceEpoch(game.firstRelease * 1000);
     var formattedDate = DateFormat('dd/MM/yyyy').format(date);
 
-    final now = DateTime.parse(DateTime.now().toString());
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    var favoriteGames = favoriteGamesProvider.favoriteGames;
 
-    //var nowDate = now.millisecondsSinceEpoch;
+    //favoriteGamesProvider.loadFavoriteGames;
+    List<String> favoriteGameNames =
+        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
-    //print(now.millisecondsSinceEpoch);
     return Scaffold(
-      backgroundColor: Color(0xFF20232a),
+      backgroundColor: const Color(0xFF20232a),
       body: Column(
         children: [
           Stack(
@@ -105,7 +104,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                 top: 20.0,
                 left: 0.0,
                 child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       EvaIcons.arrowBack,
                       color: Colors.white,
                     ),
@@ -330,12 +329,19 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                             ),
                                           ),
                                           Visibility(
-                                            visible: game.favorite == false,
+                                            visible: favoriteGameNames
+                                                    .contains(game.name) !=
+                                                true,
                                             child: ElevatedButton(
                                               onPressed: () {
                                                 favoriteGamesProvider
                                                     .addToFavorites(game);
                                                 game.favorite = true;
+                                                favoriteGameNames
+                                                    .add(game.name);
+                                                print(favoriteGameNames);
+                                                favoriteGamesProvider
+                                                    .refreshFavorites();
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(
                                                   content: Text(
@@ -345,7 +351,12 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                     onPressed: () {
                                                       favoriteGamesProvider
                                                           .removeFavorite(game);
+                                                      favoriteGameNames
+                                                          .remove(game.name);
                                                       game.favorite = false;
+                                                      print(favoriteGameNames);
+                                                      favoriteGamesProvider
+                                                          .refreshFavorites();
                                                     },
                                                   ),
                                                 ));
@@ -380,12 +391,18 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                             ),
                                           ),
                                           Visibility(
-                                            visible: game.favorite,
+                                            visible: favoriteGameNames
+                                                .contains(game.name),
                                             child: ElevatedButton(
                                               onPressed: () {
                                                 favoriteGamesProvider
                                                     .removeFavorite(game);
                                                 game.favorite = false;
+                                                favoriteGamesProvider
+                                                    .removeFavoriteByName(
+                                                        game.name);
+                                                // Remover el juego de la lista
+
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(
                                                   content: Text(
@@ -396,6 +413,10 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                       favoriteGamesProvider
                                                           .addToFavorites(game);
                                                       game.favorite = true;
+                                                      favoriteGameNames
+                                                          .add(game.name);
+
+                                                      // Agregar el juego a la lista
                                                     },
                                                   ),
                                                 ));

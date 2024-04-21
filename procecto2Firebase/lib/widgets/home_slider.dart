@@ -60,7 +60,7 @@ class _HomeSliderState extends State<HomeSlider> {
       keepPage: true,
     );
 
-// Iniciar el temporizador dentro de la función initState o dentro de un StatefulWidget
+/* Iniciar el temporizador dentro de la función initState o dentro de un StatefulWidget
     Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (currentPage < games.take(10).length - 1) {
         currentPage++;
@@ -73,7 +73,7 @@ class _HomeSliderState extends State<HomeSlider> {
         duration: const Duration(milliseconds: 2000),
         curve: Curves.ease,
       );
-    });
+    });*/
 
     return SizedBox(
       height: 220,

@@ -3,11 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:procecto2/bloc/get_games_bloc.dart';
-import 'package:procecto2/elements/error_element.dart';
-import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
-import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
@@ -30,28 +26,13 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<GameResponse>(
-      stream: getGamesBloc.subject.stream,
-      builder: (context, AsyncSnapshot<GameResponse> snapshot) {
-        if (snapshot.hasData) {
-          final gameResponse = snapshot.data!;
-          if (gameResponse.error.isNotEmpty) {
-            return buildErrorWidget(gameResponse.error);
-          } else {
-            return _buildGameGridWidget();
-          }
-        } else if (snapshot.hasError) {
-          return buildErrorWidget(snapshot.error.toString());
-        } else {
-          return buildLoadingWidget();
-        }
-      },
-    );
-  }
-
-  Widget _buildGameGridWidget() {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     var favoriteGames = favoriteGamesProvider.favoriteGames;
+
+    // Ordenar los juegos por rating (en orden descendente)
+    //favoriteGames.sort((a, b) => b.total_rating.compareTo(a.total_rating));
+    //favoriteGames.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
+    //favoriteGames.sort((b, a) => b.name.compareTo(a.name));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),

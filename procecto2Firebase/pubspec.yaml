@@ -102,6 +102,53 @@ flutter:
     - assets/images/default_avatar.jpg
     - assets/images/gamehub.png
     - assets/images/videoError.jpg
+    - assets/images/game_images/rpg.jpg
+    - assets/images/game_images/adventure.jpeg
+    - assets/images/game_images/arcade.avif
+    - assets/images/game_images/fighting.jpg
+    - assets/images/game_images/puzzle.jpg
+    - assets/images/game_images/racing.jpg
+    - assets/images/game_images/shooter.jpg
+    - assets/images/game_images/simulation.png
+    - assets/images/game_images/sports.jpeg
+    - assets/images/game_images/visual.png
+    - assets/images/game_images/indie.webp
+    - assets/images/game_images/music.png
+    - assets/images/game_images/platformer.jpg
+    - assets/images/game_images/strategy.webp
+    - assets/images/platform_images/mobile.jpg
+    - assets/images/platform_images/pc.jpg
+    - assets/images/platform_images/ps2.png
+    - assets/images/platform_images/ps3.jpg
+    - assets/images/platform_images/ps4.webp
+    - assets/images/platform_images/ps5.webp
+    - assets/images/platform_images/xbox.jpg
+    - assets/images/platform_images/psp.jpg
+    - assets/images/platform_images/wii.webp
+    - assets/images/platform_images/switch.avif
+    - assets/images/platform_images/3ds.jpg
+    - assets/images/platform_images/n64.webp
+    - assets/images/platform_images/ds.jpg
+    - assets/images/platform_images/psp.jpg
+    - assets/images/platform_images/xbox360.webp
+    - assets/images/platform_images/ps1.webp
+    - assets/images/franchise_images/res.jpg
+    - assets/images/franchise_images/call.jpg
+    - assets/images/franchise_images/fallout.jpg
+    - assets/images/franchise_images/fifa.jpg
+    - assets/images/franchise_images/gt.jpg
+    - assets/images/franchise_images/gta5.jpg
+    - assets/images/franchise_images/mario.webp
+    - assets/images/franchise_images/final.webp
+    - assets/images/franchise_images/ass.webp
+    - assets/images/franchise_images/sims.jpg
+    - assets/images/franchise_images/star.jpg
+    - assets/images/franchise_images/zelda.jpeg
+    - assets/images/franchise_images/silent.jpg
+    - assets/images/franchise_images/monster.jpg
+    - assets/images/franchise_images/tomb.avif
+    - assets/images/franchise_images/nba.jpg
+
 
 
 

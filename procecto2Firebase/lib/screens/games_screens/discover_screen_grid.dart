@@ -76,9 +76,31 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         onPressed: () {
                           //Navigator.pop(context);
                           HapticFeedback.lightImpact();
-                          game.favorite = true;
-                          favoriteGamesProvider.addToFavorites(game);
-                          Navigator.of(context).pop();
+                          if (favoriteGamesProvider.favoriteGames
+                              .contains(game)) {
+                            // El juego ya está en la lista de favoritos
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Game already in library"),
+                                duration: Duration(
+                                    seconds: 2), // Duración del SnackBar
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text("${game.name} added to the library"),
+                                duration: Duration(
+                                    seconds: 2), // Duración del SnackBar
+                              ),
+                            );
+                            // El juego no está en la lista de favoritos, así que lo añadimos
+                            game.favorite = true;
+                            favoriteGamesProvider.addToFavorites(game);
+                            Navigator.of(context).pop();
+                          }
                         },
                         child: const Row(
                           children: [
@@ -99,6 +121,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                           Navigator.pop(context);
                           HapticFeedback.lightImpact();
                           favoriteGamesProvider.addToFavorites(game);
+                          game.favorite = true;
                         },
                         child: const Row(
                           children: [

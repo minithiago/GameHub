@@ -27,7 +27,21 @@ class FavoriteGamesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeFavoriteByName(String gameName) {
+    // Busca el juego en la lista de favoritos por su nombre
+    GameModel? gameToRemove =
+        _favoriteGames.firstWhere((game) => game.name == gameName);
+
+    // Si se encuentra el juego, se elimina de la lista y se guarda
+    if (gameToRemove != null) {
+      _favoriteGames.remove(gameToRemove);
+      _saveFavoriteGames();
+      notifyListeners();
+    }
+  }
+
   void refreshFavorites() {
+    _saveFavoriteGames();
     notifyListeners();
   }
 

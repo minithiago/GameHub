@@ -24,8 +24,7 @@ class _SearchSliderState extends State<SearchSlider> {
         children: [
           _buildGameContainer(
             gameName: "RPG",
-            imageUrl:
-                "https://m.economictimes.com/thumb/msid-106052010,width-1600,height-900,resizemode-4,imgsize-59110/elden-ring-2-all-you-may-want-to-know-about-the-upcoming-game.jpg",
+            imageUrl: "assets/images/game_images/rpg.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -37,8 +36,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Adventure",
-            imageUrl:
-                "https://www.lavanguardia.com/files/og_thumbnail/uploads/2016/05/05/5fa2d332040f7.jpeg",
+            imageUrl: "assets/images/game_images/adventure.jpeg",
             onTap: () {
               Navigator.push(
                 context,
@@ -50,8 +48,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Fighting",
-            imageUrl:
-                "https://assets-prd.ignimgs.com/2022/08/10/virtua-fighter-5-1622044370501-1660101100598.jpg",
+            imageUrl: "assets/images/game_images/fighting.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -63,8 +60,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Indie",
-            imageUrl:
-                "https://assetsio.gnwcdn.com/ar89t.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
+            imageUrl: "assets/images/game_images/indie.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -76,8 +72,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Racing",
-            imageUrl:
-                "https://cdn.mos.cms.futurecdn.net/XCBwkemeV66dQ49r7CQbJP.jpg",
+            imageUrl: "assets/images/game_images/racing.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -89,8 +84,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Sports",
-            imageUrl:
-                "https://xxboxnews.blob.core.windows.net/prod/sites/2/genres_sports_hero.jpg",
+            imageUrl: "assets/images/game_images/sports.jpeg",
             onTap: () {
               Navigator.push(
                 context,
@@ -102,7 +96,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Shooter",
-            imageUrl: "https://i.ytimg.com/vi/vKlsja5s0rw/maxresdefault.jpg",
+            imageUrl: "assets/images/game_images/shooter.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -114,8 +108,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Arcade",
-            imageUrl:
-                "https://img.redbull.com/images/q_auto,f_auto/redbullcom/2013/09/16/1331611589333_2/las-cosas-que-no-sab%C3%ADas-sobre-el-pac-man.jpg",
+            imageUrl: "assets/images/game_images/arcade.avif",
             onTap: () {
               Navigator.push(
                 context,
@@ -127,8 +120,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Simulation",
-            imageUrl:
-                "https://miro.medium.com/v2/resize:fit:1120/0*znmTHTVBkCHtzulW.png",
+            imageUrl: "assets/images/game_images/simulation.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -140,8 +132,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Music",
-            imageUrl:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Fretsonfire4.png/220px-Fretsonfire4.png",
+            imageUrl: "assets/images/game_images/music.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -153,8 +144,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Puzzle",
-            imageUrl:
-                "https://static.eldiario.es/clip/979dc556-5e26-458e-9ebd-fd2ce0766703_16-9-aspect-ratio_default_0.jpg",
+            imageUrl: "assets/images/game_images/puzzle.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -166,8 +156,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Platformer",
-            imageUrl:
-                "https://cdn.wccftech.com/wp-content/uploads/2017/12/Platform-Games.jpg",
+            imageUrl: "assets/images/game_images/platformer.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -179,8 +168,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Visual Novel",
-            imageUrl:
-                "https://cdn.techinasia.com/wp-content/uploads/2014/04/018.png",
+            imageUrl: "assets/images/game_images/visual.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -192,8 +180,7 @@ class _SearchSliderState extends State<SearchSlider> {
           ),
           _buildGameContainer(
             gameName: "Strategy",
-            imageUrl:
-                "https://play-lh.googleusercontent.com/Ol5li8ELSxLQ2sPlnJd7rJIY1iOYHHUwiop7E5CwctozVQXimF1QwI1zQhdzzyIiYw=w526-h296-rw",
+            imageUrl: "assets/images/game_images/strategy.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -225,7 +212,7 @@ class _SearchSliderState extends State<SearchSlider> {
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
+                  image: AssetImage(
                     imageUrl,
                   ),
                 ),

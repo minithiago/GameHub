@@ -41,7 +41,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
               decoration: InputDecoration(
                 fillColor: Colors.grey,
                 filled: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 26),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none,
@@ -131,6 +131,22 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           ],
                         ),
                         SearchSlider2(),
+                        /*
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "  Developers",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                        SearchSlider3(),*/
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

@@ -24,8 +24,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
         children: [
           _buildGameContainer(
             gameName: "Assassin's Creed",
-            imageUrl:
-                "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2023/10/assassins-creed-3191212.jpg",
+            imageUrl: "assets/images/franchise_images/ass.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -37,8 +36,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Fifa",
-            imageUrl:
-                "https://www.fifa-infinity.com/wp-content/uploads/2022/05/ea-sports-fc-cover.jpg",
+            imageUrl: "assets/images/franchise_images/fifa.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -50,8 +48,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Fallout",
-            imageUrl:
-                "https://static1.thegamerimages.com/wordpress/wp-content/uploads/2023/07/what-year-does-every-fallout-game-take-place.jpg",
+            imageUrl: "assets/images/franchise_images/fallout.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -63,8 +60,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Resident Evil",
-            imageUrl:
-                "https://clan.akamai.steamstatic.com/images/33273264/0b977c32c1266e74151b97e7e5f621c4df2858c5.jpg",
+            imageUrl: "assets/images/franchise_images/res.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -76,8 +72,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Final Fantasy",
-            imageUrl:
-                "https://venturebeat.com/wp-content/uploads/2016/12/ffstorylogo.jpg?fit=1280%2C786&strip=all",
+            imageUrl: "assets/images/franchise_images/final.webp",
             onTap: () {
               Navigator.push(
                 context,
@@ -89,8 +84,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Grand Theft Auto",
-            imageUrl:
-                "https://www.gamespot.com/a/uploads/scale_medium/1552/15524586/3305407-the-evolution-of-grand-theft-auto-promo-1-2.jpg",
+            imageUrl: "assets/images/franchise_images/gta5.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -102,8 +96,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Zelda",
-            imageUrl:
-                "https://static1.cbrimages.com/wordpress/wp-content/uploads/2020/11/Legend-of-Zelda-25th-Anniversary-Image.jpg",
+            imageUrl: "assets/images/franchise_images/zelda.jpeg",
             onTap: () {
               Navigator.push(
                 context,
@@ -115,7 +108,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Call of duty",
-            imageUrl: "https://hd2.tudocdn.net/913234?w=824&h=494",
+            imageUrl: "assets/images/franchise_images/call.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -127,8 +120,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Silent Hill",
-            imageUrl:
-                "https://deadtalknews.com/wp-content/uploads/Town-of-Silent-Hill-930x620.jpg",
+            imageUrl: "assets/images/franchise_images/silent.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -139,9 +131,20 @@ class _SearchSliderState3 extends State<SearchSlider3> {
             },
           ),
           _buildGameContainer(
+            gameName: "Mario Bros",
+            imageUrl: "assets/images/franchise_images/mario.webp",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        DiscoverScreenWidget2(SwitchBlocSearch(), "mario")),
+              );
+            },
+          ),
+          _buildGameContainer(
             gameName: "The Sims",
-            imageUrl:
-                "https://media.vandal.net/i/640x360/10-2023/18/2023101822291723_1.jpg",
+            imageUrl: "assets/images/franchise_images/sims.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -152,9 +155,20 @@ class _SearchSliderState3 extends State<SearchSlider3> {
             },
           ),
           _buildGameContainer(
+            gameName: "Tomb raider",
+            imageUrl: "assets/images/franchise_images/tomb.avif",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DiscoverScreenWidget2(
+                        SwitchBlocSearch(), "tomb raider")),
+              );
+            },
+          ),
+          _buildGameContainer(
             gameName: "NBA 2k",
-            imageUrl:
-                "https://esportsbureau.com/wp-content/uploads/2017/03/NB2keLeague.jpg",
+            imageUrl: "assets/images/franchise_images/nba.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -166,8 +180,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Star Wars",
-            imageUrl:
-                "https://qph.cf2.quoracdn.net/main-qimg-f32362ea23333c00d1c01224e15273a1-lq",
+            imageUrl: "assets/images/franchise_images/star.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -179,8 +192,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Gran Turismo",
-            imageUrl:
-                "https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/3GEdKTGktTBsZ8Sj9yIWnr2f.jpg",
+            imageUrl: "assets/images/franchise_images/gt.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -192,7 +204,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
           ),
           _buildGameContainer(
             gameName: "Monster Hunter",
-            imageUrl: "https://i.redd.it/xw204obxwxb91.jpg",
+            imageUrl: "assets/images/franchise_images/monster.jpg",
             onTap: () {
               Navigator.push(
                 context,
@@ -224,7 +236,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
+                  image: AssetImage(
                     imageUrl,
                   ),
                 ),

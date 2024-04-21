@@ -33,7 +33,7 @@ class LibraryScreenWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Text(
-                "Fecha lanzamiento".toUpperCase(),
+                "Sort by : Rating".toUpperCase(),
                 style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,

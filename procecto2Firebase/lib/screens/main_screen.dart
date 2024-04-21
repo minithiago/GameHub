@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+import 'package:procecto2/providers/favorite_provider.dart';
 //import 'package:procecto2/screens/bottom_tab_screens/search_screen_grid.dart';
 //import 'package:procecto2/screens/bottom_tab_screens/search_screen_list.dart';
 import 'package:procecto2/screens/bottom_tab_screens/discover_screen.dart';
@@ -11,6 +12,7 @@ import 'package:procecto2/screens/bottom_tab_screens/library_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/search_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
+import 'package:provider/provider.dart';
 //import 'package:provider/provider.dart';
 //import 'package:procecto2/widgets/home_slider.dart';
 //import 'bottom_tab_screens/discover_screen_grid.dart';
@@ -58,6 +60,7 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     return Scaffold(
       backgroundColor:
           Style.Colors.backgroundColor, //color del fondo de los juegos
@@ -78,6 +81,7 @@ class MainScreenState extends State<MainScreen> {
           controller: _pageController,
           onPageChanged: (index) {
             setState(() => _currentIndex = index);
+            //favoriteGamesProvider.loadFavoriteGames();
           },
           children: <Widget>[
             //aqui van las paginas del bottomBar
@@ -96,6 +100,7 @@ class MainScreenState extends State<MainScreen> {
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
           _pageController.jumpToPage(index);
+          //favoriteGamesProvider.loadFavoriteGames();
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(

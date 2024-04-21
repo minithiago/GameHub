@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-import 'package:procecto2/providers/login_provider.dart';
-import 'package:procecto2/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
-import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/librarygames.dart';
+import 'package:procecto2/widgets/searchGame.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -64,65 +62,107 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
       );
     }*/
     return Scaffold(
-      backgroundColor: Style.Colors.backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            color: Style.Colors.backgroundColor,
-            padding: EdgeInsets.all(20.0),
-            child: Row(children: [
-              const CircleAvatar(
-                radius: 30.0,
-                backgroundImage: AssetImage('assets/images/default_avatar.jpg'),
+        backgroundColor: Style.Colors.backgroundColor,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                color: Style.Colors.backgroundColor,
+                padding: const EdgeInsets.all(20.0),
+                child: Row(children: [
+                  const CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage:
+                        AssetImage('assets/images/default_avatar.jpg'),
+                  ),
+                  const SizedBox(width: 20.0),
+                  const Text(
+                    'Your Library',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 90.0),
+                  IconButton(
+                    onPressed: () => const MainScreen(),
+                    icon: const Icon(
+                      Icons.people,
+                      size: 28, // Tamaño más grande del icono
+                      color: Colors.white, // Color blanco del icono
+                    ),
+                  ),
+                ]),
               ),
-              SizedBox(width: 20.0),
-              const Text(
-                'Your Library',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  controller: _searchController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey,
+                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Search your library",
+                    hintStyle: const TextStyle(color: Colors.white),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        print(_searchController.text);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DiscoverScreenWidget2(
+                                  SwitchBlocSearch(), _searchController.text)),
+                        );
+                      },
+                      color: Colors.white,
+                    ),
+                  ),
+                  onSubmitted: (_) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DiscoverScreenWidget2(
+                              SwitchBlocSearch(), _searchController.text)),
+                    );
+                  },
                 ),
               ),
-              SizedBox(width: 60.0),
-              IconButton(
-                onPressed: () => const MainScreen(),
-                icon: const Icon(
-                  Icons.search,
-                  size: 28, // Tamaño más grande del icono
-                  color: Colors.white, // Color blanco del icono
+
+              Center(
+                child: Container(
+                  //color: Colors.amber,
+                  height: 70,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: const <Widget>[
+                      OptionCard(title: 'Owned'),
+                      OptionCard(title: 'Wishlist'),
+                      OptionCard(title: 'Favorites'),
+                    ],
+                  ),
                 ),
               ),
-            ]),
-          ),
-          Center(
-            child: Container(
-              //color: Colors.amber,
-              height: 70,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const <Widget>[
-                  OptionCard(title: 'Favorites'),
-                  OptionCard(title: 'Wishlist'),
-                  OptionCard(title: 'Owned'),
-                ],
+
+              SizedBox(
+                height:
+                    563, //MediaQuery.of(context).size.height - 280, // Altura del contenedor hasta abajo de la pantalla
+                child: LibraryScreenWidget(
+                  switchBloc,
+                ),
               ),
-            ),
-          ),
 
-          SizedBox(
-            height:
-                600, //MediaQuery.of(context).size.height - 280, // Altura del contenedor hasta abajo de la pantalla
-            child: LibraryScreenWidget(
-              switchBloc,
-            ),
+              // Add more widgets for the rest of your content here
+            ],
           ),
-
-          // Add more widgets for the rest of your content here
-        ],
-      ),
-    );
+        ));
   }
 }
 
@@ -146,7 +186,8 @@ class _OptionCardState extends State<OptionCard> {
           isSelected = !isSelected;
         });
       },
-      child: Container(
+      child: Center(
+          child: Container(
         width: 110, // Ancho de cada tarjeta de opción
         margin: const EdgeInsets.all(10.0),
         padding: const EdgeInsets.all(10.0),
@@ -169,7 +210,7 @@ class _OptionCardState extends State<OptionCard> {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 }

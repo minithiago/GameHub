@@ -156,6 +156,19 @@ class GameRepository {
     return GameResponse.fromJson(jsonDecode(response.body));
   }
 
+  Future<GameResponse> searchCompany(String query) async {
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & involved_companies.company.name = $query & rating > 20; limit 99;");
+    print("${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
+  }
+
   Future<GameResponse> searchGenreGame(String query) async {
     var response = await http.post(Uri.parse(mainUrl),
         headers: {
