@@ -10,7 +10,7 @@ class GameRepository {
   final String apiKey = "vdpz4bxk5i2n66evywgfgpn9xzi5rc";
 
   Future<GameResponse> getGames() async {
-    //Discover games
+    //new releases
     //juegos con rating > 80 ;sort date desc;
 
     try {
@@ -21,7 +21,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & total_rating >= 80 ; limit 99; sort first_release_date desc;");
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & total_rating >= 60 ; limit 99; sort first_release_date desc;");
       print("Juegos: ${response.statusCode}");
       //print(response.body);
 
@@ -66,8 +66,7 @@ class GameRepository {
   Future<GameResponse> getSlider() async {
     final now = DateTime.parse(DateTime.now().toString());
     var nowDate = now.millisecondsSinceEpoch;
-    //Discover slider
-    //ultimos releases con nota mayor que 70
+    //Discover slider games
     //hypes > 3
     var response = await http.post(Uri.parse(mainUrl),
         headers: {
@@ -76,7 +75,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & first_release_date <= $nowDate & total_rating >= 60 ; limit 10; sort first_release_date desc; ");
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & first_release_date <= $nowDate & total_rating >= 50 & dlcs >= 2; limit 10; sort rating_count desc; ");
     print("Slider: ${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }

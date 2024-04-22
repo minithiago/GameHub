@@ -34,7 +34,7 @@ class DiscoverScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                "New releases".toUpperCase(),
+                "Discover Games".toUpperCase(),
                 style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class DiscoverScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Text(
-                "Discover Games".toUpperCase(),
+                "New releases".toUpperCase(),
                 style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
