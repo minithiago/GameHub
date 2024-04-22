@@ -6,22 +6,37 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
+import 'package:procecto2/widgets/librarygames.dart';
 import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
 class LibraryScreenGrid extends StatefulWidget {
-  LibraryScreenGrid();
+  final String filtro;
+
+  const LibraryScreenGrid({Key? key, required this.filtro}) : super(key: key);
 
   @override
   _LibraryScreenGridState createState() => _LibraryScreenGridState();
 }
 
 class _LibraryScreenGridState extends State<LibraryScreenGrid> {
-  _LibraryScreenGridState();
+  String _currentFilter = '';
 
   @override
   void initState() {
     super.initState();
+    _currentFilter = widget.filtro;
+  }
+
+  @override
+  void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.filtro != widget.filtro) {
+      setState(() {
+        _currentFilter = widget.filtro;
+        print(widget.filtro);
+      });
+    }
   }
 
   @override
@@ -29,10 +44,21 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     var favoriteGames = favoriteGamesProvider.favoriteGames;
 
+    switch (_currentFilter) {
+      case "Name":
+        favoriteGames.sort((b, a) => b.name.compareTo(a.name));
+        break;
+      case "Rating":
+        favoriteGames.sort((a, b) => b.total_rating.compareTo(a.total_rating));
+        break;
+      case "Release date":
+        favoriteGames.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
+        break;
+      default:
+        favoriteGames = favoriteGamesProvider.favoriteGames;
+    }
+
     // Ordenar los juegos por rating (en orden descendente)
-    //favoriteGames.sort((a, b) => b.total_rating.compareTo(a.total_rating));
-    //favoriteGames.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
-    //favoriteGames.sort((b, a) => b.name.compareTo(a.name));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
