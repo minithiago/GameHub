@@ -4,7 +4,7 @@ import 'package:procecto2/bloc/switch_bloc.dart';
 //import 'package:procecto2/model/game.dart';
 import 'package:procecto2/screens/games_screens/discover_screen_grid.dart';
 import 'package:procecto2/screens/games_screens/discover_screen_list.dart';
-import 'package:procecto2/widgets/home_slider.dart';
+import 'package:procecto2/widgets/DiscoverScreen/home_slider.dart';
 
 class DiscoverScreen extends StatelessWidget {
   final SwitchBloc _switchBloc;

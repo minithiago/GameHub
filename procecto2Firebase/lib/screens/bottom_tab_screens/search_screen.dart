@@ -3,14 +3,13 @@ import 'package:procecto2/bloc/switch_bloc.dart';
 
 import 'package:procecto2/style/theme.dart' as Style;
 //import 'package:procecto2/widgets/home_slider.dart';
-import 'package:procecto2/widgets/home_slider2.dart';
-import 'package:procecto2/widgets/home_slider3.dart';
-import 'package:procecto2/widgets/searchGamesScroll.dart';
-
-import 'package:procecto2/widgets/searchGame.dart';
-import 'package:procecto2/widgets/search_slider.dart';
-import 'package:procecto2/widgets/search_slider2.dart';
-import 'package:procecto2/widgets/search_slider3.dart';
+import 'package:procecto2/widgets/DiscoverScreen/home_slider2.dart';
+import 'package:procecto2/widgets/DiscoverScreen/home_slider3.dart';
+import 'package:procecto2/widgets/SearchScreen/searchGame.dart';
+import 'package:procecto2/widgets/SearchScreen/searchGamesScroll.dart';
+import 'package:procecto2/widgets/SearchScreen/search_slider.dart';
+import 'package:procecto2/widgets/SearchScreen/search_slider2.dart';
+import 'package:procecto2/widgets/SearchScreen/search_slider3.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);

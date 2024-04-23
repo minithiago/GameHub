@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/style/theme.dart' as Style;
+import 'package:procecto2/widgets/SearchScreen/searchGenre.dart';
 
-import 'package:procecto2/widgets/searchGame.dart';
-
-class SearchSlider3 extends StatefulWidget {
+class SearchSlider extends StatefulWidget {
   @override
-  _SearchSliderState3 createState() => _SearchSliderState3();
+  _SearchSliderState createState() => _SearchSliderState();
 }
 
-class _SearchSliderState3 extends State<SearchSlider3> {
+class _SearchSliderState extends State<SearchSlider> {
   @override
   void initState() {
     super.initState();
@@ -23,194 +22,170 @@ class _SearchSliderState3 extends State<SearchSlider3> {
         scrollDirection: Axis.horizontal,
         children: [
           _buildGameContainer(
-            gameName: "Assassin's Creed",
-            imageUrl: "assets/images/franchise_images/ass.webp",
+            gameName: "RPG",
+            imageUrl: "assets/images/game_images/rpg.jpg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "assassins creed")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 12.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Fifa",
-            imageUrl: "assets/images/franchise_images/fifa.jpg",
+            gameName: "Adventure",
+            imageUrl: "assets/images/game_images/adventure.jpeg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DiscoverScreenWidget2(SwitchBlocSearch(), "fifa")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 31.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Fallout",
-            imageUrl: "assets/images/franchise_images/fallout.jpg",
+            gameName: "Fighting",
+            imageUrl: "assets/images/game_images/fighting.jpg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DiscoverScreenWidget2(SwitchBlocSearch(), "fallout")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 4.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Resident Evil",
-            imageUrl: "assets/images/franchise_images/res.jpg",
+            gameName: "Indie",
+            imageUrl: "assets/images/game_images/indie.webp",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "resident evil")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 32.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Final Fantasy",
-            imageUrl: "assets/images/franchise_images/final.webp",
+            gameName: "Racing",
+            imageUrl: "assets/images/game_images/racing.jpg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "final fantasy")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 10.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Grand Theft Auto",
-            imageUrl: "assets/images/franchise_images/gta5.jpg",
+            gameName: "Sports",
+            imageUrl: "assets/images/game_images/sports.jpeg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "grand theft auto")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 14.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Zelda",
-            imageUrl: "assets/images/franchise_images/zelda.jpeg",
+            gameName: "Shooter",
+            imageUrl: "assets/images/game_images/shooter.jpg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DiscoverScreenWidget2(SwitchBlocSearch(), "zelda")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 5.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Call of duty",
-            imageUrl: "assets/images/franchise_images/call.jpg",
+            gameName: "Arcade",
+            imageUrl: "assets/images/game_images/arcade.avif",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "call of duty")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 33.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Silent Hill",
-            imageUrl: "assets/images/franchise_images/silent.jpg",
+            gameName: "Simulation",
+            imageUrl: "assets/images/game_images/simulation.png",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "silent hill")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 13.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Mario Bros",
-            imageUrl: "assets/images/franchise_images/mario.webp",
+            gameName: "Music",
+            imageUrl: "assets/images/game_images/music.png",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DiscoverScreenWidget2(SwitchBlocSearch(), "mario")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 7.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "The Sims",
-            imageUrl: "assets/images/franchise_images/sims.jpg",
+            gameName: "Puzzle",
+            imageUrl: "assets/images/game_images/puzzle.jpg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DiscoverScreenWidget2(SwitchBlocSearch(), "sims")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 9.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Tomb raider",
-            imageUrl: "assets/images/franchise_images/tomb.avif",
+            gameName: "Platformer",
+            imageUrl: "assets/images/game_images/platformer.jpg",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "tomb raider")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 8.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "NBA 2k",
-            imageUrl: "assets/images/franchise_images/nba.jpg",
+            gameName: "Visual Novel",
+            imageUrl: "assets/images/game_images/visual.png",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DiscoverScreenWidget2(SwitchBlocSearch(), "nba")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 34.toString())),
               );
             },
           ),
           _buildGameContainer(
-            gameName: "Star Wars",
-            imageUrl: "assets/images/franchise_images/star.jpg",
+            gameName: "Strategy",
+            imageUrl: "assets/images/game_images/strategy.webp",
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "star wars jedi")),
-              );
-            },
-          ),
-          _buildGameContainer(
-            gameName: "Gran Turismo",
-            imageUrl: "assets/images/franchise_images/gt.jpg",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "gran turismo")),
-              );
-            },
-          ),
-          _buildGameContainer(
-            gameName: "Monster Hunter",
-            imageUrl: "assets/images/franchise_images/monster.jpg",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DiscoverScreenWidget2(
-                        SwitchBlocSearch(), "monster hunter")),
+                    builder: (context) => DiscoverScreenWidget4(
+                        SwitchBlocSearch(), 15.toString())),
               );
             },
           ),

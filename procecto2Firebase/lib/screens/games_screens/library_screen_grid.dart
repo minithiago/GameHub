@@ -6,14 +6,17 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/librarygames.dart';
+import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
 class LibraryScreenGrid extends StatefulWidget {
   final String filtro;
+  final String busqueda;
 
-  const LibraryScreenGrid({Key? key, required this.filtro}) : super(key: key);
+  const LibraryScreenGrid(
+      {Key? key, required this.filtro, required this.busqueda})
+      : super(key: key);
 
   @override
   _LibraryScreenGridState createState() => _LibraryScreenGridState();
@@ -21,11 +24,13 @@ class LibraryScreenGrid extends StatefulWidget {
 
 class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
+  String _nameFilter = '';
 
   @override
   void initState() {
     super.initState();
     _currentFilter = widget.filtro;
+    _nameFilter = widget.busqueda;
   }
 
   @override
@@ -56,6 +61,17 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         break;
       default:
         favoriteGames = favoriteGamesProvider.favoriteGames;
+    }
+
+    List<GameModel> _filterGamesByName(List<GameModel> games) {
+      if (_nameFilter.isEmpty) {
+        return games;
+      } else {
+        return games
+            .where((game) =>
+                game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
+            .toList();
+      }
     }
 
     // Ordenar los juegos por rating (en orden descendente)

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/searchPlatform.dart';
-import 'package:procecto2/widgets/searchGame.dart';
+import 'package:procecto2/widgets/SearchScreen/searchPlatform.dart';
 
 class SearchSlider2 extends StatefulWidget {
   @override

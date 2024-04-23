@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/librarygames.dart';
-import 'package:procecto2/widgets/searchGame.dart';
+import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
+import 'package:procecto2/widgets/LibraryScreen/searchLibraryGame.dart';
+import 'package:procecto2/widgets/SearchScreen/searchPlatform.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -115,10 +116,11 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                       icon: const Icon(Icons.search),
                       onPressed: () {
                         print(_searchController.text);
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DiscoverScreenWidget2(
+                              builder: (context) => DiscoverScreenWidget6(
                                   SwitchBlocSearch(), _searchController.text)),
                         );
                       },
@@ -129,7 +131,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DiscoverScreenWidget2(
+                          builder: (context) => DiscoverScreenWidget6(
                               SwitchBlocSearch(), _searchController.text)),
                     );
                   },

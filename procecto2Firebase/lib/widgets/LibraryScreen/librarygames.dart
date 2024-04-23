@@ -16,10 +16,17 @@ class LibraryScreenWidget extends StatefulWidget {
 
 class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
   String _filter = '';
+  String _nameFilter = '';
 
   void _updateFilter(String newFilter) {
     setState(() {
       _filter = newFilter;
+    });
+  }
+
+  void _applyNameFilter(String name) {
+    setState(() {
+      _nameFilter = name;
     });
   }
 
@@ -168,8 +175,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
               switch (snapshot.data) {
                 case SwitchItem.LIST:
                   return LibraryScreenGrid(
-                    filtro: _filter,
-                  );
+                      filtro: _filter, busqueda: _nameFilter);
                 case SwitchItem.GRID:
                   return LibraryScreenList();
                 default:
