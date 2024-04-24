@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:procecto2/model/game_response.dart';
 
@@ -7,7 +8,7 @@ class GameRepository {
   static String mainUrl = "https://api.igdb.com/v4/games";
   static String releaseUrl = "https://api.igdb.com/v4/release_dates";
 
-  final String apiKey = "vdpz4bxk5i2n66evywgfgpn9xzi5rc";
+  final String apiKey = "7ke8gbpbre42gkjtpp5anax289bh6b";
 
   Future<GameResponse> getGames() async {
     //new releases
@@ -62,58 +63,27 @@ class GameRepository {
       return GameResponse.withError("$error");
     }
   }
-  Future<GameResponse> getSliderRandom() async {
-    final now = DateTime.parse(DateTime.now().toString());
-    var nowDate = now.millisecondsSinceEpoch;
-    //Discover slider games
-    //hypes > 3
-    var response = await http.post(Uri.parse(mainUrl),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Client-ID':
-              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
-        },
-        body:
-            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating >= 70 ; limit 10; sort follows desc; ");
-    print("Slider: ${response.statusCode}");
-    return GameResponse.fromJson(jsonDecode(response.body));
-  }
-  Future<GameResponse> getSliderRandom2() async {
-    final now = DateTime.parse(DateTime.now().toString());
-    var nowDate = now.millisecondsSinceEpoch;
-    //Discover slider games
-    //hypes > 3
-    var response = await http.post(Uri.parse(mainUrl),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Client-ID':
-              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
-        },
-        body:
-            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating >= 70 ; limit 10; sort dlcs asc");
-    print("Slider: ${response.statusCode}");
-    return GameResponse.fromJson(jsonDecode(response.body));
-  }
-  Future<GameResponse> getSliderRandom3() async {
-    final now = DateTime.parse(DateTime.now().toString());
-    var nowDate = now.millisecondsSinceEpoch;
-    //Discover slider games
-    //hypes > 3
-    var response = await http.post(Uri.parse(mainUrl),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Client-ID':
-              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
-        },
-        body:
-            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating <= 60 ; limit 10; ");
-    print("Slider: ${response.statusCode}");
-    return GameResponse.fromJson(jsonDecode(response.body));
-  }
 
-  Future<GameResponse> getSliderRandom4() async {
+  Future<GameResponse> getSliderRandomDelTO() async {
     final now = DateTime.parse(DateTime.now().toString());
     var nowDate = now.millisecondsSinceEpoch;
+    Random random = Random();
+    int randomNumber = random.nextInt(71) + 30;
+    int randomNumber2 = random.nextInt(2) + 1;
+    print(randomNumber);
+    print(randomNumber2);
+    String body = '';
+
+    if (randomNumber2 % 2 == 0) {
+      // El número es par
+      body =
+          "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber ; limit 10;";
+    } else {
+      body =
+          "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber; limit 10; sort first_release_date desc";
+      // El número es impar
+    }
+
     //Discover slider games
     //hypes > 3
     var response = await http.post(Uri.parse(mainUrl),
@@ -122,12 +92,10 @@ class GameRepository {
           'Client-ID':
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
-        body:
-            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating >= 80 ; limit 10; sort first_release_date desc ");
+        body: body);
     print("Slider: ${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
-  
 
   Future<GameResponse> getSlider() async {
     final now = DateTime.parse(DateTime.now().toString());
