@@ -81,7 +81,7 @@ class IntroScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 50, //100
+                height: 30, //100
               ),
               const Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -108,8 +108,8 @@ class IntroScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 30,
+              const SizedBox(
+                height: 20,
               ),
               Padding(
                 padding: const EdgeInsets.all(16),

@@ -22,7 +22,7 @@ class _HomeSliderState extends State<HomeSlider> {
 
   @override
   void initState() {
-    getSliderBloc.getSlider();
+    getSliderBloc.getSliderRandom();
     super.initState();
     // Inicia el temporizador para cambiar automáticamente las páginas cada 3 segundos
   }

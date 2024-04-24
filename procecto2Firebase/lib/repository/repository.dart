@@ -62,6 +62,72 @@ class GameRepository {
       return GameResponse.withError("$error");
     }
   }
+  Future<GameResponse> getSliderRandom() async {
+    final now = DateTime.parse(DateTime.now().toString());
+    var nowDate = now.millisecondsSinceEpoch;
+    //Discover slider games
+    //hypes > 3
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating >= 70 ; limit 10; sort follows desc; ");
+    print("Slider: ${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
+  }
+  Future<GameResponse> getSliderRandom2() async {
+    final now = DateTime.parse(DateTime.now().toString());
+    var nowDate = now.millisecondsSinceEpoch;
+    //Discover slider games
+    //hypes > 3
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating >= 70 ; limit 10; sort dlcs asc");
+    print("Slider: ${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
+  }
+  Future<GameResponse> getSliderRandom3() async {
+    final now = DateTime.parse(DateTime.now().toString());
+    var nowDate = now.millisecondsSinceEpoch;
+    //Discover slider games
+    //hypes > 3
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating <= 60 ; limit 10; ");
+    print("Slider: ${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
+  }
+
+  Future<GameResponse> getSliderRandom4() async {
+    final now = DateTime.parse(DateTime.now().toString());
+    var nowDate = now.millisecondsSinceEpoch;
+    //Discover slider games
+    //hypes > 3
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating >= 80 ; limit 10; sort first_release_date desc ");
+    print("Slider: ${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
+  }
+  
 
   Future<GameResponse> getSlider() async {
     final now = DateTime.parse(DateTime.now().toString());
