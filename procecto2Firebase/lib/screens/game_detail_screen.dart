@@ -319,7 +319,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                         .white), // Icono de cesto de la compra
                                                 SizedBox(
                                                     width:
-                                                        8), // Espacio entre el icono y el texto
+                                                        3), // Espacio entre el icono y el texto
                                                 Text(
                                                   "Buy Now",
                                                   style: TextStyle(
@@ -380,7 +380,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                           .white), // Icono de cesto de la compra
                                                   SizedBox(
                                                       width:
-                                                          8), // Espacio entre el icono y el texto
+                                                          3), // Espacio entre el icono y el texto
                                                   Text(
                                                     "to library",
                                                     style: TextStyle(

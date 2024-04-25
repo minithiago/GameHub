@@ -49,7 +49,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & total_rating >= 90 ; limit 33; sort total_rating_count desc;");
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & total_rating >= 90 ; limit 99; sort total_rating_count desc;");
       print("Juegos2: ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -65,23 +65,19 @@ class GameRepository {
   }
 
   Future<GameResponse> getSliderRandomDelTO() async {
-    final now = DateTime.parse(DateTime.now().toString());
-    var nowDate = now.millisecondsSinceEpoch;
+    //final now = DateTime.parse(DateTime.now().toString());
+    //var nowDate = now.millisecondsSinceEpoch;
     Random random = Random();
-    int randomNumber = random.nextInt(71) + 30;
-    int randomNumber2 = random.nextInt(2) + 1;
+    int randomNumber = random.nextInt(61) + 40;
+    int randomNumber2 = random.nextInt(3) + 1;
     print(randomNumber);
     print(randomNumber2);
-    String body = '';
+    String body = "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber; limit 10; sort first_release_date desc;";
 
     if (randomNumber2 % 2 == 0) {
       // El número es par
       body =
           "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber ; limit 10;";
-    } else {
-      body =
-          "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber; limit 10; sort first_release_date desc";
-      // El número es impar
     }
 
     //Discover slider games
