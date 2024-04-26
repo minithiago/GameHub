@@ -113,8 +113,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                       Navigator.pop(context);
                     }),
               ),
-              /*
-              Container(
+              
+              /*Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
@@ -131,9 +131,28 @@ class _GameDetailScreenState extends State<GameDetailScreen>
               ),*/
             ],
           ),
+          TabBar(
+            controller: _tabController,
+            indicatorColor: Colors.orange,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorWeight: 3.0,
+            unselectedLabelColor: Colors.white,
+            labelColor: Colors.orange,
+            isScrollable: false,
+            tabs: tabs.map((Item genre) {
+              return Container(
+                  padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  child: Text(genre.name,
+                      style: const TextStyle(
+                          fontSize: 13.0, fontFamily: "SFPro-Medium")));
+            }).toList(),
+          ),
           Expanded(
-            child: TabBarView(controller: _tabController, children: <Widget>[
-              ListView(
+            child: TabBarView(
+                controller: _tabController,
+                //physics: const NeverScrollableScrollPhysics(),
+                children: <Widget>[
+                  ListView(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0, left: 10.0),
@@ -459,7 +478,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                               borderRadius: BorderRadius.circular(
                                   20), // Radio de los bordes
                             ),
-                            minimumSize: const Size(120, 40),
+                            minimumSize: const Size(110, 40),
                           ),
                           onPressed: () async {
                             String url =
@@ -495,7 +514,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                               borderRadius: BorderRadius.circular(
                                   20), // Radio de los bordes
                             ),
-                            minimumSize: const Size(120, 40),
+                            minimumSize: const Size(110, 40),
                           ),
                           onPressed: () async {
                             String url =
@@ -511,7 +530,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.live_tv_rounded, color: Colors.white),
-                              SizedBox(width: 8),
+                              SizedBox(width: 4),
                               Text(
                                 "Twitch",
                                 style: TextStyle(color: Colors.white),
@@ -520,7 +539,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           ),
                         ),
                       ),
-                      ElevatedButton(
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0.0,),
+                        child:ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               Colors.red, // Color de fondo del botón
@@ -528,7 +549,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             borderRadius: BorderRadius.circular(
                                 20), // Radio de los bordes
                           ),
-                          minimumSize: const Size(120, 40),
+                          minimumSize: const Size(110, 40),
+                          
                         ),
                         onPressed: () async {
                           String url =
@@ -544,14 +566,15 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.play_arrow, color: Colors.white),
-                            SizedBox(width: 8),
+                            SizedBox(width: 4),
                             Text(
                               "Youtube",
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
                         ),
-                      ),
+                      ),)
+                      
                     ],
                   ),
 
@@ -950,6 +973,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                   const SizedBox(height: 10.0),
                 ],
               ),
+                      
+              
               Column(
                 children: [
                   Expanded(
@@ -1009,10 +1034,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                   )
                 ],
               )
-            ]),
-          ),
-        ],
-      ),
-    );
+            ]),)]
+          ),);
+      
+      
   }
 }
