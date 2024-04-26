@@ -77,7 +77,7 @@ class MainScreenState extends State<MainScreen> {
       ),
       body: SizedBox.expand(
         child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
+          //physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           onPageChanged: (index) {
             setState(() => _currentIndex = index);

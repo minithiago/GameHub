@@ -76,7 +76,7 @@ class _HomeSliderState extends State<HomeSlider> {
     });*/
 
     return SizedBox(
-      height: 220,
+      height: 230,
       child: PageIndicatorContainer(
         align: IndicatorAlign.bottom,
         length: games.take(10).length,

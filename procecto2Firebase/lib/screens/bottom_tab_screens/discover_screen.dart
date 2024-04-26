@@ -27,6 +27,7 @@ class DiscoverScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        /*
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,7 +44,7 @@ class DiscoverScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        ),*/
         HomeSlider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
