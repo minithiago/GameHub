@@ -97,7 +97,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                 height: 230.0, //220
                 child: YoutubePlayer(
                   controller: _controller,
-                  showVideoProgressIndicator: true, //true
+                  showVideoProgressIndicator: true,
+                  progressIndicatorColor: Colors.red, //true
                   thumbnail: Image.asset('assets/images/videoError.jpg'),
                 ),
               ),
@@ -132,6 +133,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
             ],
           ),
           TabBar(
+            dividerColor: Colors.transparent,
             controller: _tabController,
             indicatorColor: Colors.orange,
             indicatorSize: TabBarIndicatorSize.tab,
@@ -141,7 +143,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
             isScrollable: false,
             tabs: tabs.map((Item genre) {
               return Container(
-                  padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  padding: const EdgeInsets.only(bottom: 13.0, top: 13.0),
                   child: Text(genre.name,
                       style: const TextStyle(
                           fontSize: 13.0, fontFamily: "SFPro-Medium")));
@@ -720,6 +722,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                       ),
                     ),
                   ),
+                  
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 10.0, bottom: 10.0, top: 15.0),
@@ -779,6 +782,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                       ),
                     ),
                   ),
+                  
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 10.0, bottom: 10.0, top: 15.0),
@@ -841,6 +845,65 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                     padding: const EdgeInsets.only(
                         left: 10.0, bottom: 10.0, top: 15.0),
                     child: Text(
+                      "Languages".toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Visibility(
+                    visible:
+                        game.languages != null && game.languages!.isNotEmpty,
+                    child: Container(
+                      height: 30.0,
+                      padding: const EdgeInsets.only(left: 10.0, top: 5.0),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: game.languages?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.only(right: 10.0),
+                            child: Container(
+                              padding: EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5.0)),
+                                  border: Border.all(
+                                      width: 1.0, color: Colors.white)),
+                              child: Text(
+                                game.languages![index].language![0].name,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                    height: 1.4,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 9.0),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: game.languages == null || game.languages!.isEmpty,
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                      child: Text(
+                        "No languages available",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10.0, bottom: 10.0, top: 15.0),
+                    child: Text(
                       "DLCs".toUpperCase(),
                       style: const TextStyle(
                           fontSize: 14.0,
@@ -879,13 +942,13 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                           width: 120.0,
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                           height:
                                               5.0), // Espaciado entre la imagen y el nombre
                                       Text(
                                         dlc.name ??
                                             'Unnamed DLC', // Mostrar el nombre del DLC, o 'Unnamed DLC' si el nombre es nulo
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.bold,
@@ -927,35 +990,40 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                     ),
                   ),
                   Visibility(
-                      visible: game.similar != null && game.similar!.isNotEmpty,
-                      child: Container(
-                        height: 200.0,
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: game.similar?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
-                                  border: Border.all(
-                                      width: 1.0, color: Colors.white),
-                                ),
-                                child: Image.network(
-                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId /*game.dlc!.cover!.imageId*/}.jpg",
-                                  fit: BoxFit
-                                      .cover, //game.companies![index].company![0].name,
-                                  width: 130.0,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )),
+  visible: game.similar != null && game.similar!.isNotEmpty,
+  child: Container(
+    height: 200.0,
+    padding: EdgeInsets.only(left: 10.0, top: 5.0),
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: game.similar?.length ?? 0,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: EdgeInsets.only(right: 10.0),
+          child: GestureDetector(
+            onTap: () {
+              print('Clicked on game cover: ${game.similar![index].name}');
+            },
+            
+            child: Container(
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                border: Border.all(width: 1.0, color: Colors.white),
+              ),
+              child: Image.network(
+                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId}.jpg",
+                fit: BoxFit.cover,
+                width: 130.0,
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  ),
+),
+
                   Visibility(
                     visible: game.similar == null || game.similar!.isEmpty,
                     child: const Padding(

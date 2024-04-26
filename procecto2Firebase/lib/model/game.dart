@@ -1,6 +1,7 @@
 import 'package:procecto2/model/game_models/company.dart';
 import 'package:procecto2/model/game_models/dlcs.dart';
 import 'package:procecto2/model/game_models/genre.dart';
+import 'package:procecto2/model/game_models/language.dart';
 //import 'package:procecto2/model/game_models/keyword.dart';
 import 'package:procecto2/model/game_models/mode.dart';
 import 'package:procecto2/model/game_models/platform.dart';
@@ -24,6 +25,7 @@ class GameModel {
   final List<CompanyModel>? companies;
   final List<SimilarModel>? similar;
   final List<dlcModel>? dlc;
+  final List<LanguageModel>? languages;
   final String summary;
   final List<VideoModel>? videos;
   final double total_rating;
@@ -45,6 +47,7 @@ class GameModel {
       this.companies,
       this.similar,
       this.dlc,
+      this.languages,
       this.summary,
       this.videos,
       this.total_rating,
@@ -74,6 +77,8 @@ class GameModel {
           companies?.map((company) => company.toJson()).toList(),
       'similar_games': similar?.map((game) => game.toJson()).toList(),
       'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
+      'language_supports':
+          languages?.map((language) => language.toJson()).toList(),
       'videos': videos?.map((video) => video.toJson()).toList(),
     };
     return data;
@@ -129,6 +134,11 @@ class GameModel {
             ? null
             : (json["dlcs"] as List?)
                 ?.map((i) => dlcModel.fromJson(i))
+                .toList(),
+        json["language_supports"] == null
+            ? null
+            : (json["language_supports"] as List?)
+                ?.map((i) => LanguageModel.fromJson(i))
                 .toList(),
         json["summary"] ??
             "No summary available", // Cambiar en juegos poco conocidos
