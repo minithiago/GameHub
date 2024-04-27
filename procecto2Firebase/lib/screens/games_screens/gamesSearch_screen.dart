@@ -51,13 +51,15 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
 
   Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    final List<String> favoriteGameNames =
+        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
     List<GameModel> games = data.games;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 7.0,
+          mainAxisSpacing: 7.0,
           childAspectRatio: 0.75,
           crossAxisCount: 3,
         ),
@@ -76,23 +78,35 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                         onPressed: () {
                           //Navigator.pop(context);
                           HapticFeedback.lightImpact();
-                          game.favorite = true;
-                          favoriteGamesProvider.addToFavorites(game);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("${game.name} added to library"),
-                            action: SnackBarAction(
-                              label: "Undo",
-                              onPressed: () {
-                                favoriteGamesProvider.removeFavorite(game);
-                              },
-                            ),
-                          ));
-                          Navigator.of(context).pop();
+                          if (favoriteGameNames.contains(game.name)) {
+                            // El juego ya está en la lista de favoritos
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Game already in library"),
+                                duration: Duration(
+                                    seconds: 1), // Duración del SnackBar
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text("${game.name} added to the library"),
+                                duration: const Duration(
+                                    seconds: 1), // Duración del SnackBar
+                              ),
+                            );
+                            // El juego no está en la lista de favoritos, así que lo añadimos
+                            game.favorite = true;
+                            favoriteGamesProvider.addToFavorites(game);
+                            Navigator.of(context).pop();
+                          }
                         },
                         child: const Row(
                           children: [
                             Icon(
-                              Icons.add,
+                              Icons.add_circle,
                               color: Colors.black, // Color del icono
                             ),
                             SizedBox(
@@ -146,11 +160,28 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => GameDetailScreen(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      GameDetailScreen(
                     key: const Key("game_detail_screen_key"),
                     game: game,
                   ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    final begin = Offset(1.0, 0.0);
+                    final end = Offset.zero;
+                    final curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
             },
@@ -172,6 +203,7 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                     ),
                   ),
                 ),
+                /*
                 AspectRatio(
                   aspectRatio: 3 / 4,
                   child: Container(
@@ -242,7 +274,7 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
               ],
             ),
           );

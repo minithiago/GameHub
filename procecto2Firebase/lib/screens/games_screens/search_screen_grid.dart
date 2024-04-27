@@ -55,14 +55,16 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
   Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     List<GameModel> games = data.games;
+    final List<String> favoriteGameNames =
+        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
     return AnimationLimiter(
       child: AnimationLimiter(
         child: Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: GridView.count(
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 7.0,
+            mainAxisSpacing: 7.0,
             childAspectRatio: 0.75,
             crossAxisCount: 3, //columnas
             children: List.generate(
@@ -87,22 +89,37 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
                                     onPressed: () {
                                       //Navigator.pop(context);
                                       HapticFeedback.lightImpact();
-                                      game.favorite = true;
-                                      favoriteGamesProvider
-                                          .addToFavorites(game);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "${game.name} added to library"),
-                                        action: SnackBarAction(
-                                          label: "Undo",
-                                          onPressed: () {
-                                            favoriteGamesProvider
-                                                .removeFavorite(game);
-                                          },
-                                        ),
-                                      ));
-                                      Navigator.of(context).pop();
+                                      if (favoriteGameNames
+                                          .contains(game.name)) {
+                                        // El juego ya está en la lista de favoritos
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("Game already in library"),
+                                            duration: Duration(
+                                                seconds:
+                                                    1), // Duración del SnackBar
+                                          ),
+                                        );
+                                        Navigator.of(context).pop();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                "${game.name} added to the library"),
+                                            duration: const Duration(
+                                                seconds:
+                                                    1), // Duración del SnackBar
+                                          ),
+                                        );
+                                        // El juego no está en la lista de favoritos, así que lo añadimos
+                                        game.favorite = true;
+                                        favoriteGamesProvider
+                                            .addToFavorites(game);
+                                        Navigator.of(context).pop();
+                                      }
                                     },
                                     child: const Row(
                                       children: [
@@ -170,12 +187,30 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => GameDetailScreen(
-                                key: const Key(
-                                    "game_detail_screen_key"), // Puedes proporcionar una clave única aquí
-                                game: games[index],
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      GameDetailScreen(
+                                key: const Key("game_detail_screen_key"),
+                                game: game,
                               ),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                final begin = Offset(1.0, 0.0);
+                                final end = Offset.zero;
+                                final curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 300),
                             ),
                           );
                         },
@@ -217,8 +252,8 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
                               ),
                             ),
                             Positioned(
-                              bottom: 20.0,
-                              left: 5.0,
+                              bottom: 7.0,
+                              left: 7.0,
                               child: Container(
                                 width: 90.0,
                                 child: Text(
@@ -231,6 +266,7 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
                                 ),
                               ),
                             ),
+                            /*
                             Positioned(
                               bottom: 5.0,
                               left: 5.0,
@@ -268,7 +304,7 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
                                   )
                                 ],
                               ),
-                            )
+                            )*/
                           ],
                         ),
                       ),

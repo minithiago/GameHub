@@ -48,6 +48,16 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   Widget build(BuildContext context) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     var favoriteGames = favoriteGamesProvider.favoriteGames;
+    List<GameModel> _filterGamesByName(List<GameModel> games) {
+      if (_nameFilter.isEmpty) {
+        return games;
+      } else {
+        return games
+            .where((game) =>
+                game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
+            .toList();
+      }
+    }
 
     switch (_currentFilter) {
       case "Name":
@@ -63,25 +73,14 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         favoriteGames = favoriteGamesProvider.favoriteGames;
     }
 
-    List<GameModel> _filterGamesByName(List<GameModel> games) {
-      if (_nameFilter.isEmpty) {
-        return games;
-      } else {
-        return games
-            .where((game) =>
-                game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
-            .toList();
-      }
-    }
-
     // Ordenar los juegos por rating (en orden descendente)
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 7.0,
+          mainAxisSpacing: 7.0,
           childAspectRatio: 0.75,
           crossAxisCount: 3,
         ),
@@ -92,13 +91,14 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
             onLongPress: () {
               HapticFeedback.lightImpact();
               showCupertinoModalPopup(
+                //barrierColor: const Color.fromARGB(96, 0, 0, 0),
+
                 context: context,
                 builder: (context) {
                   return CupertinoActionSheet(
                     actions: <CupertinoActionSheetAction>[
                       CupertinoActionSheetAction(
                         onPressed: () {
-                          Navigator.pop(context);
                           HapticFeedback.lightImpact();
                           game.favorite = false;
                           favoriteGamesProvider.removeFavorite(game);
@@ -111,20 +111,22 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                 game.favorite = true;
                               },
                             ),
+                            duration: Duration(seconds: 1),
                           ));
+                          Navigator.pop(context);
                         },
                         child: const Row(
                           children: [
                             Icon(
                               Icons.remove_circle_outline,
-                              color: Colors.black, // Color del icono
+                              color: Colors.red, // Color del icono
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Remove from library",
                               style: TextStyle(
-                                color: Colors.black, // Color del texto
+                                color: Colors.red, // Color del texto
                               ),
                             ),
                           ],
@@ -160,11 +162,28 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => GameDetailScreen(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      GameDetailScreen(
                     key: const Key("game_detail_screen_key"),
                     game: game,
                   ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    final begin = Offset(1.0, 0.0);
+                    final end = Offset.zero;
+                    final curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
             },
@@ -186,6 +205,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                     ),
                   ),
                 ),
+                /*
                 AspectRatio(
                   aspectRatio: 3 / 4,
                   child: Container(
@@ -256,7 +276,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
               ],
             ),
           );

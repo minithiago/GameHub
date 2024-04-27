@@ -43,7 +43,12 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
         } else {
-          return buildLoadingWidget();
+          return buildLoadingWidget(
+            color: Colors.orange,
+            size: 6.0,
+            message:
+                'Loading...', // Opcional, muestra un mensaje bajo el indicador de progreso
+          );
         }
       },
     );
@@ -51,6 +56,10 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
 
   Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+
+    final List<String> favoriteGameNames =
+        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
+
     List<GameModel> games = data.games;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -76,14 +85,13 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         onPressed: () {
                           //Navigator.pop(context);
                           HapticFeedback.lightImpact();
-                          if (favoriteGamesProvider.favoriteGames
-                              .contains(game)) {
+                          if (favoriteGameNames.contains(game.name)) {
                             // El juego ya está en la lista de favoritos
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("Game already in library"),
                                 duration: Duration(
-                                    seconds: 2), // Duración del SnackBar
+                                    seconds: 1), // Duración del SnackBar
                               ),
                             );
                             Navigator.of(context).pop();
@@ -93,7 +101,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                 content:
                                     Text("${game.name} added to the library"),
                                 duration: Duration(
-                                    seconds: 2), // Duración del SnackBar
+                                    seconds: 1), // Duración del SnackBar
                               ),
                             );
                             // El juego no está en la lista de favoritos, así que lo añadimos
@@ -191,6 +199,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                     ),
                   ),
                 ),
+                /*
                 AspectRatio(
                   aspectRatio: 3 / 4,
                   child: Container(
@@ -211,7 +220,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                   ),
                 ),
                 Positioned(
-                  bottom: 20.0,
+                  bottom: 10.0,
                   left: 5.0,
                   child: Container(
                     width: 90.0,
@@ -226,6 +235,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                     ),
                   ),
                 ),
+                
                 Positioned(
                   bottom: 5.0,
                   left: 5.0,
@@ -261,7 +271,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
               ],
             ),
           );

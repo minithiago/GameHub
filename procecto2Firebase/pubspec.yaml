@@ -102,6 +102,7 @@ flutter:
     - assets/images/default_avatar.jpg
     - assets/images/gamehub.png
     - assets/images/videoError.jpg
+    - assets/images/loading_image.gif
     - assets/images/game_images/rpg.jpg
     - assets/images/game_images/adventure.jpeg
     - assets/images/game_images/arcade.avif

@@ -88,7 +88,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                   ),
                   const SizedBox(width: 90.0),
                   IconButton(
-                    onPressed: () => const MainScreen(),
+                    onPressed: () {},
                     icon: const Icon(
                       Icons.people,
                       size: 28, // Tamaño más grande del icono
@@ -145,7 +145,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: const <Widget>[
-                      OptionCard(title: 'Owned'),
+                      OptionCard(title: 'All'),
                       OptionCard(title: 'Wishlist'),
                       OptionCard(title: 'Favorites'),
                     ],
@@ -204,10 +204,10 @@ class _OptionCardState extends State<OptionCard> {
           children: [
             Text(
               widget.title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: isSelected ? Colors.black : Colors.white, // Ca,
               ),
             ),
           ],

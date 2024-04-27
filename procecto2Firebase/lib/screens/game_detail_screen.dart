@@ -347,6 +347,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "${game.name} added to library"),
+                                                duration: Duration(seconds: 1),
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
@@ -913,6 +914,13 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                           "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
                                                         ),
                                                         fit: BoxFit.cover)),
+                                                child: FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/images/loading_image.gif', // Ruta de la imagen de placeholder
+                                                  image:
+                                                      "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           ),

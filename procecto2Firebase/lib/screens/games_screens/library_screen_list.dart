@@ -83,12 +83,29 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => GameDetailScreen(
-                            key: Key(
-                                "game_detail_screen_key"), // Puedes proporcionar una clave única aquí
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  GameDetailScreen(
+                            key: const Key("game_detail_screen_key"),
                             game: games[index],
                           ),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            final begin = Offset(1.0, 0.0);
+                            final end = Offset.zero;
+                            final curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 300),
                         ),
                       );
                     },
@@ -146,6 +163,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                     )
                                   ],
                                 ),
+                                /*
                                 Row(
                                   children: [
                                     RatingBar.builder(
@@ -177,7 +195,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                           color: Colors.white, fontSize: 12.0),
                                     )
                                   ],
-                                )
+                                )*/
                               ],
                             ),
                           )

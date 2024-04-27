@@ -57,6 +57,8 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
   Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     var favoriteGames = favoriteGamesProvider.favoriteGames;
+    final List<String> favoriteGameNames =
+        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
     print(favoriteGames);
 
     List<GameModel> _filterGamesByName(List<GameModel> games) {
@@ -75,8 +77,8 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
         child: Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: GridView.count(
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 7.0,
+            mainAxisSpacing: 7.0,
             childAspectRatio: 0.75,
             crossAxisCount: 3, //columnas
             children: List.generate(
@@ -99,29 +101,29 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                 actions: <CupertinoActionSheetAction>[
                                   CupertinoActionSheetAction(
                                     onPressed: () {
-                                      //Navigator.pop(context);
+                                      Navigator.pop(context);
                                       HapticFeedback.lightImpact();
-                                      game.favorite = true;
+                                      game.favorite = false;
                                       favoriteGamesProvider
-                                          .addToFavorites(game);
+                                          .removeFavorite(game);
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                         content: Text(
-                                            "${game.name} added to library"),
+                                            "${game.name} removed from library"),
                                         action: SnackBarAction(
                                           label: "Undo",
                                           onPressed: () {
                                             favoriteGamesProvider
-                                                .removeFavorite(game);
+                                                .addToFavorites(game);
+                                            game.favorite = true;
                                           },
                                         ),
                                       ));
-                                      Navigator.of(context).pop();
                                     },
                                     child: const Row(
                                       children: [
                                         Icon(
-                                          Icons.add,
+                                          Icons.remove_circle_outline,
                                           color:
                                               Colors.black, // Color del icono
                                         ),
@@ -129,7 +131,7 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                             width:
                                                 8), // Espacio entre el icono y el texto
                                         Text(
-                                          "Add to library",
+                                          "Remove from library",
                                           style: TextStyle(
                                             color:
                                                 Colors.black, // Color del texto
@@ -184,12 +186,30 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => GameDetailScreen(
-                                key: const Key(
-                                    "game_detail_screen_key"), // Puedes proporcionar una clave única aquí
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      GameDetailScreen(
+                                key: const Key("game_detail_screen_key"),
                                 game: _filterGamesByName(favoriteGames)[index],
                               ),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                final begin = Offset(1.0, 0.0);
+                                final end = Offset.zero;
+                                final curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 300),
                             ),
                           );
                         },
@@ -231,8 +251,8 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                               ),
                             ),
                             Positioned(
-                              bottom: 20.0,
-                              left: 5.0,
+                              bottom: 7.0,
+                              left: 7.0,
                               child: Container(
                                 width: 90.0,
                                 child: Text(
@@ -245,6 +265,7 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                 ),
                               ),
                             ),
+                            /*
                             Positioned(
                               bottom: 5.0,
                               left: 5.0,
@@ -286,7 +307,7 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                   )
                                 ],
                               ),
-                            )
+                            )*/
                           ],
                         ),
                       ),
