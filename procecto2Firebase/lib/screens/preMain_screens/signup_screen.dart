@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:procecto2/model/userModel.dart';
 import 'package:procecto2/providers/login_provider.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
+import 'package:procecto2/services/upload_image.dart';
 import 'package:procecto2/utils.dart';
 
 import 'package:procecto2/style/theme.dart' as Style;
@@ -22,13 +28,12 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nicknameController = TextEditingController();
 
-  Uint8List? _image;
+  File? imagen_to_upload;
 
-  void selectImage() async {
-    Uint8List img = await pickImage(ImageSource.gallery);
-    setState(() {
-      _image = img;
-    });
+  Future<XFile?> getImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    return image;
   }
 
   @override
@@ -77,10 +82,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 top: 90, // Margen arriba
                 left: MediaQuery.of(context).size.width /
                     3, // Margen a la izquierda
-                child: _image != null
+                child: imagen_to_upload != null
                     ? CircleAvatar(
                         radius: 64,
-                        backgroundImage: MemoryImage(_image!),
+                        backgroundImage: FileImage(imagen_to_upload!),
                       )
                     : const CircleAvatar(
                         radius: 64,
@@ -93,7 +98,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 left: MediaQuery.of(context).size.width /
                     1.8, // Margen a la izquierda
                 child: IconButton(
-                  onPressed: selectImage,
+                  onPressed: () async {
+                    final imagen = await getImage();
+                    setState(() {
+                      imagen_to_upload = File(imagen!.path);
+                    });
+                    final uploaded = await uploadImage(imagen_to_upload!);
+                  },
+                  //selectImage,
                   icon: const Icon(Icons.add_a_photo),
                   color: Colors.white,
                 ),
@@ -241,17 +253,63 @@ class _SignupScreenState extends State<SignupScreen> {
                                   String email = _emailController.text;
                                   String password = _passwordController.text;
                                   String nickname = _nicknameController.text;
+                                  String? profilePic =
+                                      await uploadImage(imagen_to_upload!);
+
+                                  UserModel user = UserModel(
+                                      nickname: nickname,
+                                      email: email,
+                                      password: password,
+                                      profilePicUrl: profilePic!);
+                                  User? newUser = await UserRepository()
+                                      .registerUser(email, password);
+                                  bool success = await UserRepository().addUser(
+                                      nickname, email, password, profilePic);
+                                  if (success && newUser != null) {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            MainScreen(),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Error creando el usuario.")));
+                                  }
 
                                   if (await loginProvider.signup(
                                       nickname, email, password)) {
                                     bool? connected = await loginProvider.login(
                                         email, password);
 
-                                    if (connected != null) {
+                                    /*if (connected != null) {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MainScreen()),
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              MainScreen(),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: child,
+                                            );
+                                          },
+                                        ),
                                       );
                                     } else {
                                       Navigator.push(
@@ -264,7 +322,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           .showSnackBar(const SnackBar(
                                               content:
                                                   Text("Error de conexión.")));
-                                    }
+                                    }*/
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(

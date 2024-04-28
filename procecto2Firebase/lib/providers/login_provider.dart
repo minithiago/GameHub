@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
@@ -15,7 +16,7 @@ class LoginProvider extends ChangeNotifier {
   final String _baseUrl = "http://10.0.2.2:8081";
 
   final _storage = const FlutterSecureStorage();
-  static const _keyGames = 'games';
+  //static const _keyGames = 'games';
 
   static late UserLogData currentUser;
 
@@ -156,6 +157,39 @@ class LoginProvider extends ChangeNotifier {
   logout() {
     storageWriteEmail('');
     storageWritePassword('');
+  }
+
+  // Authentication - Register new game.
+  //----------------------------------------------------------------
+  Future<bool> addGame(String name, double rating, int user_id) async {
+    var url = Uri.parse('$_baseUrl/game');
+
+    Map data = {
+      "name": name,
+      "rating": rating,
+      "user_id": user_id,
+    };
+
+    var body = json.encode(data);
+
+    debugPrint(data.toString());
+    final Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    };
+
+    final response = await http.post(url, body: body, headers: headers).timeout(
+      const Duration(seconds: 3),
+      onTimeout: () {
+        return http.Response('Error', 404);
+      },
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else if (response.statusCode == 400) {
+      throw Exception("Game already in use");
+    } else {
+      throw Exception("Can't connect to GameHub");
+    }
   }
 
   // Secure Storage IO

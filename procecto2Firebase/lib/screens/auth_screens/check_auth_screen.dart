@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/model/user_log_data.dart';
 import 'package:procecto2/providers/providers.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
@@ -16,7 +17,7 @@ class CheckAuthScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: FutureBuilder(
-          future: LoginProvider().storageGetAuthData(),
+          future: UserRepository().storageGetAuthData(),
           builder: (context, AsyncSnapshot<List<String>> snapshot) {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             if (snapshot.data![0] == '' || snapshot.data![1] == '') {
@@ -48,7 +49,7 @@ class CheckAuthScreen extends StatelessWidget {
               print(password);
               Future.microtask(() async {
                 try {
-                  await LoginProvider().login(
+                  await UserRepository().loginUser(
                     email,
                     password,
                   );

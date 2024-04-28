@@ -160,7 +160,7 @@ class IntroScreen extends StatelessWidget {
                       );
                     },
                     child: const Text(
-                      'Log In',
+                      'Login',
                       style: TextStyle(
                           color: Colors.white, fontSize: 16), // Color del texto
                     ),

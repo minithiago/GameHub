@@ -82,6 +82,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     var formattedDate = DateFormat('dd/MM/yyyy').format(date);
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    LoginProvider().storageGetAuthData();
 
     //favoriteGamesProvider.loadFavoriteGames;
     List<String> favoriteGameNames =
@@ -336,6 +337,12 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               true,
                                           child: ElevatedButton(
                                             onPressed: () {
+                                              LoginProvider().addGame(
+                                                  game.name,
+                                                  game.total_rating
+                                                      .truncateToDouble(),
+                                                  LoginProvider.currentUser.id);
+
                                               favoriteGamesProvider
                                                   .addToFavorites(game);
                                               game.favorite = true;

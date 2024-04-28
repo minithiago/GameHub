@@ -1,8 +1,13 @@
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:procecto2/providers/account_form_provider.dart';
+import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/providers/login_provider.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/utils.dart';
 import 'package:procecto2/style/theme.dart' as Style;
@@ -30,9 +35,11 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    LoginProvider().storageGetAuthData();
+    UserRepository().storageGetAuthData();
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    FirebaseFirestore db = FirebaseFirestore.instance;
 
-    if (LoginProvider.currentUser.email == "Guest") {
+    /*if (LoginProvider.currentUser.email == "Guest") {
       return Scaffold(
         backgroundColor: Style.Colors.backgroundColor,
         body: Center(
@@ -57,7 +64,7 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       );
-    }
+    }*/
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -67,6 +74,9 @@ class _AccountScreenState extends State<AccountScreen> {
           create: (_) => LoginProvider(),
           lazy: false,
         ),
+        ChangeNotifierProvider(
+          create: (_) => UserRepository(),
+        ),
       ],
       child: Scaffold(
         backgroundColor: Style.Colors.backgroundColor,
@@ -75,6 +85,7 @@ class _AccountScreenState extends State<AccountScreen> {
           child: Center(
             child: Stack(
               children: [
+                /*
                 const Positioned(
                   top: 30,
                   left: 0,
@@ -89,9 +100,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                ),*/
                 Positioned(
-                  top: 90, // Margen arriba
+                  top: 30, // Margen arriba
                   left: MediaQuery.of(context).size.width /
                       3, // Margen a la izquierda
                   child: _image != null
@@ -106,7 +117,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                 ),
                 Positioned(
-                  top: 180, // Margen arriba
+                  top: 120, // Margen arriba
                   left: MediaQuery.of(context).size.width /
                       1.8, // Margen a la izquierda
                   child: IconButton(
@@ -116,12 +127,12 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 230,
+                  top: 170,
                   left: 0,
                   right: 0,
                   child: Text(
                     textAlign: TextAlign.center,
-                    LoginProvider.currentUser.nickname,
+                    db.collection("Users").get().toString(),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -129,8 +140,52 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                 ),
+
                 Positioned(
-                  top: 220,
+                  top: 220, // Ajusta la posición vertical según necesites
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            const Icon(
+                              SimpleLineIcons.game_controller,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '${favoriteGamesProvider.favoriteGames.length} games',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Expanded(
+                        child: Column(
+                          children: [
+                            Icon(
+                              SimpleLineIcons.people,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '3 friends',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Positioned(
+                  top: 290,
                   left: 20,
                   right: 20,
                   child: Form(
@@ -148,7 +203,8 @@ class _AccountScreenState extends State<AccountScreen> {
                               fillColor: Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: Icon(Icons.mail),
                               prefixIconColor: Colors.white,
-                              hintText: LoginProvider.currentUser.email,
+                              hintText: FirebaseAuth.instance.currentUser!.email
+                                  .toString(),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Ajusta el valor de 10.0 según sea necesario
@@ -175,13 +231,33 @@ class _AccountScreenState extends State<AccountScreen> {
                             height: 20,
                           ),
                           Positioned(
+                            top: 400, // Margen arriba
+                            left: MediaQuery.of(context).size.width /
+                                1.8, // Margen a la izquierda
+                            child: FilledButton(
+                              onPressed: () async {
+                                UserRepository().fetchUserData();
+                              },
+                              child: const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.exit_to_app, size: 24.0),
+                                  Text("HGola"),
+                                  Icon(Icons.arrow_right, size: 32.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
                             top: 380, // Margen arriba
                             left: MediaQuery.of(context).size.width /
                                 1.8, // Margen a la izquierda
                             child: FilledButton(
                               onPressed: () async {
-                                LoginProvider.currentUser.token = "";
-                                LoginProvider().logout();
+                                UserRepository().logout();
+                                //LoginProvider.currentUser.token = "";
+                                //LoginProvider().logout();
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (context) =>

@@ -1,5 +1,5 @@
 class UserModel {
-  int id;
+  int? id;
   String nickname;
   String email;
   String password;
@@ -7,7 +7,7 @@ class UserModel {
   //List<String> friends;
 
   UserModel({
-    required this.id,
+    this.id,
     required this.nickname,
     required this.email,
     required this.password,
@@ -23,11 +23,13 @@ class UserModel {
         profilePicUrl: json["profilePicUrl"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": nickname,
-        "email": email,
-        "password": password,
-        "profilePicUrl": profilePicUrl,
-      };
+  toJson() {
+    return {
+//"id": id,
+      "nickname": nickname,
+      "email": email,
+      "password": password,
+      "avatar": profilePicUrl,
+    };
+  }
 }

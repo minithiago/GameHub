@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'package:procecto2/forms/login_form.dart';
 //import 'package:procecto2/providers/login_form_provider.dart';
 import 'package:procecto2/providers/login_provider.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 //import 'package:procecto2/services/auth_service.dart';
@@ -40,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            title: Text('Log in'),
+            title: Text('Login'),
             titleTextStyle: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -347,6 +349,20 @@ class LoginButton extends StatelessWidget {
               String password = _passwordController.text;
 
               try {
+                User? newUser =
+                    await UserRepository().loginUser(email, password);
+                if (newUser != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainScreen()),
+                  );
+                }
+              } on Exception catch (_) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Invalid email or password.")));
+              }
+
+              /*try {
                 bool? connected = await loginProvider.login(email, password);
                 if (connected != null) {
                   Navigator.push(
@@ -357,7 +373,7 @@ class LoginButton extends StatelessWidget {
               } on Exception catch (_) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Invalid email or password.")));
-              }
+              }*/
             }
           },
           child: const Text('Login'),
