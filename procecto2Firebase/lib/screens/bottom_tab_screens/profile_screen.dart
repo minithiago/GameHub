@@ -32,12 +32,61 @@ class _AccountScreenState extends State<AccountScreen> {
       _image = img;
     });
   }
+  Future<String?> getUserNickname() async {
+    // Llamamos a la función fetchUserData() para obtener los datos del usuario
+    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
+
+    // Verificamos si se encontró algún usuario con el correo electrónico dado
+    if (userData != null) {
+      // Accedemos al valor del campo "nickname" del usuario
+      String? nickname = userData['nickname'];
+
+      // Devolvemos el valor del nickname
+      return nickname;
+    } else {
+      // Si no se encontró ningún usuario, devolvemos null
+      return null;
+    }
+  }
+  Future<String?> getUserPass() async {
+    // Llamamos a la función fetchUserData() para obtener los datos del usuario
+    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
+
+    // Verificamos si se encontró algún usuario con el correo electrónico dado
+    if (userData != null) {
+      // Accedemos al valor del campo "nickname" del usuario
+      String? password = userData['password'];
+
+      // Devolvemos el valor del nickname
+      return password;
+    } else {
+      // Si no se encontró ningún usuario, devolvemos null
+      return null;
+    }
+  }
+  Future<String?> getUserAvatar() async {
+    // Llamamos a la función fetchUserData() para obtener los datos del usuario
+    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
+
+    // Verificamos si se encontró algún usuario con el correo electrónico dado
+    if (userData != null) {
+      // Accedemos al valor del campo "nickname" del usuario
+      String? avatar = userData['avatar'];
+
+      // Devolvemos el valor del nickname
+      return avatar;
+    } else {
+      // Si no se encontró ningún usuario, devolvemos null
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     UserRepository().storageGetAuthData();
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     FirebaseFirestore db = FirebaseFirestore.instance;
+    String? _password;
 
     /*if (LoginProvider.currentUser.email == "Guest") {
       return Scaffold(
@@ -105,17 +154,24 @@ class _AccountScreenState extends State<AccountScreen> {
                   top: 30, // Margen arriba
                   left: MediaQuery.of(context).size.width /
                       3, // Margen a la izquierda
-                  child: _image != null
-                      ? CircleAvatar(
-                          radius: 64,
-                          backgroundImage: MemoryImage(_image!),
-                        )
-                      : const CircleAvatar(
+                  child: FutureBuilder<String?>(
+                    future: getUserAvatar(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                      } else {
+                        final avatar = snapshot.data ?? 'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
+                        return CircleAvatar(
                           radius: 64,
                           backgroundImage:
-                              AssetImage('assets/images/default_avatar.jpg'),
-                        ),
+                              NetworkImage(avatar),
+                              //backgroundColor: Colors.amber,
+                        );
+                      }
+                    },
+                  ),
                 ),
+                
                 Positioned(
                   top: 120, // Margen arriba
                   left: MediaQuery.of(context).size.width /
@@ -130,16 +186,27 @@ class _AccountScreenState extends State<AccountScreen> {
                   top: 170,
                   left: 0,
                   right: 0,
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    db.collection("Users").get().toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: FutureBuilder<String?>(
+                    future: getUserNickname(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                      } else {
+                        final nickname = snapshot.data ?? 'user'; // Obtiene el nickname o establece "user" si no hay ninguno
+                        return Text(
+                          nickname,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
+
 
                 Positioned(
                   top: 220, // Ajusta la posición vertical según necesites
@@ -196,7 +263,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           const SizedBox(
                             height: 50,
                           ),
-                          TextFormField(
+                          TextField(
+                            
                             decoration: InputDecoration(
                               filled: true,
                               //enabled: false,
@@ -214,67 +282,78 @@ class _AccountScreenState extends State<AccountScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          TextFormField(
+                          /*
+                          TextField(
+                            
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: Icon(Icons.lock_outline),
+                              suffixIcon: Icon(Icons.lock_outline),
                               prefixIconColor: Colors.white,
-                              hintText: "Password",
+                              hintText:"Password",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Ajusta el valor de 10.0 según sea necesario
                               ),
                             ),
+                          ),*/
+                          Positioned(
+                            
+                            child: FutureBuilder<String?>(
+                              future: getUserPass(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                                } else {
+                                  _password = snapshot.data ?? 'Password'; // Obtiene el nickname o establece "user" si no hay ninguno
+                                  return TextField(
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.lock_outline),
+                                     
+                                      prefixIconColor: Colors.white,
+                                      filled: true,
+                                      fillColor: Color.fromARGB(128, 255, 255, 255),
+                                      
+                                      hintText: _password, // Utiliza el nickname como hintText
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
+                          
                           Positioned(
-                            top: 400, // Margen arriba
-                            left: MediaQuery.of(context).size.width /
-                                1.8, // Margen a la izquierda
-                            child: FilledButton(
-                              onPressed: () async {
-                                UserRepository().fetchUserData();
-                              },
-                              child: const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.exit_to_app, size: 24.0),
-                                  Text("HGola"),
-                                  Icon(Icons.arrow_right, size: 32.0),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 380, // Margen arriba
-                            left: MediaQuery.of(context).size.width /
-                                1.8, // Margen a la izquierda
-                            child: FilledButton(
-                              onPressed: () async {
-                                UserRepository().logout();
-                                //LoginProvider.currentUser.token = "";
-                                //LoginProvider().logout();
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const IntroScreen()),
-                                    (Route<dynamic> route) => false);
-                              },
-                              child: const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.exit_to_app, size: 24.0),
-                                  Text("Logout"),
-                                  Icon(Icons.arrow_right, size: 32.0),
-                                ],
-                              ),
-                            ),
-                          ),
+                                  top: 380,
+                                  left: MediaQuery.of(context).size.width / 1.8,
+                                  child: SizedBox(
+                                    height: 50, // Establece la altura deseada del botón
+                                    child: FilledButton(
+                                      onPressed: () async {
+                                        UserRepository().logout();
+                                        Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(builder: (context) => const IntroScreen()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      },
+                                      child: const Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.exit_to_app, size: 24.0),
+                                          Text("Logout"),
+                                          Icon(Icons.arrow_right, size: 32.0),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
                         ],
                       ),
                     ),

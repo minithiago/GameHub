@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
@@ -31,6 +32,22 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
   void _showList() {
     print("List Clicked");
     _switchBloc.showList();
+  }
+  Future<String?> getUserAvatar() async {
+    // Llamamos a la función fetchUserData() para obtener los datos del usuario
+    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
+
+    // Verificamos si se encontró algún usuario con el correo electrónico dado
+    if (userData != null) {
+      // Accedemos al valor del campo "nickname" del usuario
+      String? avatar = userData['avatar'];
+
+      // Devolvemos el valor del nickname
+      return avatar;
+    } else {
+      // Si no se encontró ningún usuario, devolvemos null
+      return null;
+    }
   }
 
   @override
@@ -72,11 +89,23 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                 color: Style.Colors.backgroundColor,
                 padding: const EdgeInsets.all(20.0),
                 child: Row(children: [
-                  const CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage:
-                        AssetImage('assets/images/default_avatar.jpg'),
+                  FutureBuilder<String?>(
+                    future: getUserAvatar(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                      } else {
+                        final avatar = snapshot.data ?? 'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
+                        return CircleAvatar(
+                          radius: 30,
+                          backgroundImage:
+                              NetworkImage(avatar),
+                              //backgroundColor: Colors.amber,
+                        );
+                      }
+                    },
                   ),
+                  
                   const SizedBox(width: 20.0),
                   const Text(
                     'Your Library',

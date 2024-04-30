@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           backgroundColor: Style.Colors.introGrey,
           appBar: AppBar(
-            backgroundColor: Style.Colors.introGrey,
+            backgroundColor: Style.Colors.introGrey, //background
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               color: Colors.white,
@@ -57,7 +57,19 @@ class LoginScreen extends StatelessWidget {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(Icons.waving_hand,size: 70,
+                          color: Colors.white,),
+                          
+                        ]
+                          
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       const Column(
@@ -88,17 +100,17 @@ class LoginScreen extends StatelessWidget {
                       Form(
                         key: _formKey,
                         child: Padding(
-                          padding: const EdgeInsets.all(20),
+                          padding: EdgeInsets.all(20),
                           child: Column(
                             children: [
                               Column(
                                 children: [
                                   Email(emailController: _emailController),
-                                  const SizedBox(height: 30),
+                                  SizedBox(height: 30),
 
                                   Password(
                                       passwordController: _passwordController),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -125,7 +137,7 @@ class LoginScreen extends StatelessWidget {
 
                                   // ROW - REGISTER
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
+                                    padding: EdgeInsets.only(top: 20),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -160,7 +172,7 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 30),
+                              SizedBox(height: 30),
                               LoginButton(
                                 formKey: _formKey,
                                 emailController: _emailController,
@@ -357,6 +369,7 @@ class LoginButton extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MainScreen()),
                   );
                 }
+                
               } on Exception catch (_) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Invalid email or password.")));

@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:procecto2/model/game.dart';
 //import 'package:procecto2/model/game_models/screenshot.dart';
 import 'package:procecto2/model/item.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -58,7 +60,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
       _controller = YoutubePlayerController(
         initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
         flags: const YoutubePlayerFlags(
-          autoPlay: true,
+          autoPlay: false,
           loop: true,
           mute: false,
           hideThumbnail: true,
@@ -80,6 +82,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
   Widget build(BuildContext context) {
     var date = DateTime.fromMillisecondsSinceEpoch(game.firstRelease * 1000);
     var formattedDate = DateFormat('dd/MM/yyyy').format(date);
+    String userId = "";
+    
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     LoginProvider().storageGetAuthData();
@@ -88,7 +92,20 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     List<String> favoriteGameNames =
         favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // Verifica si hay un usuario autenticado
+    if (user != null) {
+      // El usuario está autenticado, puedes obtener su ID
+      userId = user.uid;
+      print('UserID: $userId');
+    } else {
+      // No hay usuario autenticado
+      print('No user logged in');
+    }
+
     return Scaffold(
+      
       backgroundColor: const Color(0xFF20232a),
       body: Column(children: [
         const SizedBox(height: 50.0),
@@ -337,19 +354,14 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               true,
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              LoginProvider().addGame(
-                                                  game.name,
-                                                  game.total_rating
-                                                      .truncateToDouble(),
-                                                  LoginProvider.currentUser.id);
+                                              UserRepository().addGameToUser(userId,"https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",game.name,game.total_rating,game.id);
 
                                               favoriteGamesProvider
                                                   .addToFavorites(game);
                                               game.favorite = true;
                                               favoriteGameNames.add(game.name);
                                               print(favoriteGameNames);
-                                              favoriteGamesProvider
-                                                  .refreshFavorites();
+                                              
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
@@ -358,14 +370,14 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
+                                                    UserRepository().removeGameFromUser(userId, game.id);
                                                     favoriteGamesProvider
                                                         .removeFavorite(game);
                                                     favoriteGameNames
                                                         .remove(game.name);
                                                     game.favorite = false;
                                                     print(favoriteGameNames);
-                                                    favoriteGamesProvider
-                                                        .refreshFavorites();
+                                                    
                                                   },
                                                 ),
                                               ));
@@ -403,6 +415,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               .contains(game.name),
                                           child: ElevatedButton(
                                             onPressed: () {
+                                              UserRepository().removeGameFromUser(userId, game.id);
                                               favoriteGamesProvider
                                                   .removeFavorite(game);
                                               game.favorite = false;
@@ -418,6 +431,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
+                                                    UserRepository().addGameToUser(userId,"https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",game.name,game.total_rating,game.id);
                                                     favoriteGamesProvider
                                                         .addToFavorites(game);
                                                     game.favorite = true;

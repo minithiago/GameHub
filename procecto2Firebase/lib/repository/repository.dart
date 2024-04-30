@@ -224,4 +224,22 @@ class GameRepository {
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
+
+  Future<GameResponse> libraryGames(List<String> gameIds) async {
+  // Construye la consulta para seleccionar los juegos que estén dentro de la lista de gameIds
+  String query = gameIds.join(',');
+  
+  // Realiza la solicitud HTTP con la consulta construida
+  var response = await http.post(
+    Uri.parse(mainUrl),
+    headers: {
+      'Authorization': 'Bearer $apiKey',
+      'Client-ID': 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+    },
+    body:
+        "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id = ($query) ; limit 99;");
+  // Devuelve la respuesta del servidor en forma de GameResponse
+  return GameResponse.fromJson(jsonDecode(response.body));
+}
+
 }

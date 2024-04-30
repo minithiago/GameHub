@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:procecto2/bloc/get_games_bloc.dart';
+import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
+import 'package:procecto2/elements/error_element.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
+import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
@@ -25,13 +32,76 @@ class LibraryScreenGrid extends StatefulWidget {
 class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
   String _nameFilter = '';
+  Future<String?> getUserId() async {
+  // Obtener el usuario actualmente autenticado
+  User? user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    return user.uid;
+  } else {
+    return null;
+  }
+}
+
+Future<List<String>> getGamesForUser() async {
+  String? userId = await getUserId();
+  if (userId != null) {
+    try {
+      // Obtener la referencia a la subcolección "Games" del usuario actual
+      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Games')
+          .get();
+
+      // Extraer los IDs de los juegos
+      List<String> gameIds = gamesSnapshot.docs.map((doc) {
+        // Obtener el campo "id" de cada documento en la subcolección "Games"
+        return doc['id'].toString(); // Ajusta esto según la estructura de tus documentos
+      }).toList();
+
+      return gameIds;
+    } catch (e) {
+      print('Error getting games for user: $e');
+      return [];
+    }
+  } else {
+    return [];
+  }
+}
+
 
   @override
-  void initState() {
-    super.initState();
-    _currentFilter = widget.filtro;
-    _nameFilter = widget.busqueda;
+void initState() {
+  super.initState();
+  _currentFilter = widget.filtro;
+  _nameFilter = widget.busqueda;
+  
+  // Obtiene la lista de juegos para el usuario de manera asíncrona
+  _fetchUserGames();
+}
+
+Future<void> _fetchUserGames() async {
+  try {
+    // Obtiene la lista de juegos para el usuario
+    List<String> userGames = await getGamesForUser();
+    
+    // Verifica si la lista de juegos para el usuario está vacía
+    if (userGames.isEmpty) {
+      // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
+      getlibraryGames.getlibraryGames([]);
+    } else {
+      // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
+      getlibraryGames.getlibraryGames(userGames);
+    }
+  } catch (e) {
+    // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
+    print('Error fetching user games: $e');
   }
+}
+
+
+
 
   @override
   void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
@@ -43,11 +113,34 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<GameResponse>(
+      stream: getlibraryGames.subject.stream,
+      builder: (context, AsyncSnapshot<GameResponse> snapshot) {
+        if (snapshot.hasData) {
+          final gameResponse = snapshot.data;
+          if (gameResponse != null && gameResponse.error.isNotEmpty) {
+            return buildErrorWidget(gameResponse.error);
+          } else {
+            return _build(gameResponse!);
+          }
+        } else if (snapshot.hasError) {
+          return buildErrorWidget(snapshot.error.toString());
+        } else {
+          return buildLoadingWidget();
+        }
+      },
+    );
+  }
+  
+
+  //@override
+  Widget _build(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     var favoriteGames = favoriteGamesProvider.favoriteGames;
+
+    var favoriteGamess = data.games;
     List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
         return games;
@@ -61,16 +154,16 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
     switch (_currentFilter) {
       case "Name":
-        favoriteGames.sort((b, a) => b.name.compareTo(a.name));
+        favoriteGamess.sort((b, a) => b.name.compareTo(a.name));
         break;
       case "Rating":
-        favoriteGames.sort((a, b) => b.total_rating.compareTo(a.total_rating));
+        favoriteGamess.sort((a, b) => b.total_rating.compareTo(a.total_rating));
         break;
       case "Release date":
-        favoriteGames.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
+        favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
         break;
       default:
-        favoriteGames = favoriteGamesProvider.favoriteGames;
+        favoriteGamess = data.games;
     }
 
     // Ordenar los juegos por rating (en orden descendente)
@@ -84,9 +177,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
           childAspectRatio: 0.75,
           crossAxisCount: 3,
         ),
-        itemCount: favoriteGames.length,
+        itemCount: favoriteGamess.length,
         itemBuilder: (BuildContext context, int index) {
-          GameModel game = favoriteGames[index];
+          GameModel game = favoriteGamess[index];
           return GestureDetector(
             onLongPress: () {
               HapticFeedback.lightImpact();
@@ -199,7 +292,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                               const BorderRadius.all(Radius.circular(5.0)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGames[index].cover!.imageId}.jpg",
+                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
                               ),
                               fit: BoxFit.cover)),
                     ),

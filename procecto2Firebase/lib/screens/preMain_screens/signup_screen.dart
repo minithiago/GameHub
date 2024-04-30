@@ -253,8 +253,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                   String email = _emailController.text;
                                   String password = _passwordController.text;
                                   String nickname = _nicknameController.text;
-                                  String? profilePic =
-                                      await uploadImage(imagen_to_upload!);
+                                  String? profilePic;
+
+                                  if (imagen_to_upload != null) {
+                                    profilePic = await uploadImage(imagen_to_upload!);
+                                  } else{
+                                    profilePic = "";
+                                  }
 
                                   UserModel user = UserModel(
                                       nickname: nickname,
@@ -263,10 +268,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                       profilePicUrl: profilePic!);
                                   User? newUser = await UserRepository()
                                       .registerUser(email, password);
-                                  bool success = await UserRepository().addUser(
+                                  
+                                  if (newUser != null) {
+                                    bool success = await UserRepository().addUser(
                                       nickname, email, password, profilePic);
-                                  if (success && newUser != null) {
-                                    Navigator.push(
+                                    if (success){
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "User register completed.")));
+                                      Navigator.push(
                                       context,
                                       PageRouteBuilder(
                                         pageBuilder: (context, animation,
@@ -281,11 +292,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                         },
                                       ),
                                     );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Error creating the user.")));
+                                    }
+                                    
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
                                             content: Text(
-                                                "Error creando el usuario.")));
+                                                "Email already in use.")));
                                   }
 
                                   if (await loginProvider.signup(
