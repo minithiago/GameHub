@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:procecto2/firebase_options.dart';
 import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
+import 'package:procecto2/style/light_theme.dart';
+import 'package:procecto2/style/theme.dart';
 import 'package:provider/provider.dart';
 import 'providers/providers.dart';
 import 'package:procecto2/style/theme.dart' as Style;
@@ -13,7 +15,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
+    //statusBarColor: Colors.transparent,
     systemNavigationBarColor: Style.Colors.introGrey, //barra de abajo
   ));
   runApp(
@@ -28,7 +30,7 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => FavoriteGamesProvider(),
-        )
+        ),
       ],
       child: const MyApp(),
     ),
@@ -43,10 +45,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GameHub',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      /*theme: ThemeData(
         primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      ),*/
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: const CheckAuthScreen(),
     );
   }

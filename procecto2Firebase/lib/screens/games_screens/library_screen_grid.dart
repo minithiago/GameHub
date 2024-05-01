@@ -32,76 +32,77 @@ class LibraryScreenGrid extends StatefulWidget {
 class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
   String _nameFilter = '';
+
   Future<String?> getUserId() async {
-  // Obtener el usuario actualmente autenticado
-  User? user = FirebaseAuth.instance.currentUser;
+    // Obtener el usuario actualmente autenticado
+    User? user = FirebaseAuth.instance.currentUser;
 
-  if (user != null) {
-    return user.uid;
-  } else {
-    return null;
+    print(user);
+
+    if (user != null) {
+      return user.uid;
+    } else {
+      return null;
+    }
   }
-}
 
-Future<List<String>> getGamesForUser() async {
-  String? userId = await getUserId();
-  if (userId != null) {
-    try {
-      // Obtener la referencia a la subcolección "Games" del usuario actual
-      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userId)
-          .collection('Games')
-          .get();
+  Future<List<String>> getGamesForUser() async {
+    String? userId = await getUserId();
+    print(userId);
+    if (userId != null) {
+      try {
+        // Obtener la referencia a la subcolección "Games" del usuario actual
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Games')
+            .get();
 
-      // Extraer los IDs de los juegos
-      List<String> gameIds = gamesSnapshot.docs.map((doc) {
-        // Obtener el campo "id" de cada documento en la subcolección "Games"
-        return doc['id'].toString(); // Ajusta esto según la estructura de tus documentos
-      }).toList();
+        // Extraer los IDs de los juegos
+        List<String> gameIds = gamesSnapshot.docs.map((doc) {
+          // Obtener el campo "id" de cada documento en la subcolección "Games"
+          return doc['id']
+              .toString(); // Ajusta esto según la estructura de tus documentos
+        }).toList();
 
-      return gameIds;
-    } catch (e) {
-      print('Error getting games for user: $e');
+        return gameIds;
+      } catch (e) {
+        print('Error getting games for user: $e');
+        return [];
+      }
+    } else {
       return [];
     }
-  } else {
-    return [];
   }
-}
-
 
   @override
-void initState() {
-  super.initState();
-  _currentFilter = widget.filtro;
-  _nameFilter = widget.busqueda;
-  
-  // Obtiene la lista de juegos para el usuario de manera asíncrona
-  _fetchUserGames();
-}
+  void initState() {
+    super.initState();
+    _currentFilter = widget.filtro;
+    _nameFilter = widget.busqueda;
 
-Future<void> _fetchUserGames() async {
-  try {
-    // Obtiene la lista de juegos para el usuario
-    List<String> userGames = await getGamesForUser();
-    
-    // Verifica si la lista de juegos para el usuario está vacía
-    if (userGames.isEmpty) {
-      // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
-      getlibraryGames.getlibraryGames([]);
-    } else {
-      // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
-      getlibraryGames.getlibraryGames(userGames);
-    }
-  } catch (e) {
-    // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
-    print('Error fetching user games: $e');
+    // Obtiene la lista de juegos para el usuario de manera asíncrona
+    _fetchUserGames();
   }
-}
 
+  Future<void> _fetchUserGames() async {
+    try {
+      // Obtiene la lista de juegos para el usuario
+      List<String> userGames = await getGamesForUser();
 
-
+      // Verifica si la lista de juegos para el usuario está vacía
+      if (userGames.isEmpty) {
+        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
+        getlibraryGames.getlibraryGames([]);
+      } else {
+        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
+        getlibraryGames.getlibraryGames(userGames);
+      }
+    } catch (e) {
+      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
+      print('Error fetching user games: $e');
+    }
+  }
 
   @override
   void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
@@ -113,6 +114,7 @@ Future<void> _fetchUserGames() async {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
@@ -133,7 +135,6 @@ Future<void> _fetchUserGames() async {
       },
     );
   }
-  
 
   //@override
   Widget _build(GameResponse data) {
@@ -165,6 +166,11 @@ Future<void> _fetchUserGames() async {
       default:
         favoriteGamess = data.games;
     }
+
+    /*
+    if (favoriteGamess.isEmpty) {
+      favoriteGamess = [];
+    }*/
 
     // Ordenar los juegos por rating (en orden descendente)
 
@@ -283,7 +289,7 @@ Future<void> _fetchUserGames() async {
             child: Stack(
               children: [
                 Hero(
-                  tag: favoriteGames[index].id,
+                  tag: favoriteGamess[index].id,
                   child: AspectRatio(
                     aspectRatio: 3 / 4,
                     child: Container(

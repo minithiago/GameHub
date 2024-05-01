@@ -8,7 +8,7 @@ class GameHub extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      "assets/images/gamehub.png",
+      "assets/images/gamehubFondo.png",
     );
   }
 }

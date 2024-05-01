@@ -33,6 +33,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
     print("List Clicked");
     _switchBloc.showList();
   }
+
   Future<String?> getUserAvatar() async {
     // Llamamos a la función fetchUserData() para obtener los datos del usuario
     Map<String, dynamic>? userData = await UserRepository().fetchUserData();
@@ -42,9 +43,13 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
       // Accedemos al valor del campo "nickname" del usuario
       String? avatar = userData['avatar'];
 
+      if (avatar == "") {
+        return "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+      }
+
       // Devolvemos el valor del nickname
       return avatar;
-    } else {
+    } else if (userData == null) {
       // Si no se encontró ningún usuario, devolvemos null
       return null;
     }
@@ -95,17 +100,16 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
                       } else {
-                        final avatar = snapshot.data ?? 'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
+                        final avatar = snapshot.data ??
+                            'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
                         return CircleAvatar(
                           radius: 30,
-                          backgroundImage:
-                              NetworkImage(avatar),
-                              //backgroundColor: Colors.amber,
+                          backgroundImage: NetworkImage(avatar),
+                          //backgroundColor: Colors.amber,
                         );
                       }
                     },
                   ),
-                  
                   const SizedBox(width: 20.0),
                   const Text(
                     'Your Library',

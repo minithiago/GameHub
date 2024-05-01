@@ -32,6 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
       _image = img;
     });
   }
+
   Future<String?> getUserNickname() async {
     // Llamamos a la función fetchUserData() para obtener los datos del usuario
     Map<String, dynamic>? userData = await UserRepository().fetchUserData();
@@ -48,6 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
       return null;
     }
   }
+
   Future<String?> getUserPass() async {
     // Llamamos a la función fetchUserData() para obtener los datos del usuario
     Map<String, dynamic>? userData = await UserRepository().fetchUserData();
@@ -64,6 +66,7 @@ class _AccountScreenState extends State<AccountScreen> {
       return null;
     }
   }
+
   Future<String?> getUserAvatar() async {
     // Llamamos a la función fetchUserData() para obtener los datos del usuario
     Map<String, dynamic>? userData = await UserRepository().fetchUserData();
@@ -73,9 +76,13 @@ class _AccountScreenState extends State<AccountScreen> {
       // Accedemos al valor del campo "nickname" del usuario
       String? avatar = userData['avatar'];
 
+      if (avatar == "") {
+        return "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+      }
+
       // Devolvemos el valor del nickname
       return avatar;
-    } else {
+    } else if (userData == null) {
       // Si no se encontró ningún usuario, devolvemos null
       return null;
     }
@@ -153,25 +160,25 @@ class _AccountScreenState extends State<AccountScreen> {
                 Positioned(
                   top: 30, // Margen arriba
                   left: MediaQuery.of(context).size.width /
-                      3, // Margen a la izquierda
+                      2.90, // Margen a la izquierda
                   child: FutureBuilder<String?>(
                     future: getUserAvatar(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
                       } else {
-                        final avatar = snapshot.data ?? 'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
+                        final avatar = snapshot.data ??
+                            'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
                         return CircleAvatar(
                           radius: 64,
-                          backgroundImage:
-                              NetworkImage(avatar),
-                              //backgroundColor: Colors.amber,
+                          backgroundImage: NetworkImage(avatar),
+                          //backgroundColor: Colors.amber,
                         );
                       }
                     },
                   ),
                 ),
-                
+
                 Positioned(
                   top: 120, // Margen arriba
                   left: MediaQuery.of(context).size.width /
@@ -192,7 +199,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
                       } else {
-                        final nickname = snapshot.data ?? 'user'; // Obtiene el nickname o establece "user" si no hay ninguno
+                        final nickname = snapshot.data ??
+                            'user'; // Obtiene el nickname o establece "user" si no hay ninguno
                         return Text(
                           nickname,
                           textAlign: TextAlign.center,
@@ -206,7 +214,6 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                   ),
                 ),
-
 
                 Positioned(
                   top: 220, // Ajusta la posición vertical según necesites
@@ -264,7 +271,6 @@ class _AccountScreenState extends State<AccountScreen> {
                             height: 50,
                           ),
                           TextField(
-                            
                             decoration: InputDecoration(
                               filled: true,
                               //enabled: false,
@@ -299,25 +305,29 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           ),*/
                           Positioned(
-                            
                             child: FutureBuilder<String?>(
                               future: getUserPass(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
                                 } else {
-                                  _password = snapshot.data ?? 'Password'; // Obtiene el nickname o establece "user" si no hay ninguno
+                                  _password = snapshot.data ??
+                                      'Password'; // Obtiene el nickname o establece "user" si no hay ninguno
                                   return TextField(
                                     decoration: InputDecoration(
                                       prefixIcon: Icon(Icons.lock_outline),
-                                     
+
                                       prefixIconColor: Colors.white,
                                       filled: true,
-                                      fillColor: Color.fromARGB(128, 255, 255, 255),
-                                      
-                                      hintText: _password, // Utiliza el nickname como hintText
+                                      fillColor:
+                                          Color.fromARGB(128, 255, 255, 255),
+
+                                      hintText:
+                                          _password, // Utiliza el nickname como hintText
                                       border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                     ),
                                   );
@@ -326,34 +336,43 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 200,
                           ),
-                          
                           Positioned(
-                                  top: 380,
-                                  left: MediaQuery.of(context).size.width / 1.8,
-                                  child: SizedBox(
-                                    height: 50, // Establece la altura deseada del botón
-                                    child: FilledButton(
-                                      onPressed: () async {
-                                        UserRepository().logout();
-                                        Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(builder: (context) => const IntroScreen()),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      },
-                                      child: const Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.exit_to_app, size: 24.0),
-                                          Text("Logout"),
-                                          Icon(Icons.arrow_right, size: 32.0),
-                                        ],
-                                      ),
-                                    ),
+                            //top: 580,
+                            //left: MediaQuery.of(context).size.width / 1.8,
+                            child: SizedBox(
+                              height:
+                                  50, // Establece la altura deseada del botón
+                              child: FilledButton(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
+                                onPressed: () async {
+                                  UserRepository().logout();
 
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const IntroScreen()),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                },
+                                child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.exit_to_app, size: 24.0),
+                                    Text("Logout"),
+                                    Icon(Icons.arrow_right, size: 32.0),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

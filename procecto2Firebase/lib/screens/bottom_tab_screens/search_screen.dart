@@ -90,7 +90,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                               "  Browse by genre",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -106,7 +106,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                               "  Incoming games",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -122,7 +122,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                               "  Search by platform",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -153,7 +153,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                               "  Incoming expansions",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -169,7 +169,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                               "  Popular franchises",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -185,7 +185,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                               "  Top rated games",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

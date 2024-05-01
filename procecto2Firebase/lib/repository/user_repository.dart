@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/userModel.dart';
 
 class UserRepository extends ChangeNotifier {
@@ -14,11 +12,12 @@ class UserRepository extends ChangeNotifier {
   static late UserModel currentUser;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<bool> addUser(
-      String nickname, String email, String password, String profilePic) async {
+  Future<bool> addUser(String uid, String nickname, String email,
+      String password, String profilePic) async {
     try {
-      await db.collection("Users").add({
+      await db.collection("Users").doc(uid).set({
         "nickname": nickname,
         "email": email,
         "password": password,
@@ -37,10 +36,25 @@ class UserRepository extends ChangeNotifier {
       return false;
     }
   }
-  Future<bool> addGameToUser(String userId,String coverId, String gameName, double rating, int id) async {
+
+  Future<bool> forgotPassword(String email) async {
+    try {
+      auth.sendPasswordResetEmail(email: email);
+
+      print("Recover password");
+      return true;
+    } catch (e) {
+      print("Error adding user: $e");
+      return false;
+    }
+  }
+
+  Future<bool> addGameToUser(String userId, String coverId, String gameName,
+      double rating, int id) async {
     try {
       // Obtén una referencia al documento del usuario en Firestore utilizando su ID
-      DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('Users').doc(userId);
 
       // Agrega el juego a la colección de juegos del usuario
       await userRef.collection('Games').add({
@@ -57,28 +71,31 @@ class UserRepository extends ChangeNotifier {
       return false;
     }
   }
-  Future<bool> removeGameFromUser(String userId, int gameId) async {
-  try {
-    // Obtén una referencia al documento del usuario en Firestore utilizando su ID
-    DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(userId);
 
-    // Elimina el juego de la colección de juegos del usuario usando el ID del juego
-    QuerySnapshot gameQuery = await userRef.collection('Games').where('id', isEqualTo: gameId).get();
-    if (gameQuery.docs.isNotEmpty) {
-      await gameQuery.docs.first.reference.delete();
-      print("Game removed from user successfully");
-      return true;
-    } else {
-      print("Game not found in user's collection");
+  Future<bool> removeGameFromUser(String userId, int gameId) async {
+    try {
+      // Obtén una referencia al documento del usuario en Firestore utilizando su ID
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('Users').doc(userId);
+
+      // Elimina el juego de la colección de juegos del usuario usando el ID del juego
+      QuerySnapshot gameQuery = await userRef
+          .collection('Games')
+          .where('id', isEqualTo: gameId)
+          .get();
+      if (gameQuery.docs.isNotEmpty) {
+        await gameQuery.docs.first.reference.delete();
+        print("Game removed from user successfully");
+        return true;
+      } else {
+        print("Game not found in user's collection");
+        return false;
+      }
+    } catch (e) {
+      print("Error removing game from user: $e");
       return false;
     }
-  } catch (e) {
-    print("Error removing game from user: $e");
-    return false;
   }
-}
-
-  
 
   Future<Map<String, dynamic>?> fetchUserData() async {
     try {
@@ -124,7 +141,6 @@ class UserRepository extends ChangeNotifier {
       return credential.user; // El registro se realizó correctamente
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
@@ -135,7 +151,6 @@ class UserRepository extends ChangeNotifier {
       return null; // Hubo un error desconocido durante el registro
     }
   }
-  
 
   Future<User?> loginUser(String email, String password) async {
     try {
@@ -156,6 +171,8 @@ class UserRepository extends ChangeNotifier {
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
+    storageWriteEmail('');
+    storageWritePassword('');
   }
 
   Future<String> storageReadEmail() async {

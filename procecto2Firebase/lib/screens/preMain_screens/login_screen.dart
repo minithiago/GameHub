@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
+import 'package:procecto2/screens/preMain_screens/recover_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 //import 'package:procecto2/services/auth_service.dart';
 
@@ -61,14 +62,14 @@ class LoginScreen extends StatelessWidget {
                         height: 20,
                       ),
                       const Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(Icons.waving_hand,size: 70,
-                          color: Colors.white,),
-                          
-                        ]
-                          
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(
+                              Icons.waving_hand,
+                              size: 70,
+                              color: Colors.white,
+                            ),
+                          ]),
                       const SizedBox(
                         height: 20,
                       ),
@@ -114,62 +115,57 @@ class LoginScreen extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
                                       InkWell(
                                         onTap: () {
-                                          /*istentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: RequestPasswordScreen(),
-                                        withNavBar: false,
-                                        pageTransitionAnimation:
-                                            PageTransitionAnimation.fade,
-                                      );
-                                      */
+                                          Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  RecoverPasswordScreen(),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                const begin = Offset(1.0, 0.0);
+                                                const end = Offset.zero;
+                                                const curve = Curves.ease;
+
+                                                var tween = Tween(
+                                                        begin: begin, end: end)
+                                                    .chain(CurveTween(
+                                                        curve: curve));
+                                                var offsetAnimation =
+                                                    animation.drive(tween);
+
+                                                return SlideTransition(
+                                                  position: offsetAnimation,
+                                                  child: child,
+                                                );
+                                              },
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 250),
+                                            ),
+                                          );
                                         },
                                         child: const Text(
                                           'I forgot my password ',
                                           style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.white),
+                                            fontSize: 13,
+                                            color: Colors.white,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
 
                                   // ROW - REGISTER
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Opacity(
-                                          opacity: 0.7,
-                                          child: Text(
-                                            'No account? ',
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SignupScreen()),
-                                            );
-                                          },
-                                          child: const Text(
-                                            ' Create one.',
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
                               SizedBox(height: 30),
@@ -178,6 +174,40 @@ class LoginScreen extends StatelessWidget {
                                 emailController: _emailController,
                                 passwordController: _passwordController,
                                 loginProvider: loginProvider,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 40),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Opacity(
+                                      opacity: 0.7,
+                                      child: Text(
+                                        "Don't have an account?  ",
+                                        style: TextStyle(
+                                            fontSize: 13, color: Colors.grey),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SignupScreen()),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Create one',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -265,7 +295,7 @@ class Email extends StatelessWidget {
         fillColor: Color.fromARGB(128, 255, 255, 255),
         prefixIcon: Icon(Icons.email),
         prefixIconColor: Colors.white,
-        labelText: "Email",
+        labelText: "Enter your email",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
               10.0), // Ajusta el valor de 10.0 según sea necesario
@@ -317,7 +347,7 @@ class _PasswordState extends State<Password> {
           borderRadius: BorderRadius.circular(
               10.0), // Ajusta el valor de 10.0 según sea necesario
         ),
-        labelText: 'Password',
+        labelText: 'Enter your password',
         suffixIcon: IconButton(
           onPressed: () {
             setState(() {
@@ -353,8 +383,14 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         width: double.infinity,
-        height: 50,
+        height: 55,
         child: FilledButton(
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               String email = _emailController.text;
@@ -369,7 +405,6 @@ class LoginButton extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MainScreen()),
                   );
                 }
-                
               } on Exception catch (_) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Invalid email or password.")));
@@ -389,7 +424,14 @@ class LoginButton extends StatelessWidget {
               }*/
             }
           },
-          child: const Text('Login'),
+          child: const Text(
+            'Login',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ), // Color del texto
+          ),
         ));
   }
 }

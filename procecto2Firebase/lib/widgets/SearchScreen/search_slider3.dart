@@ -17,7 +17,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 160,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -230,7 +230,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
         child: Stack(
           children: [
             Container(
-              width: 170,
+              width: 160,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
@@ -267,7 +267,7 @@ class _SearchSliderState3 extends State<SearchSlider3> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
               ),

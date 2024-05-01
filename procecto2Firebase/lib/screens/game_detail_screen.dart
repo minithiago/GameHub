@@ -83,7 +83,6 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     var date = DateTime.fromMillisecondsSinceEpoch(game.firstRelease * 1000);
     var formattedDate = DateFormat('dd/MM/yyyy').format(date);
     String userId = "";
-    
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     LoginProvider().storageGetAuthData();
@@ -105,7 +104,6 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     }
 
     return Scaffold(
-      
       backgroundColor: const Color(0xFF20232a),
       body: Column(children: [
         const SizedBox(height: 50.0),
@@ -354,14 +352,19 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               true,
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              UserRepository().addGameToUser(userId,"https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",game.name,game.total_rating,game.id);
+                                              UserRepository().addGameToUser(
+                                                  userId,
+                                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                                  game.name,
+                                                  game.total_rating,
+                                                  game.id);
 
                                               favoriteGamesProvider
                                                   .addToFavorites(game);
                                               game.favorite = true;
                                               favoriteGameNames.add(game.name);
                                               print(favoriteGameNames);
-                                              
+
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
@@ -370,14 +373,15 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
-                                                    UserRepository().removeGameFromUser(userId, game.id);
+                                                    UserRepository()
+                                                        .removeGameFromUser(
+                                                            userId, game.id);
                                                     favoriteGamesProvider
                                                         .removeFavorite(game);
                                                     favoriteGameNames
                                                         .remove(game.name);
                                                     game.favorite = false;
                                                     print(favoriteGameNames);
-                                                    
                                                   },
                                                 ),
                                               ));
@@ -415,13 +419,16 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               .contains(game.name),
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              UserRepository().removeGameFromUser(userId, game.id);
+                                              UserRepository()
+                                                  .removeGameFromUser(
+                                                      userId, game.id);
                                               favoriteGamesProvider
                                                   .removeFavorite(game);
                                               game.favorite = false;
                                               favoriteGamesProvider
                                                   .removeFavoriteByName(
                                                       game.name);
+
                                               // Remover el juego de la lista
 
                                               ScaffoldMessenger.of(context)
@@ -431,7 +438,12 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
-                                                    UserRepository().addGameToUser(userId,"https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",game.name,game.total_rating,game.id);
+                                                    UserRepository().addGameToUser(
+                                                        userId,
+                                                        "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                                        game.name,
+                                                        game.total_rating,
+                                                        game.id);
                                                     favoriteGamesProvider
                                                         .addToFavorites(game);
                                                     game.favorite = true;

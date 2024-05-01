@@ -63,7 +63,7 @@ class _HomeSliderState2 extends State<HomeSlider2> {
             BorderRadius.circular(10.0), // Ajusta el radio según sea necesario
         // Color de fondo del contenedor
       ),
-      height: 220,
+      height: 180,
       child: PageIndicatorContainer(
         align: IndicatorAlign.bottom,
         length: games.take(10).length,

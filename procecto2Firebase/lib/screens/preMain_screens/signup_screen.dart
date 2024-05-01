@@ -112,16 +112,16 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               Positioned(
                 top: 220,
-                left: 20,
-                right: 20,
+                left: 10,
+                right: 10,
                 child: Form(
                   key: _formKey,
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(25),
                     child: Column(
                       children: [
                         TextFormField(
-                          maxLength: 30,
+                          //maxLength: 30,
                           controller: _nicknameController,
                           inputFormatters: [
                             FilteringTextInputFormatter.deny(RegExp(
@@ -243,10 +243,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                          padding: const EdgeInsets.only(top: 40),
                           child: SizedBox(
                             width: double.infinity,
-                            height: 50,
+                            height: 55,
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
@@ -256,8 +256,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                   String? profilePic;
 
                                   if (imagen_to_upload != null) {
-                                    profilePic = await uploadImage(imagen_to_upload!);
-                                  } else{
+                                    profilePic =
+                                        await uploadImage(imagen_to_upload!);
+                                  } else {
                                     profilePic = "";
                                   }
 
@@ -266,44 +267,47 @@ class _SignupScreenState extends State<SignupScreen> {
                                       email: email,
                                       password: password,
                                       profilePicUrl: profilePic!);
+
                                   User? newUser = await UserRepository()
                                       .registerUser(email, password);
-                                  
+
                                   if (newUser != null) {
-                                    bool success = await UserRepository().addUser(
-                                      nickname, email, password, profilePic);
-                                    if (success){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "User register completed.")));
+                                    bool success = await UserRepository()
+                                        .addUser(newUser.uid, nickname, email,
+                                            password, profilePic);
+                                    if (success) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "User register completed.")));
                                       Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder: (context, animation,
-                                                secondaryAnimation) =>
-                                            MainScreen(),
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: child,
-                                          );
-                                        },
-                                      ),
-                                    );
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              MainScreen(),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: child,
+                                            );
+                                          },
+                                        ),
+                                      );
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Error creating the user.")));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "Error creating the user.")));
                                     }
-                                    
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
-                                            content: Text(
-                                                "Email already in use.")));
+                                            content:
+                                                Text("Email already in use.")));
                                   }
 
                                   if (await loginProvider.signup(
@@ -352,14 +356,16 @@ class _SignupScreenState extends State<SignupScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.orange,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               child: const Text(
                                 'Register',
                                 style: TextStyle(
+                                    fontWeight: FontWeight.bold,
                                     color: Colors.white,
-                                    fontSize: 16), // Color del texto
+                                    fontSize: 16),
+                                // Color del texto
                               ),
                             ),
                           ),
