@@ -115,6 +115,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     }
   }
 
+  //List<GameModel> favoriteGamess = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
@@ -125,10 +127,22 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
           if (gameResponse != null && gameResponse.error.isNotEmpty) {
             return buildErrorWidget(gameResponse.error);
           } else {
+            //favoriteGamess = gameResponse!.games;
             return _build(gameResponse!);
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          // Devolvemos un widget vacío que no ocupa espacio en la pantalla
+          return const SizedBox(
+            child: Center(
+              child: Text(
+                "Search for games",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
         } else {
           return buildLoadingWidget();
         }
@@ -139,9 +153,10 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   //@override
   Widget _build(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    var favoriteGames = favoriteGamesProvider.favoriteGames;
+    var favoriteGamess = favoriteGamesProvider.favoriteGames;
 
-    var favoriteGamess = data.games;
+    //var favoriteGamess = data.games;
+
     List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
         return games;
@@ -167,10 +182,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         favoriteGamess = data.games;
     }
 
-    /*
     if (favoriteGamess.isEmpty) {
       favoriteGamess = [];
-    }*/
+    }
 
     // Ordenar los juegos por rating (en orden descendente)
 

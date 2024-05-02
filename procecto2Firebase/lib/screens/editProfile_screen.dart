@@ -8,23 +8,22 @@ import 'package:procecto2/providers/account_form_provider.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
-import 'package:procecto2/screens/editProfile_screen.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/utils.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
 import 'package:provider/provider.dart';
 
-class AccountScreen extends StatefulWidget {
+class editAccountScreen extends StatefulWidget {
   final image;
 
-  const AccountScreen({super.key, this.image});
+  const editAccountScreen({super.key, this.image});
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  State<editAccountScreen> createState() => _editAccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _editAccountScreenState extends State<editAccountScreen> {
   Uint8List? _image;
 
   void selectImage() async {
@@ -97,68 +96,25 @@ class _AccountScreenState extends State<AccountScreen> {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String? _password;
 
-    /*if (LoginProvider.currentUser.email == "Guest") {
-      return Scaffold(
-        backgroundColor: Style.Colors.backgroundColor,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Not Available without account',
-                style: TextStyle(fontSize: 20.0, color: Colors.white),
-              ),
-              SizedBox(height: 20), // Espacio entre el texto y el botón
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => IntroScreen()),
-                  );
-                },
-                child: Text('Register'),
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Style.Colors.introGrey, //background
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-      );
-    }*/
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => AccountFormProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => LoginProvider(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (_) => UserRepository(),
-        ),
-      ],
-      child: Scaffold(
+        title: Text("Edit"),
+      ),
+      body: Scaffold(
         backgroundColor: Style.Colors.backgroundColor,
         body: SafeArea(
           bottom: true,
           child: Center(
             child: Stack(
               children: [
-                /*
-                const Positioned(
-                  top: 30,
-                  left: 0,
-                  right: 0, // Ocupa todo el ancho disponible
-                  child: Text(
-                    "Account information",
-                    textAlign:
-                        TextAlign.center, // Centra el texto horizontalmente
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),*/
                 Positioned(
                   top: 30, // Margen arriba
                   left: MediaQuery.of(context).size.width /
@@ -181,21 +137,6 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ),
 
-                Positioned(
-                  top: 20, // Margen arriba
-                  right: 10, // Margen a la izquierda
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => editAccountScreen()),
-                      );
-                    }, //selectImage,
-                    icon: const Icon(Icons.edit),
-                    color: Colors.white,
-                  ),
-                ),
                 Positioned(
                   top: 170,
                   left: 0,
@@ -221,52 +162,18 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                   ),
                 ),
-
                 Positioned(
-                  top: 220, // Ajusta la posición vertical según necesites
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const Icon(
-                              SimpleLineIcons.game_controller,
-                              size: 60,
-                              color: Colors.white,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '${favoriteGamesProvider.favoriteGames.length} games',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Expanded(
-                        child: Column(
-                          children: [
-                            Icon(
-                              SimpleLineIcons.people,
-                              size: 60,
-                              color: Colors.white,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '3 friends',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  top: 120, // Margen arriba
+                  right: 110, // Margen a la izquierda
+                  child: IconButton(
+                    onPressed: () {}, //selectImage,
+                    icon: const Icon(Icons.add_a_photo),
+                    color: Colors.white,
                   ),
                 ),
 
                 Positioned(
-                  top: 290,
+                  top: 200,
                   left: 20,
                   right: 20,
                   child: Form(
@@ -311,39 +218,9 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                             ),
                           ),*/
-                          Positioned(
-                            child: FutureBuilder<String?>(
-                              future: getUserPass(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
-                                } else {
-                                  _password = snapshot.data ??
-                                      'Password'; // Obtiene el nickname o establece "user" si no hay ninguno
-                                  return TextField(
-                                    decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.lock_outline),
 
-                                      prefixIconColor: Colors.white,
-                                      filled: true,
-                                      fillColor:
-                                          Color.fromARGB(128, 255, 255, 255),
-
-                                      hintText:
-                                          _password, // Utiliza el nickname como hintText
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
                           const SizedBox(
-                            height: 200,
+                            height: 20,
                           ),
                           Positioned(
                             //top: 580,
@@ -353,13 +230,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                   50, // Establece la altura deseada del botón
                               child: FilledButton(
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.orange,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
                                 onPressed: () async {
-                                  UserRepository().logout();
+                                  //UserRepository().logout();
 
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
@@ -372,9 +249,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Icon(Icons.exit_to_app, size: 24.0),
-                                    Text("Logout"),
-                                    Icon(Icons.arrow_right, size: 32.0),
+                                    Icon(Icons.edit, size: 24.0),
+                                    Text("Modify"),
+                                    Icon(Icons.check, size: 32.0),
                                   ],
                                 ),
                               ),
