@@ -74,6 +74,40 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
       return [];
     }
   }
+  Future<List<String>> getGamesForUserEmail(String userEmail) async {
+  try {
+    // Obtener la referencia al documento del usuario en Firestore utilizando su email
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      String userId = userSnapshot.docs.first.id;
+      // Obtener la referencia a la subcolección "Games" del usuario
+      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Games')
+          .get();
+
+      // Extraer los IDs de los juegos
+      List<String> gameIds = gamesSnapshot.docs.map((doc) {
+        // Obtener el campo "id" de cada documento en la subcolección "Games"
+        return doc['id'].toString(); // Ajusta esto según la estructura de tus documentos
+      }).toList();
+
+      return gameIds;
+    } else {
+      print('No se encontró ningún usuario con el correo electrónico $userEmail.');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting games for user: $e');
+    return [];
+  }
+}
+
 
   @override
   void initState() {
@@ -85,7 +119,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     _fetchUserGames();
   }
 
-  Future<void> _fetchUserGames() async {
+  Future<void> _fetchUserGames() async { //ponerlo en game-details y en añadri un setState() 'alomejor'
     try {
       // Obtiene la lista de juegos para el usuario
       List<String> userGames = await getGamesForUser();
