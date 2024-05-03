@@ -26,6 +26,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   Uint8List? _image;
+  int games = 0;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -49,6 +50,32 @@ class _AccountScreenState extends State<AccountScreen> {
       // Si no se encontró ningún usuario, devolvemos null
       return null;
     }
+  }
+  Future<int?> getUserGamesCountByEmail() async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: FirebaseAuth.instance.currentUser!.email
+                                  .toString())
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Games')
+            .get();
+        games = gamesSnapshot.size;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email
+                                  .toString()}.');
+      }
+    } catch (e) {
+      print('Error obteniendo la cantidad de juegos del usuario: $e');
+    }
+    return null;
   }
 
   Future<String?> getUserPass() async {
@@ -230,7 +257,16 @@ class _AccountScreenState extends State<AccountScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Column(
+
+                        child: FutureBuilder<int?>(
+                          future: getUserGamesCountByEmail(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                            } else {
+                              final nickname = snapshot.data ??
+                                  'user'; // Obtiene el nickname o establece "user" si no hay ninguno
+                              return Column(
                           children: [
                             const Icon(
                               SimpleLineIcons.game_controller,
@@ -239,11 +275,15 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              '${favoriteGamesProvider.favoriteGames.length} games',
+                              '${games} games',
                               style: TextStyle(color: Colors.grey),
                             ),
-                          ],
+                          ],);
+                        
+                            }
+                          },
                         ),
+                        
                       ),
                       const Expanded(
                         child: Column(
@@ -343,7 +383,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           ),
                           const SizedBox(
-                            height: 200,
+                            height: 130,
                           ),
                           Positioned(
                             //top: 580,

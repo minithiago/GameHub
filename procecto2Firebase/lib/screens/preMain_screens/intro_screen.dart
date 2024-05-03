@@ -82,7 +82,7 @@ class IntroScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 30, //100
+                height: 20, //100
               ),
               const Column(
                 mainAxisAlignment: MainAxisAlignment.end,
