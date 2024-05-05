@@ -54,6 +54,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
       // Si no se encontró ningún usuario, devolvemos null
       return null;
     }
+    return null;
   }
 
   @override

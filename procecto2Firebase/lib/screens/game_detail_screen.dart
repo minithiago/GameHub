@@ -93,11 +93,13 @@ class _GameDetailScreenState extends State<GameDetailScreen>
 
     User? user = FirebaseAuth.instance.currentUser;
 
+    print(user);
+
     // Verifica si hay un usuario autenticado
     if (user != null) {
       // El usuario está autenticado, puedes obtener su ID
-      userId = user.uid;
-      print('UserID: $userId');
+      userId = user.email!;
+      print('email: $userId');
     } else {
       // No hay usuario autenticado
       print('No user logged in');

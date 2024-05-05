@@ -81,7 +81,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Positioned(
                 top: 90, // Margen arriba
                 left: MediaQuery.of(context).size.width /
-                    3, // Margen a la izquierda
+                    2.9, // Margen a la izquierda
                 child: imagen_to_upload != null
                     ? CircleAvatar(
                         radius: 64,

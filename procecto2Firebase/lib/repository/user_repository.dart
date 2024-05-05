@@ -37,6 +37,39 @@ class UserRepository extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateUser(
+      String email, String nickname, String profilePic) async {
+    try {
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+
+        // Actualiza el nickname y el avatar del usuario en Firestore
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userId)
+            .update({
+          "nickname": nickname,
+          "avatar": profilePic,
+        });
+
+        print("User updated successfully");
+        return true;
+      } else {
+        print("User with email $email not found");
+        return false;
+      }
+    } catch (e) {
+      print("Error updating user: $e");
+      return false;
+    }
+  }
+
   Future<bool> forgotPassword(String email) async {
     try {
       auth.sendPasswordResetEmail(email: email);
@@ -49,46 +82,72 @@ class UserRepository extends ChangeNotifier {
     }
   }
 
-  Future<bool> addGameToUser(String userId, String coverId, String gameName,
+  Future<bool> addGameToUser(String email, String coverId, String gameName,
       double rating, int id) async {
     try {
-      // Obtén una referencia al documento del usuario en Firestore utilizando su ID
-      DocumentReference userRef =
-          FirebaseFirestore.instance.collection('Users').doc(userId);
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
 
-      // Agrega el juego a la colección de juegos del usuario
-      await userRef.collection('Games').add({
-        "name": gameName,
-        "id": id,
-        "rating": rating,
-        "coverId": coverId,
-      });
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
 
-      print("Game added to user successfully");
-      return true;
+        // Obtén una referencia a la colección de juegos del usuario
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+
+        // Agrega el juego a la colección de juegos del usuario
+        await userRef.collection('Games').add({
+          "name": gameName,
+          "id": id,
+          "rating": rating,
+          "coverId": coverId,
+        });
+
+        print("Game added to user successfully");
+        return true;
+      } else {
+        print("User with email $email not found");
+        return false;
+      }
     } catch (e) {
       print("Error adding game to user: $e");
       return false;
     }
   }
 
-  Future<bool> removeGameFromUser(String userId, int gameId) async {
+  Future<bool> removeGameFromUser(String email, int gameId) async {
     try {
-      // Obtén una referencia al documento del usuario en Firestore utilizando su ID
-      DocumentReference userRef =
-          FirebaseFirestore.instance.collection('Users').doc(userId);
-
-      // Elimina el juego de la colección de juegos del usuario usando el ID del juego
-      QuerySnapshot gameQuery = await userRef
-          .collection('Games')
-          .where('id', isEqualTo: gameId)
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
           .get();
-      if (gameQuery.docs.isNotEmpty) {
-        await gameQuery.docs.first.reference.delete();
-        print("Game removed from user successfully");
-        return true;
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+
+        // Obtén una referencia al documento del usuario
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+
+        // Elimina el juego de la colección de juegos del usuario usando el ID del juego
+        QuerySnapshot gameQuery = await userRef
+            .collection('Games')
+            .where('id', isEqualTo: gameId)
+            .get();
+        if (gameQuery.docs.isNotEmpty) {
+          await gameQuery.docs.first.reference.delete();
+          print("Game removed from user successfully");
+          return true;
+        } else {
+          print("Game not found in user's collection");
+          return false;
+        }
       } else {
-        print("Game not found in user's collection");
+        print("User with email $email not found");
         return false;
       }
     } catch (e) {
@@ -123,6 +182,23 @@ class UserRepository extends ChangeNotifier {
     } catch (e) {
       // Manejar errores y devolver null
       print('Error obtaining the user data: $e');
+      return null;
+    }
+  }
+
+  Future<String?> getUserUID() async {
+    // Llamamos a la función fetchUserData() para obtener los datos del usuario
+    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
+
+    // Verificamos si se encontró algún usuario con el correo electrónico dado
+    if (userData != null) {
+      // Accedemos al valor del campo "nickname" del usuario
+      String? uid = userData['uid'];
+
+      // Devolvemos el valor del nickname
+      return uid;
+    } else {
+      // Si no se encontró ningún usuario, devolvemos null
       return null;
     }
   }

@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
+import 'package:procecto2/widgets/LibraryScreen/userLibraryGames.dart';
 
 class UserProfilePage extends StatefulWidget {
   final String uid;
@@ -152,8 +153,9 @@ class _UserProfilePage extends State<UserProfilePage> {
                         //color: Colors.blue,
                         child: SizedBox(
                           //MediaQuery.of(context).size.height - 280, // Altura del contenedor hasta abajo de la pantalla
-                          child: LibraryScreenWidget(
+                          child: UserLibraryScreenWidget(
                             switchBloc,
+                            userData['email'],
                           ),
                         ),
                       ),

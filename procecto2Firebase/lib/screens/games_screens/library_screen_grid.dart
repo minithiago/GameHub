@@ -20,9 +20,13 @@ import '../game_detail_screen.dart';
 class LibraryScreenGrid extends StatefulWidget {
   final String filtro;
   final String busqueda;
+  final String usuario;
 
   const LibraryScreenGrid(
-      {Key? key, required this.filtro, required this.busqueda})
+      {Key? key,
+      required this.filtro,
+      required this.busqueda,
+      required this.usuario})
       : super(key: key);
 
   @override
@@ -32,7 +36,9 @@ class LibraryScreenGrid extends StatefulWidget {
 class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
   String _nameFilter = '';
+  String _usuario = '';
 
+  /*
   Future<String?> getUserId() async {
     // Obtener el usuario actualmente autenticado
     User? user = FirebaseAuth.instance.currentUser;
@@ -73,56 +79,62 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     } else {
       return [];
     }
-  }
-  Future<List<String>> getGamesForUserEmail(String userEmail) async {
-  try {
-    // Obtener la referencia al documento del usuario en Firestore utilizando su email
-    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .where('email', isEqualTo: userEmail)
-        .get();
+  }*/
 
-    if (userSnapshot.docs.isNotEmpty) {
-      String userId = userSnapshot.docs.first.id;
-      // Obtener la referencia a la subcolección "Games" del usuario
-      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+  Future<List<String>> getGamesForUserEmail(String userEmail) async {
+    try {
+      // Obtener la referencia al documento del usuario en Firestore utilizando su email
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('Users')
-          .doc(userId)
-          .collection('Games')
+          .where('email', isEqualTo: userEmail)
           .get();
 
-      // Extraer los IDs de los juegos
-      List<String> gameIds = gamesSnapshot.docs.map((doc) {
-        // Obtener el campo "id" de cada documento en la subcolección "Games"
-        return doc['id'].toString(); // Ajusta esto según la estructura de tus documentos
-      }).toList();
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        // Obtener la referencia a la subcolección "Games" del usuario
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Games')
+            .get();
 
-      return gameIds;
-    } else {
-      print('No se encontró ningún usuario con el correo electrónico $userEmail.');
+        // Extraer los IDs de los juegos
+        List<String> gameIds = gamesSnapshot.docs.map((doc) {
+          // Obtener el campo "id" de cada documento en la subcolección "Games"
+          return doc['id']
+              .toString(); // Ajusta esto según la estructura de tus documentos
+        }).toList();
+
+        return gameIds;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico $userEmail.');
+        return [];
+      }
+    } catch (e) {
+      print('Error getting games for user: $e');
       return [];
     }
-  } catch (e) {
-    print('Error getting games for user: $e');
-    return [];
   }
-}
-
 
   @override
   void initState() {
     super.initState();
     _currentFilter = widget.filtro;
     _nameFilter = widget.busqueda;
+    _usuario = widget.usuario;
 
     // Obtiene la lista de juegos para el usuario de manera asíncrona
     _fetchUserGames();
   }
 
-  Future<void> _fetchUserGames() async { //ponerlo en game-details y en añadri un setState() 'alomejor'
+  Future<void> _fetchUserGames() async {
+    //ponerlo en game-details y en añadri un setState() 'alomejor'
     try {
       // Obtiene la lista de juegos para el usuario
-      List<String> userGames = await getGamesForUser();
+      List<String> userGames = await getGamesForUserEmail(
+          //FirebaseAuth.instance.currentUser!.email.toString()
+          _usuario);
 
       // Verifica si la lista de juegos para el usuario está vacía
       if (userGames.isEmpty) {

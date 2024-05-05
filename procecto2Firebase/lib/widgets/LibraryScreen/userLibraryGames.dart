@@ -6,16 +6,19 @@ import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/games_screens/library_screen_grid.dart';
 import 'package:procecto2/screens/games_screens/library_screen_list.dart';
 
-class LibraryScreenWidget extends StatefulWidget {
+class UserLibraryScreenWidget extends StatefulWidget {
   final SwitchBloc _switchBloc;
+  final String _usuario;
 
-  const LibraryScreenWidget(this._switchBloc, {Key? key}) : super(key: key);
+  const UserLibraryScreenWidget(this._switchBloc, this._usuario, {Key? key})
+      : super(key: key);
 
   @override
-  _LibraryScreenWidgetState createState() => _LibraryScreenWidgetState();
+  _UserLibraryScreenWidgetState createState() =>
+      _UserLibraryScreenWidgetState();
 }
 
-class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
+class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
   String _filter = '';
   String _nameFilter = '';
 
@@ -178,8 +181,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                   return LibraryScreenGrid(
                     filtro: _filter,
                     busqueda: _nameFilter,
-                    usuario:
-                        FirebaseAuth.instance.currentUser!.email.toString(),
+                    usuario: widget._usuario,
                   );
                 case SwitchItem.GRID:
                   return LibraryScreenList();

@@ -51,12 +51,13 @@ class _AccountScreenState extends State<AccountScreen> {
       return null;
     }
   }
+
   Future<int?> getUserGamesCountByEmail() async {
     try {
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('Users')
-          .where('email', isEqualTo: FirebaseAuth.instance.currentUser!.email
-                                  .toString())
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
@@ -69,8 +70,7 @@ class _AccountScreenState extends State<AccountScreen> {
         games = gamesSnapshot.size;
       } else {
         print(
-            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email
-                                  .toString()}.');
+            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email.toString()}.');
       }
     } catch (e) {
       print('Error obteniendo la cantidad de juegos del usuario: $e');
@@ -257,33 +257,32 @@ class _AccountScreenState extends State<AccountScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-
                         child: FutureBuilder<int?>(
                           future: getUserGamesCountByEmail(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
                             } else {
                               final nickname = snapshot.data ??
                                   'user'; // Obtiene el nickname o establece "user" si no hay ninguno
                               return Column(
-                          children: [
-                            const Icon(
-                              SimpleLineIcons.game_controller,
-                              size: 60,
-                              color: Colors.white,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '${games} games',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],);
-                        
+                                children: [
+                                  const Icon(
+                                    SimpleLineIcons.game_controller,
+                                    size: 60,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '${games} games',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              );
                             }
                           },
                         ),
-                        
                       ),
                       const Expanded(
                         child: Column(
