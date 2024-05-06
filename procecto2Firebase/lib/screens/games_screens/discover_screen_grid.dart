@@ -44,10 +44,9 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
           return buildErrorWidget(snapshot.error.toString());
         } else {
           return buildLoadingWidget(
-            color: Colors.orange,
-            size: 6.0,
-            message:
-                'Loading...', // Opcional, muestra un mensaje bajo el indicador de progreso
+            //color: Colors.orange,
+            //size: 6.0,
+            //message:  'Loading...', 
           );
         }
       },

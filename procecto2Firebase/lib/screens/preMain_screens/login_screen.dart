@@ -386,9 +386,9 @@ class LoginButton extends StatelessWidget {
         height: 55,
         child: FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white, //const Color.fromARGB(255, 0, 136, 255),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
           onPressed: () async {
@@ -427,7 +427,7 @@ class LoginButton extends StatelessWidget {
           child: const Text(
             'Login',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ), // Color del texto

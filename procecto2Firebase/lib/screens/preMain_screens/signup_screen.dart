@@ -50,7 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Register'),
+        title: const Text('Create your account'),
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -62,6 +62,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Center(
           child: Stack(
             children: [
+              /*
               const Positioned(
                 top: 30,
                 left: 0,
@@ -77,9 +78,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-
+              */
               Positioned(
-                top: 90, // Margen arriba
+                top: 30, // Margen arriba
                 left: MediaQuery.of(context).size.width /
                     2.9, // Margen a la izquierda
                 child: imagen_to_upload != null
@@ -94,9 +95,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
               ),
               Positioned(
-                top: 180, // Margen arriba
+                top: 120, // Margen arriba
                 left: MediaQuery.of(context).size.width /
-                    1.8, // Margen a la izquierda
+                    1.6, // Margen a la izquierda
                 child: IconButton(
                   onPressed: () async {
                     final imagen = await getImage();
@@ -111,7 +112,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               Positioned(
-                top: 220,
+                top: 160,
                 left: 10,
                 right: 10,
                 child: Form(
@@ -354,9 +355,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
+                                backgroundColor: const Color.fromARGB(255, 255, 167, 10),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
                               child: const Text(

@@ -104,6 +104,7 @@ flutter:
     - assets/images/gamehubFondo.png
     - assets/images/videoError.jpg
     - assets/images/loading_image.gif
+    - assets/images/twitch_logo.png
     - assets/images/game_images/rpg.jpg
     - assets/images/game_images/adventure.jpeg
     - assets/images/game_images/arcade.avif

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:procecto2/widgets/LibraryScreen/userLibraryGames.dart';
@@ -75,18 +76,23 @@ class _UserProfilePage extends State<UserProfilePage> {
       appBar: AppBar(
         backgroundColor: Style.Colors.introGrey,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(userData != null ? userData['nickname'] : 'Loading...'),
+        title: Text(
+          userData != null ? userData['nickname'] : 'Loading...',
+          style: const TextStyle(color: Colors.white),
+        ),
+        
+        
         centerTitle: false,
       ),
       body: isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: buildLoadingWidget(),
             )
           : userData != null
               ? Padding(
@@ -97,10 +103,11 @@ class _UserProfilePage extends State<UserProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(
-                              userData['avatar'],
-                            ),
+                            //backgroundColor: Colors.grey,
+                            backgroundImage: userData['avatar'] != ""
+                              ? NetworkImage(userData['avatar'])
+                              : const NetworkImage(
+                                  'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'),
                             radius: 64,
                           ),
                           Expanded(
@@ -148,7 +155,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                               20), // Añade un espacio entre los widgets existentes y el contenedor
                       SizedBox(
                         // Aquí puedes personalizar el contenedor según tus necesidades
-                        height: 600,
+                        height: 523,
                         width: double.infinity,
                         //color: Colors.blue,
                         child: SizedBox(

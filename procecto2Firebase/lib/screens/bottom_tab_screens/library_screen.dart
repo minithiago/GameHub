@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/friends_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
@@ -18,6 +19,7 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenWidgetState extends State<LibraryScreen> {
   final TextEditingController _searchController = TextEditingController();
   late SwitchBloc _switchBloc;
+  
 
   @override
   void initState() {
@@ -100,7 +102,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     future: getUserAvatar(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                        return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
                       } else {
                         final avatar = snapshot.data ??
                             'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
@@ -129,7 +131,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  FriendsScreen(),
+                                  const FriendsScreen(),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             const begin = Offset(1.0, 0.0);

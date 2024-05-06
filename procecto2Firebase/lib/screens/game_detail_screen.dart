@@ -424,6 +424,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               UserRepository()
                                                   .removeGameFromUser(
                                                       userId, game.id);
+
+                                              UserRepository().fetchUserData();
+                                              
                                               favoriteGamesProvider
                                                   .removeFavorite(game);
                                               game.favorite = false;
@@ -568,18 +571,24 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                 throw 'Could not launch $url';
                               }
                             },
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.live_tv_rounded,
-                                    color: Colors.white),
-                                SizedBox(width: 4),
-                                Text(
-                                  "Twitch",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
+                            child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // Reemplaza el icono con una imagen de tu elección
+                                        Image.asset(
+                                          'assets/images/twitch_logo.png', // Ruta de la imagen local
+                                          width: 20, // Ancho deseado de la imagen
+                                          height: 20, // Altura deseada de la imagen
+                                          color: Colors.white, // Color de la imagen
+                                        ),
+                                        const SizedBox(width: 6),
+                                        const Text(
+                                          "Twitch",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+
                           ),
                         ),
                         Padding(
@@ -941,7 +950,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.all(
+                                                        const BorderRadius.all(
                                                             Radius.circular(
                                                                 5.0)),
                                                     image: DecorationImage(

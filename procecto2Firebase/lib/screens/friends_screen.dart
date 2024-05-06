@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:procecto2/elements/loader_element.dart';
+import 'package:procecto2/screens/bottom_tab_screens/library_screen.dart';
 import 'package:procecto2/screens/userProfile_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
@@ -33,6 +35,31 @@ class _FriendsScreenState extends State<FriendsScreen> {
           color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
+            /*Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const LibraryScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 250),
+                        ),
+                      );*/
+            
           },
         ),
         title: TextFormField(
@@ -72,8 +99,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return Center(
+                    child: buildLoadingWidget(),
                   );
                 }
                 return ListView.builder(
@@ -97,12 +124,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         leading: CircleAvatar(
                           backgroundImage: userData['avatar'] != ""
                               ? NetworkImage(userData['avatar'])
-                              : NetworkImage(
+                              : const NetworkImage(
                                   'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'),
                         ),
                         title: Text(
                           userData['nickname'],
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     );
@@ -111,8 +138,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                 );
               },
             )
-          : Text(
-              'posts',
+          : const Text(
+              'Añadir lista de amigos',
               style: TextStyle(color: Colors.white),
             ),
     );

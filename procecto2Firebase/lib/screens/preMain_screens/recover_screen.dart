@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:procecto2/forms/login_form.dart';
-//import 'package:procecto2/providers/login_form_provider.dart';
-import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
-//import 'package:procecto2/services/auth_service.dart';
-
-//import 'package:procecto2/widgets/gameHub_logo.dart';
 import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 //import '../widgets/widgets.dart';
@@ -20,7 +14,6 @@ class RecoverPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context, listen: true);
 
     return MultiProvider(
         providers: [

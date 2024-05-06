@@ -21,10 +21,12 @@ class IntroScreen extends StatelessWidget {
     final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: Style.Colors.introGrey, //fondo fondo
+      
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
-          color: Style.Colors.introGrey,
+          
+          color: Style.Colors.introGrey, //fondo real
           child: Column(
             children: [
               const GameHub(),
@@ -118,10 +120,10 @@ class IntroScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                    style: ElevatedButton.styleFrom( //  const Color.fromARGB(255, 255, 119, 0),//color soundcloud
+                      backgroundColor: const Color.fromARGB(255, 255, 167, 10),//color gamehub
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                     onPressed: () {
@@ -151,7 +153,7 @@ class IntroScreen extends StatelessWidget {
                       );
                     },
                     child: const Text(
-                      'Register',
+                      'Create an account',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -168,9 +170,9 @@ class IntroScreen extends StatelessWidget {
                   height: 55,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                     onPressed: () {
@@ -209,7 +211,7 @@ class IntroScreen extends StatelessWidget {
                     child: const Text(
                       'Login',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ), // Color del texto

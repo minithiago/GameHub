@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/providers/account_form_provider.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/providers/login_provider.dart';
@@ -194,7 +195,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     future: getUserAvatar(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                        return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
                       } else {
                         final avatar = snapshot.data ??
                             'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
@@ -216,7 +217,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => editAccountScreen()),
+                            builder: (context) => const editAccountScreen()),
                       );
                     }, //selectImage,
                     icon: const Icon(Icons.edit),
@@ -231,7 +232,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     future: getUserNickname(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                        return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
                       } else {
                         final nickname = snapshot.data ??
                             'user'; // Obtiene el nickname o establece "user" si no hay ninguno
@@ -262,7 +263,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                              return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
                             } else {
                               final nickname = snapshot.data ??
                                   'user'; // Obtiene el nickname o establece "user" si no hay ninguno
@@ -356,7 +357,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtiene el nickname
+                                  return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
                                 } else {
                                   _password = snapshot.data ??
                                       'Password'; // Obtiene el nickname o establece "user" si no hay ninguno

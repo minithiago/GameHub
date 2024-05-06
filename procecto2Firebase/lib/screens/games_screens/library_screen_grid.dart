@@ -118,37 +118,38 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _currentFilter = widget.filtro;
-    _nameFilter = widget.busqueda;
-    _usuario = widget.usuario;
+void initState() {
+  super.initState();
+  _currentFilter = widget.filtro;
+  _nameFilter = widget.busqueda;
+  _usuario = widget.usuario;
 
-    // Obtiene la lista de juegos para el usuario de manera asíncrona
-    _fetchUserGames();
-  }
+  fetchUserGames();
+}
 
-  Future<void> _fetchUserGames() async {
-    //ponerlo en game-details y en añadri un setState() 'alomejor'
-    try {
-      // Obtiene la lista de juegos para el usuario
-      List<String> userGames = await getGamesForUserEmail(
-          //FirebaseAuth.instance.currentUser!.email.toString()
-          _usuario);
 
-      // Verifica si la lista de juegos para el usuario está vacía
-      if (userGames.isEmpty) {
-        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
-        getlibraryGames.getlibraryGames([]);
-      } else {
-        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
-        getlibraryGames.getlibraryGames(userGames);
-      }
-    } catch (e) {
-      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
-      print('Error fetching user games: $e');
+Future<void> fetchUserGames() async {
+  //ponerlo en game-details y en añadri un setState() 'alomejor'
+  try {
+    // Obtiene la lista de juegos para el usuario
+    List<String> userGames = await getGamesForUserEmail(
+        //FirebaseAuth.instance.currentUser!.email.toString()
+        _usuario);
+
+    // Verifica si la lista de juegos para el usuario está vacía
+    if (userGames.isEmpty) {
+      // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
+      getlibraryGames.getlibraryGames([]);
+    } else {
+      // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
+      getlibraryGames.getlibraryGames(userGames);
     }
+  } catch (e) {
+    // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
+    print('Error fetching user games: $e');
   }
+}
+
 
   @override
   void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
@@ -178,7 +179,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
+        } else if(snapshot.connectionState == ConnectionState.waiting){
+          return buildLoadingWidget();
+         }else {
           // Devolvemos un widget vacío que no ocupa espacio en la pantalla
           return const SizedBox(
             child: Center(
@@ -189,19 +192,18 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
               ),
             ),
           );
-        } else {
-          return buildLoadingWidget();
         }
       },
+        
     );
   }
 
   //@override
   Widget _build(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    var favoriteGamess = favoriteGamesProvider.favoriteGames;
+    //var favoriteGamess = favoriteGamesProvider.favoriteGames;
 
-    //var favoriteGamess = data.games;
+    var favoriteGamess = data.games;
 
     List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
@@ -326,6 +328,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                       GameDetailScreen(
                     key: const Key("game_detail_screen_key"),
                     game: game,
+                    
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
@@ -345,6 +348,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
+              //setState(() => fetchUserGames());
             },
             child: Stack(
               children: [
