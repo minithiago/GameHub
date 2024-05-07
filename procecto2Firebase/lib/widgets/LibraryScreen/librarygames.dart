@@ -130,14 +130,15 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                 },
                 icon: const Icon(
                   Icons.swap_vert,
-                  color: Colors.white,
+                  size: 27,
+                  //color: Colors.white,
                 ),
                 label: Text(
                   _filter.toUpperCase(),
                   style: const TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    //color: Colors.white,
                   ),
                 ),
               ),
@@ -150,14 +151,14 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                 switch (snapshot.data) {
                   case SwitchItem.LIST:
                     return IconButton(
-                      icon: const Icon(SimpleLineIcons.list, size: 18.0),
-                      color: Colors.white,
+                      icon: const Icon(SimpleLineIcons.list, size: 20.0),
+                      //color: Colors.white,
                       onPressed: _showGrid,
                     );
                   case SwitchItem.GRID:
                     return IconButton(
-                      icon: const Icon(SimpleLineIcons.grid, size: 18.0),
-                      color: Colors.white,
+                      icon: const Icon(SimpleLineIcons.grid, size: 20.0),
+                      //color: Colors.white,
                       onPressed: _showList,
                     );
                   default:

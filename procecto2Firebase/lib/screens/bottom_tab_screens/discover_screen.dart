@@ -27,24 +27,6 @@ class DiscoverScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        /*
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Discover Games".toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),*/
         HomeSlider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,9 +37,9 @@ class DiscoverScreen extends StatelessWidget {
               child: Text(
                 "New releases".toUpperCase(),
                 style: const TextStyle(
-                  fontSize: 14.0,
+                  fontSize: 15.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  //color: Colors.white,
                 ),
               ),
             ),
@@ -69,14 +51,14 @@ class DiscoverScreen extends StatelessWidget {
                 switch (snapshot.data) {
                   case SwitchItem.LIST:
                     return IconButton(
-                      icon: Icon(SimpleLineIcons.list, size: 18.0),
-                      color: Colors.white,
+                      icon: Icon(SimpleLineIcons.list, size: 20.0),
+                      //color: Colors.white,
                       onPressed: _showGrid,
                     );
                   case SwitchItem.GRID:
                     return IconButton(
-                      icon: Icon(SimpleLineIcons.grid, size: 18.0),
-                      color: Colors.white,
+                      icon: Icon(SimpleLineIcons.grid, size: 20.0),
+                      //color: Colors.white,
                       onPressed: _showList,
                     );
                   default:

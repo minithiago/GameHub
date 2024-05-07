@@ -83,7 +83,7 @@ class _HomeSliderState extends State<HomeSlider> {
         indicatorSpace: 8.0,
         padding: const EdgeInsets.all(10.0),
         indicatorColor: Colors.white,
-        indicatorSelectorColor: Colors.orange,
+        indicatorSelectorColor: const Color.fromARGB(255, 28, 231, 131),  
         shape: IndicatorShape.circle(size: 5.0),
         child: PageView.builder(
           controller: pageController,

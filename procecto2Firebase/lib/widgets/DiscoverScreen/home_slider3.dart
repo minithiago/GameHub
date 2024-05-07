@@ -58,17 +58,17 @@ class _HomeSliderState3 extends State<HomeSlider3> {
     return Container(
       decoration: BoxDecoration(
         borderRadius:
-            BorderRadius.circular(10.0), // Ajusta el radio según sea necesario
+            BorderRadius.circular(0.0), // Ajusta el radio según sea necesario
         // Color de fondo del contenedor
       ),
-      height: 180,
+      height: 210,
       child: PageIndicatorContainer(
         align: IndicatorAlign.bottom,
         length: games.take(10).length,
         indicatorSpace: 8.0,
         padding: const EdgeInsets.all(10.0),
         indicatorColor: Colors.white,
-        indicatorSelectorColor: Colors.orange,
+        indicatorSelectorColor: const Color.fromARGB(255, 28, 231, 131),
         shape: IndicatorShape.circle(size: 5.0),
         child: PageView.builder(
           controller: pageController2,
@@ -111,10 +111,10 @@ class _HomeSliderState3 extends State<HomeSlider3> {
                     tag: games[index].id,
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 220.0,
+                      height: 210.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            20), // Ajusta el radio según sea necesario
+                            0), // Ajusta el radio según sea necesario
                         //
 
                         image: DecorationImage(
@@ -128,7 +128,7 @@ class _HomeSliderState3 extends State<HomeSlider3> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      //borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,

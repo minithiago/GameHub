@@ -6,6 +6,7 @@ import 'package:procecto2/repository/auth_repository.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
+import 'package:procecto2/style/theme_provider.dart';
 import 'package:procecto2/widgets/gameHub_logo.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/widgets.dart';
@@ -20,17 +21,25 @@ class IntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: Style.Colors.introGrey, //fondo fondo
-      
+      //backgroundColor: Theme.of(context).colorScheme.background , //fondo fondo
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [Theme.of(context).colorScheme.secondary,Color.fromARGB(255, 83, 114, 188),],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            stops: const [
+              0.35,//0.15 
+              1 //0.9
+            ])
+          ),
           
-          color: Style.Colors.introGrey, //fondo real
+          //color:  Theme.of(context).colorScheme.background ,//Style.Colors.introGrey, //fondo real
           child: Column(
             children: [
-              const GameHub(),
-              const Row(
+              const Image(image: AssetImage("assets/images/gamehubFondo.png")),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
@@ -39,12 +48,15 @@ class IntroScreen extends StatelessWidget {
                         Icon(
                           SimpleLineIcons.game_controller,
                           size: 70,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         SizedBox(height: 10),
-                        Text(
+                        const Text(
                           'Explore games',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            //color: Theme.of(context).colorScheme.tertiary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,),
                         ),
                       ],
                     ),
@@ -55,12 +67,16 @@ class IntroScreen extends StatelessWidget {
                         Icon(
                           SimpleLineIcons.layers,
                           size: 70,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Expand your library',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            //color: Theme.of(context).colorScheme.tertiary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,),
+                          
                         ),
                       ],
                     ),
@@ -71,12 +87,15 @@ class IntroScreen extends StatelessWidget {
                         Icon(
                           SimpleLineIcons.people,
                           size: 70,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         SizedBox(height: 10),
-                        Text(
+                        const Text(
                           'Meet friends',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            //color: Theme.of(context).colorScheme.tertiary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,),
                         ),
                       ],
                     ),
@@ -92,7 +111,7 @@ class IntroScreen extends StatelessWidget {
                   Text(
                     "Welcome to GameHub!",
                     style: TextStyle(
-                      color: Colors.white,
+                      //color: Theme.of(context).colorScheme.tertiary,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
@@ -103,7 +122,7 @@ class IntroScreen extends StatelessWidget {
                   Text(
                     "Popular games, new releases, incoming games \n explore and add games to your library to \n show it to your friends all of this in one app ",
                     style: TextStyle(
-                      color: Colors.grey,
+                      //color: Theme.of(context).colorScheme.tertiary,
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
@@ -121,7 +140,8 @@ class IntroScreen extends StatelessWidget {
                   height: 55,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom( //  const Color.fromARGB(255, 255, 119, 0),//color soundcloud
-                      backgroundColor: const Color.fromARGB(255, 255, 167, 10),//color gamehub
+                      backgroundColor: Color.fromARGB(255, 83, 114, 188),
+                      //const Color.fromARGB(255, 255, 167, 10),  color gamehub
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -155,7 +175,7 @@ class IntroScreen extends StatelessWidget {
                     child: const Text(
                       'Create an account',
                       style: TextStyle(
-                        color: Colors.white,
+                        //color: Theme.of(context).colorScheme.background,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ), // Color del texto
@@ -170,7 +190,7 @@ class IntroScreen extends StatelessWidget {
                   height: 55,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -208,10 +228,10 @@ class IntroScreen extends StatelessWidget {
                         ),
                       );*/
                     },
-                    child: const Text(
+                    child: Text(
                       'Login',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.background,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ), // Color del texto
@@ -227,7 +247,7 @@ class IntroScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         PageRouteBuilder(
                           pageBuilder:
@@ -252,7 +272,9 @@ class IntroScreen extends StatelessWidget {
                         ),
                       );
                       loginProvider.signup("nickname", "Guest", "password");
-                      loginProvider.login("Guest", "password");
+                      loginProvider.login("Guest", "password");*/
+                      Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                      print("cambiado");
                     },
                     child: const Text(
                       "Continue without account",

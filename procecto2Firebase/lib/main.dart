@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:procecto2/firebase_options.dart';
 import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
-import 'package:procecto2/style/light_theme.dart';
 import 'package:procecto2/style/theme.dart';
+import 'package:procecto2/style/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/providers.dart';
 import 'package:procecto2/style/theme.dart' as Style;
@@ -31,6 +31,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => FavoriteGamesProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -49,8 +52,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),*/
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: Provider.of<ThemeProvider>(context).themeData,
+      //darkTheme: darkTheme,
       home: const CheckAuthScreen(),
     );
   }

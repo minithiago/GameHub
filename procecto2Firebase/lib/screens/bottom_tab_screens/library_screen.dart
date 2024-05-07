@@ -89,13 +89,13 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
       );
     }*/
     return Scaffold(
-        backgroundColor: Style.Colors.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                color: Style.Colors.backgroundColor,
+                color: Theme.of(context).colorScheme.secondary,
                 padding: const EdgeInsets.all(20.0),
                 child: Row(children: [
                   FutureBuilder<String?>(
@@ -120,7 +120,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      //color: Colors.white,
                     ),
                   ),
                   const SizedBox(width: 90.0),
@@ -154,7 +154,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     icon: const Icon(
                       Icons.people,
                       size: 28, // Tamaño más grande del icono
-                      color: Colors.white, // Color blanco del icono
+                      //color: Colors.white, // Color blanco del icono
                     ),
                   ),
                 ]),
@@ -163,7 +163,9 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
                   controller: _searchController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(
+                    //color: Colors.white
+                    ),
                   decoration: InputDecoration(
                     fillColor: Colors.grey,
                     filled: true,
@@ -173,7 +175,9 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                       borderSide: BorderSide.none,
                     ),
                     hintText: "Search your library",
-                    hintStyle: const TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(
+                      //color: Colors.white
+                      ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.search),
                       onPressed: () {
@@ -186,7 +190,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                                   SwitchBlocSearch(), _searchController.text)),
                         );
                       },
-                      color: Colors.white,
+                      //color: Colors.white,
                     ),
                   ),
                   onSubmitted: (_) {
@@ -257,8 +261,8 @@ class _OptionCardState extends State<OptionCard> {
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.orange
-              : Style.Colors.introGrey, // Cambiar el color si está seleccionado
+              ? const Color.fromARGB(255, 28, 231, 131)
+              : Theme.of(context).colorScheme.tertiary, // Cambiar el color si está seleccionado
           borderRadius: BorderRadius.circular(25.0),
         ),
         child: Column(

@@ -1,16 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:procecto2/forms/login_form.dart';
-//import 'package:procecto2/providers/login_form_provider.dart';
 import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/recover_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
-//import 'package:procecto2/services/auth_service.dart';
-
-//import 'package:procecto2/widgets/gameHub_logo.dart';
 import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 //import '../widgets/widgets.dart';
@@ -33,26 +28,35 @@ class LoginScreen extends StatelessWidget {
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Style.Colors.introGrey,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           appBar: AppBar(
-            backgroundColor: Style.Colors.introGrey, //background
+            backgroundColor: Theme.of(context).colorScheme.secondary, //background
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              color: Colors.white,
+              //color: Colors.white,
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             title: Text('Login'),
-            titleTextStyle: const TextStyle(
-              color: Colors.white,
+            titleTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
           body: SafeArea(
-              child: Container(
-            color: Style.Colors.introGrey,
+            child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [Theme.of(context).colorScheme.secondary,Color.fromARGB(255, 83, 114, 188),],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: [
+                    0.15,
+                    0.9
+                  ])
+                ),
+            //color: Theme.of(context).colorScheme.background,
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -67,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                             Icon(
                               Icons.waving_hand,
                               size: 70,
-                              color: Colors.white,
+                              //color: Colors.white,
                             ),
                           ]),
                       const SizedBox(
@@ -79,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                           Text(
                             "Hello again!",
                             style: TextStyle(
-                              color: Colors.white,
+                              //color: Colors.white,
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
@@ -90,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                           Text(
                             "We are glad to see you again! \n Continue with your account",
                             style: TextStyle(
-                              color: Colors.grey,
+                              //color: Theme.of(context).colorScheme.tertiary,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
@@ -156,7 +160,7 @@ class LoginScreen extends StatelessWidget {
                                           'I forgot my password ',
                                           style: TextStyle(
                                             fontSize: 13,
-                                            color: Colors.white,
+                                            //color: Colors.white,
                                             decoration:
                                                 TextDecoration.underline,
                                           ),
@@ -185,7 +189,7 @@ class LoginScreen extends StatelessWidget {
                                       child: Text(
                                         "Don't have an account?  ",
                                         style: TextStyle(
-                                            fontSize: 13, color: Colors.grey),
+                                            fontSize: 13),
                                       ),
                                     ),
                                     InkWell(
@@ -201,7 +205,7 @@ class LoginScreen extends StatelessWidget {
                                         'Create one',
                                         style: TextStyle(
                                           fontSize: 13,
-                                          color: Colors.white,
+                                          //color: Colors.white,
                                           decoration: TextDecoration.underline,
                                         ),
                                       ),
@@ -214,43 +218,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
 
-                      /* GOOGLE SIGN IN
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 64,
-                      child: FilledButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            String email = _emailController.text;
-                            String password = _passwordController.text;
-
-                            try {
-                              bool? connected =
-                                  await userProvider.login(email, password);
-                              if (connected != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainScreen()),
-                                );
-                                ;
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('bannedAccount')));
-                              }
-                            } on Exception catch (_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('invalidAccount')));
-                            }
-                          }
-                        },
-                        child: const Text('Login with Google'),
-                      ),
-                    ),
-                  ),
-                  */
+                      
                     ],
                   ),
                 ),
@@ -294,7 +262,7 @@ class Email extends StatelessWidget {
         filled: true,
         fillColor: Color.fromARGB(128, 255, 255, 255),
         prefixIcon: Icon(Icons.email),
-        prefixIconColor: Colors.white,
+        //prefixIconColor: Colors.white,
         labelText: "Enter your email",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
@@ -342,7 +310,7 @@ class _PasswordState extends State<Password> {
         filled: true,
         fillColor: Color.fromARGB(128, 255, 255, 255),
         prefixIcon: Icon(Icons.lock_outline),
-        prefixIconColor: Colors.white,
+        //prefixIconColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
               10.0), // Ajusta el valor de 10.0 según sea necesario
@@ -386,7 +354,7 @@ class LoginButton extends StatelessWidget {
         height: 55,
         child: FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: Colors.white, //const Color.fromARGB(255, 0, 136, 255),
+            backgroundColor: Theme.of(context).colorScheme.primary, //const Color.fromARGB(255, 0, 136, 255),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),
@@ -405,29 +373,21 @@ class LoginButton extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MainScreen()),
                   );
                 }
+                else{
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Invalid email or password.")));
+                }
               } on Exception catch (_) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Invalid email or password.")));
               }
 
-              /*try {
-                bool? connected = await loginProvider.login(email, password);
-                if (connected != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
-                  );
-                }
-              } on Exception catch (_) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Invalid email or password.")));
-              }*/
             }
           },
           child: const Text(
             'Login',
             style: TextStyle(
-              color: Colors.black,
+              //color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ), // Color del texto

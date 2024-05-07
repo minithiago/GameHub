@@ -1,9 +1,8 @@
-import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/providers/account_form_provider.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
@@ -11,30 +10,22 @@ import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/editProfile_screen.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
-import 'package:procecto2/utils.dart';
+import 'package:procecto2/style/theme_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
-  final image;
 
-  const AccountScreen({super.key, this.image});
+  const AccountScreen({super.key});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  Uint8List? _image;
   int games = 0;
-
-  void selectImage() async {
-    Uint8List img = await pickImage(ImageSource.gallery);
-    setState(() {
-      _image = img;
-    });
-  }
+  bool isLightMode = true;
 
   Future<String?> getUserNickname() async {
     // Llamamos a la función fetchUserData() para obtener los datos del usuario
@@ -124,33 +115,6 @@ class _AccountScreenState extends State<AccountScreen> {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     FirebaseFirestore db = FirebaseFirestore.instance;
     String? _password;
-
-    /*if (LoginProvider.currentUser.email == "Guest") {
-      return Scaffold(
-        backgroundColor: Style.Colors.backgroundColor,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Not Available without account',
-                style: TextStyle(fontSize: 20.0, color: Colors.white),
-              ),
-              SizedBox(height: 20), // Espacio entre el texto y el botón
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => IntroScreen()),
-                  );
-                },
-                child: Text('Register'),
-              ),
-            ],
-          ),
-        ),
-      );
-    }*/
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -163,9 +127,12 @@ class _AccountScreenState extends State<AccountScreen> {
         ChangeNotifierProvider(
           create: (_) => UserRepository(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+        ),
       ],
       child: Scaffold(
-        backgroundColor: Style.Colors.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary, //Style.Colors.backgroundColor,
         body: SafeArea(
           bottom: true,
           child: Center(
@@ -208,6 +175,22 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                   ),
                 ),
+                Positioned(
+                  top: 20, // Margen arriba
+                  left: 10, // Margen a la izquierda
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        // Cambia el estado del modo cada vez que se pulsa
+                        isLightMode = !isLightMode;
+                      });
+                      // También puedes llamar a la función para cambiar el tema aquí si lo deseas
+                      Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                    }, 
+                    icon: isLightMode ? const Icon(Icons.light_mode) : const Icon(Icons.dark_mode),
+                    // Muestra el icono correspondiente según el estado actual
+                  )
+                ),
 
                 Positioned(
                   top: 20, // Margen arriba
@@ -219,9 +202,9 @@ class _AccountScreenState extends State<AccountScreen> {
                         MaterialPageRoute(
                             builder: (context) => const editAccountScreen()),
                       );
-                    }, //selectImage,
+                    }, 
                     icon: const Icon(Icons.edit),
-                    color: Colors.white,
+                    //color: Colors.white,
                   ),
                 ),
                 Positioned(
@@ -240,7 +223,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           nickname,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: Colors.white,
+                            //color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -272,12 +255,14 @@ class _AccountScreenState extends State<AccountScreen> {
                                   const Icon(
                                     SimpleLineIcons.game_controller,
                                     size: 60,
-                                    color: Colors.white,
+                                    //color: Colors.white,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     '${games} games',
-                                    style: TextStyle(color: Colors.grey),
+                                    style: TextStyle(
+                                      //color: Theme.of(context).colorScheme.tertiary
+                                      ),
                                   ),
                                 ],
                               );
@@ -285,18 +270,20 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                         ),
                       ),
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           children: [
-                            Icon(
+                            const Icon(
                               SimpleLineIcons.people,
                               size: 60,
-                              color: Colors.white,
+                              //color: Colors.white,
                             ),
                             SizedBox(height: 10),
                             Text(
                               '3 friends',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(
+                                //color: Theme.of(context).colorScheme.tertiary
+                              ),
                             ),
                           ],
                         ),
@@ -323,7 +310,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               //enabled: false,
                               fillColor: Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: Icon(Icons.mail),
-                              prefixIconColor: Colors.white,
+                              //prefixIconColor: Colors.white,
                               hintText: FirebaseAuth.instance.currentUser!.email
                                   .toString(),
                               border: OutlineInputBorder(
@@ -365,7 +352,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     decoration: InputDecoration(
                                       prefixIcon: Icon(Icons.lock_outline),
 
-                                      prefixIconColor: Colors.white,
+                                      //prefixIconColor: Colors.white,
                                       filled: true,
                                       fillColor:
                                           Color.fromARGB(128, 255, 255, 255),

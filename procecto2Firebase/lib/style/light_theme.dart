@@ -9,6 +9,4 @@ class Colors {
   static const Color introGrey = Color.fromARGB(255, 14, 61, 192);
 }
 
-ThemeData lightTheme = ThemeData(
-  brightness: Brightness.light,
-);
+

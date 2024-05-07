@@ -18,7 +18,7 @@ class DiscoverScreenWidget5 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          Style.Colors.backgroundColor, // Cambia el color de fondo del body
+          Theme.of(context).colorScheme.background, // Cambia el color de fondo del body
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

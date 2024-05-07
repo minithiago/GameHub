@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class Colors {
   const Colors();
   static const Color mainColor = Color.fromARGB(255, 242, 97, 1);
@@ -17,6 +18,4 @@ class Colors {
   static const Color black = Color.fromARGB(255, 11, 11, 11);
 }
 
-ThemeData darkTheme = ThemeData(
-  brightness: Brightness.dark,
-);
+

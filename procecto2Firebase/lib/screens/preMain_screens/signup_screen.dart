@@ -40,26 +40,36 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: Style.Colors.introGrey,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Style.Colors.introGrey,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
+          //color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: const Text('Create your account'),
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
+        titleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
       ),
       body: SafeArea(
         bottom: true,
-        child: Center(
+        child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [Theme.of(context).colorScheme.secondary,Color.fromARGB(255, 83, 114, 188),],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: [
+                    0.35,
+                    1
+                  ])
+                ),
+                child: Center(
           child: Stack(
             children: [
               /*
@@ -108,7 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                   //selectImage,
                   icon: const Icon(Icons.add_a_photo),
-                  color: Colors.white,
+                  //color: Colors.white,
                 ),
               ),
               Positioned(
@@ -141,7 +151,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             filled: true,
                             fillColor: const Color.fromARGB(128, 255, 255, 255),
                             prefixIcon: const Icon(Icons.person),
-                            prefixIconColor: Colors.white,
+                            //prefixIconColor: Colors.white,
                             labelText: "Username",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(
@@ -174,7 +184,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             filled: true,
                             fillColor: Color.fromARGB(128, 255, 255, 255),
                             prefixIcon: Icon(Icons.mail),
-                            prefixIconColor: Colors.white,
+                            //prefixIconColor: Colors.white,
                             labelText: "Email",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(
@@ -204,7 +214,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             filled: true,
                             fillColor: Color.fromARGB(128, 255, 255, 255),
                             prefixIcon: Icon(Icons.lock_outline),
-                            prefixIconColor: Colors.white,
+                            //prefixIconColor: Colors.white,
                             labelText: "Password",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(
@@ -235,7 +245,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             filled: true,
                             fillColor: Color.fromARGB(128, 255, 255, 255),
                             prefixIcon: Icon(Icons.lock_outline),
-                            prefixIconColor: Colors.white,
+                            //prefixIconColor: Colors.white,
                             labelText: "Confirm Password",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(
@@ -311,51 +321,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 Text("Email already in use.")));
                                   }
 
-                                  if (await loginProvider.signup(
-                                      nickname, email, password)) {
-                                    bool? connected = await loginProvider.login(
-                                        email, password);
-
-                                    /*if (connected != null) {
-                                      Navigator.push(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation,
-                                                  secondaryAnimation) =>
-                                              MainScreen(),
-                                          transitionsBuilder: (context,
-                                              animation,
-                                              secondaryAnimation,
-                                              child) {
-                                            return FadeTransition(
-                                              opacity: animation,
-                                              child: child,
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginScreen()),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                              content:
-                                                  Text("Error de conexión.")));
-                                    }*/
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Usuario o contraseña no válidos.")));
-                                  }
+                                  
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 255, 167, 10),
+                                backgroundColor: const Color.fromARGB(255, 28, 231, 131),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
                                 ),
@@ -364,7 +334,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 'Register',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    //color: Colors.white,
                                     fontSize: 16),
                                 // Color del texto
                               ),
@@ -380,7 +350,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   'Do you already have an account?',
                                   style: TextStyle(
-                                      fontSize: 13, color: Colors.grey),
+                                      fontSize: 13, //color: Theme.of(context).colorScheme.tertiary
+                                      ),
                                 ),
                               ),
                               InkWell(
@@ -394,7 +365,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: const Text(
                                   ' Log in.',
                                   style: TextStyle(
-                                      fontSize: 13, color: Colors.white),
+                                      fontSize: 13, 
+                                      //color: Colors.white
+                                      ),
                                 ),
                               ),
                             ],
@@ -409,7 +382,9 @@ class _SignupScreenState extends State<SignupScreen> {
               //aqui va los texts
             ],
           ),
-        ),
+        ),),
+        
+        
       ),
     );
   }

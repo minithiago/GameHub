@@ -45,7 +45,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     pageController.dispose();
     _tabController.dispose();
     super.dispose();
