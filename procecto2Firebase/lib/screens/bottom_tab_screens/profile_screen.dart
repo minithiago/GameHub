@@ -270,10 +270,10 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                         ),
                       ),
-                      Expanded(
+                      const Expanded(
                         child: Column(
                           children: [
-                            const Icon(
+                            Icon(
                               SimpleLineIcons.people,
                               size: 60,
                               //color: Colors.white,
