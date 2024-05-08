@@ -1,4 +1,3 @@
-import 'package:procecto2/model/game_models/cover.dart';
 
 class dlcModel {
   final int id;

@@ -96,7 +96,7 @@ class LoginForm extends StatelessWidget {
                     if (context.mounted) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
+                        MaterialPageRoute(builder: (context) => MainScreen(currentIndex: 0,)),
                       );
                     }
                   } on Exception catch (e) {

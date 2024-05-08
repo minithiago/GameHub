@@ -10,8 +10,6 @@ import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/services/upload_image.dart';
-import 'package:procecto2/utils.dart';
-
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 
@@ -38,7 +36,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context, listen: true);
+    //final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -296,7 +294,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         PageRouteBuilder(
                                           pageBuilder: (context, animation,
                                                   secondaryAnimation) =>
-                                              MainScreen(),
+                                              MainScreen(currentIndex: 0,),
                                           transitionsBuilder: (context,
                                               animation,
                                               secondaryAnimation,
@@ -325,7 +323,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 28, 231, 131),
+                                backgroundColor: Color.fromARGB(255, 83, 114, 188),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
                                 ),

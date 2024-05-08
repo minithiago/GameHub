@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:procecto2/repository/user_repository.dart';
+import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/services/upload_image.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
@@ -19,22 +20,6 @@ class _editAccountScreenState extends State<editAccountScreen> {
   File? imagen_to_upload;
   final TextEditingController _nicknameController = TextEditingController();
 
-  /*Future<String?> getUserUID() async {
-    // Llamamos a la función fetchUserData() para obtener los datos del usuario
-    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
-
-    // Verificamos si se encontró algún usuario con el correo electrónico dado
-    if (userData != null) {
-      // Accedemos al valor del campo "nickname" del usuario
-      String? uid = userData['uid'];
-
-      // Devolvemos el valor del nickname
-      return uid;
-    } else {
-      // Si no se encontró ningún usuario, devolvemos null
-      return null;
-    }
-  }*/
   Future<String?> getUserAvatar() async {
     // Llamamos a la función fetchUserData() para obtener los datos del usuario
     Map<String, dynamic>? userData = await UserRepository().fetchUserData();
@@ -81,18 +66,24 @@ class _editAccountScreenState extends State<editAccountScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Style.Colors.introGrey, //background
+        backgroundColor: Theme.of(context).colorScheme.secondary, //background
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.white,
+          icon: const Icon(Icons.arrow_back),
+          //color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
+            
           },
         ),
-        title: Text("Edit"),
+        title: const Text("Edit"),
+        titleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
       body: Scaffold(
-        backgroundColor: Style.Colors.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         body: SafeArea(
           bottom: true,
           child: Center(
@@ -126,7 +117,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                       //final uploaded = await uploadImage(imagen_to_upload!);
                     }, //selectImage,
                     icon: const Icon(Icons.add_a_photo),
-                    color: Colors.white,
+                    //color: Colors.white,
                   ),
                 ),
 
@@ -144,9 +135,9 @@ class _editAccountScreenState extends State<editAccountScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               //enabled: true,
-                              fillColor: Color.fromARGB(128, 255, 255, 255),
+                              fillColor:   Theme.of(context).colorScheme.tertiary, //Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: Icon(Icons.person),
-                              prefixIconColor: Colors.white,
+                              //prefixIconColor: Colors.white,
                               hintText: "Enter a new nickname",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
@@ -167,7 +158,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                     height: 50, // Establece la altura deseada del botón
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: Colors.orange,
+                        backgroundColor: Color.fromARGB(255, 83, 114, 188),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -184,6 +175,12 @@ class _editAccountScreenState extends State<editAccountScreen> {
                         bool success = await UserRepository()
                             .updateUser(userEmail, nickname, profilePic!);
                         if (success) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainScreen(currentIndex: 4,)),
+                                    (Route<dynamic> route) => false,
+                                  );
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("User modified completed.")));

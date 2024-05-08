@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:procecto2/elements/loader_element.dart';
-import 'package:procecto2/screens/bottom_tab_screens/library_screen.dart';
+import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/userProfile_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
@@ -13,7 +13,7 @@ class FriendsScreen extends StatefulWidget {
 }
 
 class _FriendsScreenState extends State<FriendsScreen> {
-  final _formKey = GlobalKey<FormState>();
+  //final _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   bool isShowUsers = false;
 
@@ -31,10 +31,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
       appBar: AppBar(
         backgroundColor: Style.Colors.introGrey, //background
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.white,
+          icon: const Icon(Icons.arrow_back),
+          //color: Colors.white,
           onPressed: () {
-            Navigator.pop(context);
+           Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainScreen(currentIndex: 2,)),
+                                    (Route<dynamic> route) => false,
+                                  );
             /*Navigator.push(
                         context,
                         PageRouteBuilder(
@@ -78,11 +83,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
             suffixIcon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                print(_searchController.text);
+                //print(_searchController.text);
+                setState(() {
+                  isShowUsers = true;
+                });
               },
               color: Colors.white,
             ),
           ),
+          
           onFieldSubmitted: (_) {
             setState(() {
               isShowUsers = true;

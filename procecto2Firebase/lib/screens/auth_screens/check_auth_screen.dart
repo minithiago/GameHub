@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:procecto2/model/user_log_data.dart';
-import 'package:procecto2/providers/providers.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
-//import 'package:procecto2/widgets/formatted_message.dart';
-//import 'package:procecto2/widgets/screen_transitions.dart';
+
 
 class CheckAuthScreen extends StatelessWidget {
   const CheckAuthScreen({super.key});
@@ -58,7 +53,7 @@ class CheckAuthScreen extends StatelessWidget {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            const MainScreen(),
+                            const MainScreen(currentIndex: 0,),
                         transitionDuration: const Duration(milliseconds: 500),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
@@ -68,6 +63,9 @@ class CheckAuthScreen extends StatelessWidget {
                       ),
                     );
                   }
+                  ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Login successfully")));
+
                 } on Exception {
                   if (context.mounted) {
                     Navigator.pushReplacement(
@@ -84,7 +82,7 @@ class CheckAuthScreen extends StatelessWidget {
                       ),
                     );
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text("Error")));
+                        .showSnackBar(const SnackBar(content: Text("Error trying to login")));
                   }
                 }
               });

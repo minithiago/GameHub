@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:procecto2/repository/user_repository.dart';
-import 'package:provider/provider.dart';
-import '../../providers/providers.dart';
-//import '../widgets/widgets.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class RecoverPasswordScreen extends StatelessWidget {
   RecoverPasswordScreen({super.key});
@@ -14,11 +10,7 @@ class RecoverPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LoginFormProvider()),
-        ],
-        child: Scaffold(
+    return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.secondary,
           appBar: AppBar(
@@ -90,7 +82,7 @@ class RecoverPasswordScreen extends StatelessWidget {
                           Text(
                             "We will send you an email \n to set a new password",
                             style: TextStyle(
-                              color: Colors.grey,
+                              //color: Colors.grey,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
@@ -116,7 +108,7 @@ class RecoverPasswordScreen extends StatelessWidget {
                                   height: 55,
                                   child: FilledButton(
                                     style: FilledButton.styleFrom(
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor: Color.fromARGB(255, 83, 114, 188),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -142,7 +134,7 @@ class RecoverPasswordScreen extends StatelessWidget {
               ],
             ),
           )),
-        ));
+        );
   }
 }
 

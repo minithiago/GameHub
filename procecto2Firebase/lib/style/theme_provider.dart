@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:procecto2/style/theme.dart';
 
 class ThemeProvider with ChangeNotifier{
     ThemeData _themeData = darkTheme;

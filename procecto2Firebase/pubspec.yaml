@@ -48,7 +48,7 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_secure_storage: ^9.0.0
   flutter_rating_bar: ^4.0.1
-  flutter_native_splash: 2.3.7
+  flutter_native_splash: ^2.3.7
   page_indicator: ^0.4.1
   sleek_circular_slider: ^2.0.1
   youtube_player_flutter: ^9.0.0
@@ -78,15 +78,23 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter_native_splash:
-  color: "#353840"
-  image: assets/images/gamehub2.png
+  #android: true
+  ios: true
+  color: "#6EB6FF"
+  image: "assets/images/iconGB.png"
+  
+  android_12:
+    color: "#6EB6FF"
+    image: "assets/images/iconGB.png"
+    image_dark: "assets/images/iconGB.png"
 
-flutter_icons:
+
+flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/icon.png"
-  adaptive_icon_foreground: "assets/images/icon.png"
-  adaptive_icon_background: "#353840"
+  image_path: "assets/images/iconGB.png"   #"assets/images/icon.png"
+  adaptive_icon_foreground: "assets/images/iconGB.png"
+  adaptive_icon_background: "#6EB6FF"
 
 
 
@@ -102,6 +110,7 @@ flutter:
     - assets/images/default_avatar.jpg
     - assets/images/gamehub.png
     - assets/images/gamehubFondo.png
+    - assets/images/gamehubNuevo.png
     - assets/images/videoError.jpg
     - assets/images/loading_image.gif
     - assets/images/twitch_logo.png

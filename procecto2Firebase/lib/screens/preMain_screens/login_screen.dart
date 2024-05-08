@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context, listen: true);
+    //final loginProvider = Provider.of<LoginProvider>(context, listen: true);
 
     return MultiProvider(
         providers: [
@@ -178,7 +178,7 @@ class LoginScreen extends StatelessWidget {
                                 formKey: _formKey,
                                 emailController: _emailController,
                                 passwordController: _passwordController,
-                                loginProvider: loginProvider,
+                                //loginProvider: loginProvider,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 40),
@@ -335,7 +335,7 @@ class LoginButton extends StatelessWidget {
     required GlobalKey<FormState> formKey,
     required TextEditingController emailController,
     required TextEditingController passwordController,
-    required this.loginProvider,
+    //required this.loginProvider,
   })  : _formKey = formKey,
         _emailController = emailController,
         _passwordController = passwordController;
@@ -343,7 +343,7 @@ class LoginButton extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
-  final LoginProvider loginProvider;
+  //final LoginProvider loginProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -370,7 +370,7 @@ class LoginButton extends StatelessWidget {
                 if (newUser != null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
+                    MaterialPageRoute(builder: (context) => MainScreen(currentIndex: 0,)),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

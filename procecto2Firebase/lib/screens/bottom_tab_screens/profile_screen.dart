@@ -4,11 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/elements/loader_element.dart';
-import 'package:procecto2/providers/account_form_provider.dart';
-import 'package:procecto2/providers/favorite_provider.dart';
-import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/editProfile_screen.dart';
+import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
 import 'package:procecto2/style/theme.dart' as Style;
@@ -112,18 +110,14 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     UserRepository().storageGetAuthData();
-    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    FirebaseFirestore db = FirebaseFirestore.instance;
+   
+    //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    //FirebaseFirestore db = FirebaseFirestore.instance;
     String? _password;
+    String _avatar = 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
+    String _nickname = ''; // Nombre predeterminado
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AccountFormProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => LoginProvider(),
-          lazy: false,
-        ),
         ChangeNotifierProvider(
           create: (_) => UserRepository(),
         ),
@@ -161,19 +155,22 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: FutureBuilder<String?>(
                     future: getUserAvatar(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
-                      } else {
-                        final avatar = snapshot.data ??
-                            'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
-                        return CircleAvatar(
-                          radius: 64,
-                          backgroundImage: NetworkImage(avatar),
-                          //backgroundColor: Colors.amber,
-                        );
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // Actualiza el valor de _avatar si el futuro ha completado
+                        _avatar = snapshot.data ?? 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
                       }
+
+                      return Positioned(
+                        top: 30, // Margen arriba
+                        left: MediaQuery.of(context).size.width / 2.90, // Margen a la izquierda
+                        child: CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(_avatar),
+                          //backgroundColor: Colors.amber,
+                        ),
+                      );
                     },
-                  ),
+                  )
                 ),
                 Positioned(
                   top: 20, // Margen arriba
@@ -187,7 +184,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       // También puedes llamar a la función para cambiar el tema aquí si lo deseas
                       Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
                     }, 
-                    icon: isLightMode ? const Icon(Icons.light_mode) : const Icon(Icons.dark_mode),
+                    icon: isLightMode ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
                     // Muestra el icono correspondiente según el estado actual
                   )
                 ),
@@ -214,23 +211,27 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: FutureBuilder<String?>(
                     future: getUserNickname(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
-                      } else {
-                        final nickname = snapshot.data ??
-                            'user'; // Obtiene el nickname o establece "user" si no hay ninguno
-                        return Text(
-                          nickname,
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // Actualiza el valor de _nickname si el futuro ha completado
+                        _nickname = snapshot.data ?? 'user';
+                      }
+
+                      return Positioned(
+                        top: 170,
+                        left: 0,
+                        right: 0,
+                        child: Text(
+                          _nickname,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             //color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
-                        );
-                      }
+                        ),
+                      );
                     },
-                  ),
+                  )
                 ),
 
                 Positioned(
@@ -244,32 +245,37 @@ class _AccountScreenState extends State<AccountScreen> {
                         child: FutureBuilder<int?>(
                           future: getUserGamesCountByEmail(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
-                            } else {
-                              final nickname = snapshot.data ??
-                                  'user'; // Obtiene el nickname o establece "user" si no hay ninguno
-                              return Column(
-                                children: [
-                                  const Icon(
-                                    SimpleLineIcons.game_controller,
-                                    size: 60,
-                                    //color: Colors.white,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '${games} games',
-                                    style: TextStyle(
-                                      //color: Theme.of(context).colorScheme.tertiary
+                            //final nickname = snapshot.data ?? 'user'; // Obtiene el nickname o establece "user" si no hay ninguno
+
+                            return Column(
+                              children: [
+                                // Icono
+                                const Icon(
+                                  SimpleLineIcons.game_controller,
+                                  size: 60,
+                                  //color: Colors.white,
+                                ),
+                                const SizedBox(height: 10),
+                                // Texto con indicador de carga condicional
+                                snapshot.connectionState == ConnectionState.waiting
+                                    ? const Text(
+                                        '',
+                                        style: TextStyle(
+                                          //color: Theme.of(context).colorScheme.tertiary
+                                        ),
+                                      ) // Muestra un indicador de carga mientras se obtiene el número de juegos
+                                    : Text(
+                                        '$games games',
+                                        style: TextStyle(
+                                          //color: Theme.of(context).colorScheme.tertiary
+                                        ),
                                       ),
-                                  ),
-                                ],
-                              );
-                            }
+                              ],
+                            );
                           },
                         ),
                       ),
+
                       const Expanded(
                         child: Column(
                           children: [
@@ -305,14 +311,14 @@ class _AccountScreenState extends State<AccountScreen> {
                             height: 50,
                           ),
                           TextField(
+                            enabled: false,
                             decoration: InputDecoration(
                               filled: true,
-                              //enabled: false,
-                              fillColor: Color.fromARGB(128, 255, 255, 255),
+                              fillColor: Theme.of(context).colorScheme.tertiary,// Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: Icon(Icons.mail),
+                              
                               //prefixIconColor: Colors.white,
-                              hintText: FirebaseAuth.instance.currentUser!.email
-                                  .toString(),
+                              hintText: FirebaseAuth.instance.currentUser!.email.toString(),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Ajusta el valor de 10.0 según sea necesario
@@ -322,52 +328,34 @@ class _AccountScreenState extends State<AccountScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          /*
-                          TextField(
-                            
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color.fromARGB(128, 255, 255, 255),
-                              prefixIcon: Icon(Icons.lock_outline),
-                              suffixIcon: Icon(Icons.lock_outline),
-                              prefixIconColor: Colors.white,
-                              hintText:"Password",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Ajusta el valor de 10.0 según sea necesario
-                              ),
-                            ),
-                          ),*/
+                         
                           Positioned(
                             child: FutureBuilder<String?>(
-                              future: getUserPass(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
-                                } else {
-                                  _password = snapshot.data ??
-                                      'Password'; // Obtiene el nickname o establece "user" si no hay ninguno
-                                  return TextField(
-                                    decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.lock_outline),
-
-                                      //prefixIconColor: Colors.white,
-                                      filled: true,
-                                      fillColor:
-                                          Color.fromARGB(128, 255, 255, 255),
-
-                                      hintText:
-                                          _password, // Utiliza el nickname como hintText
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                  );
+                            future: getUserPass(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.done) {
+                                // Actualiza el valor de _password si el futuro ha completado
+                                _password = snapshot.data ?? 'Password';
+                              } else if(snapshot.connectionState == ConnectionState.waiting)
+                                {
+                                  _password = snapshot.data ?? 'Password';
                                 }
-                              },
-                            ),
+                              return Positioned(
+                                child: TextField(
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.lock_outline),
+                                    filled: true,
+                                    fillColor: Theme.of(context).colorScheme.tertiary,  //Color.fromARGB(128, 255, 255, 255),
+                                    hintText: _password, // Utiliza el valor actual de _password como hintText
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
                           ),
                           const SizedBox(
                             height: 130,

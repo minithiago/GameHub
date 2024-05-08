@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:procecto2/providers/providers.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
@@ -13,9 +12,10 @@ class IntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context, listen: true);
+    //final loginProvider = Provider.of<LoginProvider>(context, listen: true);
+    ThemeData _themeData = Provider.of<ThemeProvider>(context).themeData;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 110, 153, 253), //fondo fondo
+      //backgroundColor: Color.fromARGB(255, 110, 153, 253), //fondo fondo
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
@@ -35,12 +35,15 @@ class IntroScreen extends StatelessWidget {
           //color:  Theme.of(context).colorScheme.background ,//Style.Colors.introGrey, //fondo real
           child: Column(
             children: [
-              const SizedBox(
-                height: 330,
-                //color: Colors.amber,
-                child:
-                    Image(image: AssetImage("assets/images/gamehubFondo.png")),
+              SizedBox(
+                height: 300,
+                child: Image(
+                  image: _themeData.brightness == Brightness.dark
+                      ? AssetImage("assets/images/gamehubFondo.png")
+                      : AssetImage("assets/images/gamehubNuevo.png"),
+                ),
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

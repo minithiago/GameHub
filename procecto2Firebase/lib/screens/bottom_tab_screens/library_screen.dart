@@ -7,7 +7,6 @@ import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:procecto2/widgets/LibraryScreen/searchLibraryGame.dart';
-import 'package:procecto2/widgets/SearchScreen/searchPlatform.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -61,6 +60,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String _avatar = 'assets/default_avatar.jpg';
     /*
     if (LoginProvider.currentUser.email == "Guest") {
       return Scaffold(
@@ -101,17 +101,20 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                   FutureBuilder<String?>(
                     future: getUserAvatar(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return buildLoadingWidget(); // Muestra un indicador de carga mientras se obtiene el nickname
-                      } else {
-                        final avatar = snapshot.data ??
-                            'assets/default_avatar.jpg'; // Obtiene el nickname o establece "user" si no hay ninguno
-                        return CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(avatar),
-                          //backgroundColor: Colors.amber,
-                        );
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // Actualiza el valor de _avatar si el futuro ha completado
+                        _avatar = snapshot.data ?? "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
                       }
+
+                      return Positioned(
+                        top: 30, // Margen arriba
+                        left: MediaQuery.of(context).size.width / 2.90, // Margen a la izquierda
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(_avatar),
+                          //backgroundColor: Colors.amber,
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(width: 20.0),
@@ -128,27 +131,8 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  const FriendsScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(1.0, 0.0);
-                            const end = Offset.zero;
-                            const curve = Curves.ease;
-
-                            var tween = Tween(begin: begin, end: end)
-                                .chain(CurveTween(curve: curve));
-                            var offsetAnimation = animation.drive(tween);
-
-                            return SlideTransition(
-                              position: offsetAnimation,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 250),
-                        ),
+                        MaterialPageRoute(
+                            builder: (context) => const FriendsScreen()),
                       );
                     },
                     icon: const Icon(
