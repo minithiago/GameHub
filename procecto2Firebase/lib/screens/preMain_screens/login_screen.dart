@@ -30,7 +30,8 @@ class LoginScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.secondary,
           appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.secondary, //background
+            backgroundColor:
+                Theme.of(context).colorScheme.secondary, //background
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               //color: Colors.white,
@@ -46,16 +47,16 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
           body: SafeArea(
-            child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [Theme.of(context).colorScheme.secondary,Color.fromARGB(255, 83, 114, 188),],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [
-                    0.15,
-                    0.9
-                  ])
-                ),
+              child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.secondary,
+                      Color.fromARGB(255, 83, 114, 188),
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0.15, 0.9])),
             //color: Theme.of(context).colorScheme.background,
             child: Stack(
               children: [
@@ -188,8 +189,7 @@ class LoginScreen extends StatelessWidget {
                                       opacity: 0.7,
                                       child: Text(
                                         "Don't have an account?  ",
-                                        style: TextStyle(
-                                            fontSize: 13),
+                                        style: TextStyle(fontSize: 13),
                                       ),
                                     ),
                                     InkWell(
@@ -217,8 +217,6 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
-                      
                     ],
                   ),
                 ),
@@ -354,7 +352,9 @@ class LoginButton extends StatelessWidget {
         height: 55,
         child: FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary, //const Color.fromARGB(255, 0, 136, 255),
+            backgroundColor: Theme.of(context)
+                .colorScheme
+                .primary, //const Color.fromARGB(255, 0, 136, 255),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),
@@ -372,16 +372,14 @@ class LoginButton extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => MainScreen()),
                   );
-                }
-                else{
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Invalid email or password.")));
+                      content: Text("Invalid email or password.")));
                 }
               } on Exception catch (_) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Invalid email or password.")));
               }
-
             }
           },
           child: const Text(

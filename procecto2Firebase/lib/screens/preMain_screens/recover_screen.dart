@@ -14,16 +14,16 @@ class RecoverPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LoginFormProvider()),
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Style.Colors.introGrey,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           appBar: AppBar(
-            backgroundColor: Style.Colors.introGrey, //background
+            backgroundColor:
+                Theme.of(context).colorScheme.secondary, //background
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               color: Colors.white,
@@ -40,7 +40,19 @@ class RecoverPasswordScreen extends StatelessWidget {
           ),
           body: SafeArea(
               child: Container(
-            color: Style.Colors.introGrey,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.secondary,
+                      Color.fromARGB(255, 83, 114, 188),
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: const [
+                      0.25, //0.15
+                      1 //0.9
+                    ])),
+            //color: Style.Colors.introGrey,
             child: Stack(
               children: [
                 SingleChildScrollView(

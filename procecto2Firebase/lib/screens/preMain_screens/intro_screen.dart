@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/providers/providers.dart';
-import 'package:procecto2/repository/auth_repository.dart';
-//import 'package:procecto2/model/user_log_data.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
-import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
-import 'package:procecto2/widgets/gameHub_logo.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/widgets.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({
@@ -21,24 +15,32 @@ class IntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
-      //backgroundColor: Theme.of(context).colorScheme.background , //fondo fondo
+      backgroundColor: Color.fromARGB(255, 110, 153, 253), //fondo fondo
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Theme.of(context).colorScheme.secondary,Color.fromARGB(255, 83, 114, 188),],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            stops: const [
-              0.35,//0.15 
-              1 //0.9
-            ])
-          ),
-          
+              gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.secondary,
+                    Color.fromARGB(255, 83, 114, 188),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: const [
+                    0.25, //0.15
+                    1 //0.9
+                  ])),
+
           //color:  Theme.of(context).colorScheme.background ,//Style.Colors.introGrey, //fondo real
           child: Column(
             children: [
-              const Image(image: AssetImage("assets/images/gamehubFondo.png")),
+              const SizedBox(
+                height: 330,
+                //color: Colors.amber,
+                child:
+                    Image(image: AssetImage("assets/images/gamehubFondo.png")),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -55,8 +57,9 @@ class IntroScreen extends StatelessWidget {
                           'Explore games',
                           style: TextStyle(
                             //color: Theme.of(context).colorScheme.tertiary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -74,9 +77,9 @@ class IntroScreen extends StatelessWidget {
                           'Expand your library',
                           style: TextStyle(
                             //color: Theme.of(context).colorScheme.tertiary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,),
-                          
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -94,8 +97,9 @@ class IntroScreen extends StatelessWidget {
                           'Meet friends',
                           style: TextStyle(
                             //color: Theme.of(context).colorScheme.tertiary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -139,7 +143,8 @@ class IntroScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom( //  const Color.fromARGB(255, 255, 119, 0),//color soundcloud
+                    style: ElevatedButton.styleFrom(
+                      //  const Color.fromARGB(255, 255, 119, 0),//color soundcloud
                       backgroundColor: Color.fromARGB(255, 83, 114, 188),
                       //const Color.fromARGB(255, 255, 167, 10),  color gamehub
                       shape: RoundedRectangleBorder(
@@ -273,7 +278,8 @@ class IntroScreen extends StatelessWidget {
                       );
                       loginProvider.signup("nickname", "Guest", "password");
                       loginProvider.login("Guest", "password");*/
-                      Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                      Provider.of<ThemeProvider>(context, listen: false)
+                          .toggleTheme();
                       print("cambiado");
                     },
                     child: const Text(
