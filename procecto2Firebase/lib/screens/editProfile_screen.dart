@@ -66,7 +66,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary, //background
+        backgroundColor: Theme.of(context).colorScheme.background, //background
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           //color: Colors.white,
@@ -178,7 +178,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                           Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const MainScreen(currentIndex: 4,)),
+                                            const MainScreen(currentIndex: 3)),
                                     (Route<dynamic> route) => false,
                                   );
                           ScaffoldMessenger.of(context).showSnackBar(

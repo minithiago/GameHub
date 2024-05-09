@@ -6,7 +6,6 @@ import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/providers.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +14,7 @@ void main() async {
   );
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     //statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Color(0xFF20232a), //barra de abajo
+    systemNavigationBarColor: Colors.transparent, //Color(0xFF20232a), //barra de abajo
 
   ));
   runApp(

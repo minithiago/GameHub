@@ -6,6 +6,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/editProfile_screen.dart';
+import 'package:procecto2/screens/friends_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
@@ -249,11 +250,20 @@ class _AccountScreenState extends State<AccountScreen> {
 
                             return Column(
                               children: [
-                                // Icono
-                                const Icon(
-                                  SimpleLineIcons.game_controller,
-                                  size: 60,
-                                  //color: Colors.white,
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainScreen(currentIndex: 2)),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                  },
+                                  child: const Icon(
+                                    SimpleLineIcons.game_controller,
+                                    size: 60,
+                                    //color: Colors.white,
+                                  ),
                                 ),
                                 const SizedBox(height: 10),
                                 // Texto con indicador de carga condicional
@@ -276,15 +286,25 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ),
 
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           children: [
-                            Icon(
-                              SimpleLineIcons.people,
-                              size: 60,
-                              //color: Colors.white,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const FriendsScreen()),
+                              );
+                              },
+                              child: const Icon(
+                                SimpleLineIcons.people,
+                                size: 60,
+                                //color: Colors.white,
+                              ),
                             ),
-                            SizedBox(height: 10),
+
+                            const SizedBox(height: 10),
                             Text(
                               '3 friends',
                               style: TextStyle(

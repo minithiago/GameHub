@@ -8,6 +8,7 @@ import 'package:procecto2/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:procecto2/screens/bottom_tab_screens/search_screen.dart';
 
 
+
 class MainScreen extends StatefulWidget {
   final int currentIndex;
 
@@ -33,6 +34,7 @@ class MainScreenState extends State<MainScreen> {
     _currentIndex = widget.currentIndex;
   
   }
+  
 
   @override
   void dispose() {
@@ -51,9 +53,11 @@ class MainScreenState extends State<MainScreen> {
     _switchBloc.showList();
     //_switchBlocSearch.showListSearch();
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    
     //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     _pageController.initialPage = _currentIndex;
     return Scaffold(
@@ -88,7 +92,7 @@ class MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar: BottomNavyBar(
         containerHeight: 60.0,
-        backgroundColor: Theme.of(context).colorScheme.tertiary, //color de la barra de navegación
+        backgroundColor: Theme.of(context).colorScheme.background, //color de la barra de navegación
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
@@ -107,7 +111,7 @@ class MainScreenState extends State<MainScreen> {
               child: Icon(
                 SimpleLineIcons.game_controller,
                 size: 18.0,
-                color: _currentIndex == 0 ? Color.fromARGB(255, 83, 114, 188) : Colors.white,
+                color: _currentIndex == 0 ? Color.fromARGB(255, 83, 114, 188) : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -122,7 +126,7 @@ class MainScreenState extends State<MainScreen> {
               child: Icon(
                 SimpleLineIcons.magnifier,
                 size: 18.0,
-                color: _currentIndex == 1 ? Color.fromARGB(255, 83, 114, 188) : Colors.white,
+                color: _currentIndex == 1 ? Color.fromARGB(255, 83, 114, 188) : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -137,7 +141,7 @@ class MainScreenState extends State<MainScreen> {
               child: Icon(
                 SimpleLineIcons.layers,
                 size: 18.0,
-                color: _currentIndex == 2 ? Color.fromARGB(255, 83, 114, 188) : Colors.white,
+                color: _currentIndex == 2 ? Color.fromARGB(255, 83, 114, 188) : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -152,7 +156,7 @@ class MainScreenState extends State<MainScreen> {
               child: Icon(
                 SimpleLineIcons.user,
                 size: 18.0,
-                color: _currentIndex == 3 ? Color.fromARGB(255, 83, 114, 188) : Colors.white, //null
+                color: _currentIndex == 3 ? Color.fromARGB(255, 83, 114, 188) : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),

@@ -72,19 +72,21 @@ class _UserProfilePage extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.Colors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: AppBar(
-        backgroundColor: Style.Colors.introGrey,
+        backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
+          //color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
           userData != null ? userData['nickname'] : 'Loading...',
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(
+            //color: Colors.white
+            ),
         ),
         
         
@@ -119,12 +121,12 @@ class _UserProfilePage extends State<UserProfilePage> {
                                 const Icon(
                                   SimpleLineIcons.game_controller,
                                   size: 60,
-                                  color: Colors.white,
+                                  //color: Colors.white,
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
                                   '$games Games',
-                                  style: const TextStyle(color: Colors.grey),
+                                  //style: const TextStyle(color: Colors.grey),
                                 ),
                               ],
                             ),
@@ -138,12 +140,12 @@ class _UserProfilePage extends State<UserProfilePage> {
                                 Icon(
                                   SimpleLineIcons.people,
                                   size: 60,
-                                  color: Colors.white,
+                                  //color: Colors.white,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '3 friends',
-                                  style: TextStyle(color: Colors.grey),
+                                 // style: TextStyle(color: Colors.grey),
                                 ),
                               ],
                             ),

@@ -27,19 +27,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Style.Colors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: AppBar(
-        backgroundColor: Style.Colors.introGrey, //background
+        backgroundColor: Theme.of(context).colorScheme.background, //background
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           //color: Colors.white,
           onPressed: () {
-           Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MainScreen(currentIndex: 2,)),
-                                    (Route<dynamic> route) => false,
-                                  );
+           Navigator.of(context).pop();
             /*Navigator.push(
                         context,
                         PageRouteBuilder(
@@ -69,7 +64,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
         ),
         title: TextFormField(
           controller: _searchController,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(
+            //color: Colors.white
+            ),
           decoration: InputDecoration(
             fillColor: Colors.grey,
             filled: true,
@@ -79,7 +76,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
               borderSide: BorderSide.none,
             ),
             hintText: "Search users",
-            hintStyle: const TextStyle(color: Colors.white),
+            hintStyle: const TextStyle(
+              //color: Colors.white
+              ),
             suffixIcon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
@@ -88,7 +87,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   isShowUsers = true;
                 });
               },
-              color: Colors.white,
+              //color: Colors.white,
             ),
           ),
           
@@ -138,7 +137,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         ),
                         title: Text(
                           userData['nickname'],
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(
+                            //color: Colors.white
+                            ),
                         ),
                       ),
                     );
@@ -149,7 +150,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
             )
           : const Text(
               'Añadir lista de amigos',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                //color: Colors.white
+              ),
             ),
     );
   }

@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-import 'package:procecto2/screens/games_screens/library_screen_grid.dart';
 import 'package:procecto2/screens/games_screens/library_screen_list.dart';
+import 'package:procecto2/screens/games_screens/userLibrary_screen.dart';
 
 class UserLibraryScreenWidget extends StatefulWidget {
   final SwitchBloc _switchBloc;
@@ -133,14 +133,15 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                 },
                 icon: const Icon(
                   Icons.swap_vert,
-                  color: Colors.white,
+                  size: 24,
+                  //color: Colors.white,
                 ),
                 label: Text(
                   _filter.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    //color: Colors.white,
                   ),
                 ),
               ),
@@ -153,14 +154,14 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                 switch (snapshot.data) {
                   case SwitchItem.LIST:
                     return IconButton(
-                      icon: const Icon(SimpleLineIcons.list, size: 18.0),
-                      color: Colors.white,
+                      icon: const Icon(SimpleLineIcons.list, size: 20.0),
+                      //color: Colors.white,
                       onPressed: _showGrid,
                     );
                   case SwitchItem.GRID:
                     return IconButton(
-                      icon: const Icon(SimpleLineIcons.grid, size: 18.0),
-                      color: Colors.white,
+                      icon: const Icon(SimpleLineIcons.grid, size: 20.0),
+                      //color: Colors.white,
                       onPressed: _showList,
                     );
                   default:
@@ -178,7 +179,7 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                 (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
               switch (snapshot.data) {
                 case SwitchItem.LIST:
-                  return LibraryScreenGrid(
+                  return LibraryScreenGridUser(
                     filtro: _filter,
                     busqueda: _nameFilter,
                     usuario: widget._usuario,

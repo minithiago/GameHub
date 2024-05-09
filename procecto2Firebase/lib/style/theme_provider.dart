@@ -31,7 +31,7 @@ ThemeData darkTheme = ThemeData(
     background: Color.fromARGB(255, 53, 56, 64),
     secondary: Color(0xFF20232a),
     primary: Color.fromARGB(255, 255, 255, 255),
-    tertiary: Color.fromARGB(255, 41, 41, 41),
+    tertiary: Color.fromARGB(255, 118, 118, 118),
     
   )
 );

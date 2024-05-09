@@ -130,7 +130,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                 },
                 icon: const Icon(
                   Icons.swap_vert,
-                  size: 27,
+                  size: 24,
                   //color: Colors.white,
                 ),
                 label: Text(

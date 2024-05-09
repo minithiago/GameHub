@@ -18,14 +18,14 @@ class RecoverPasswordScreen extends StatelessWidget {
                 Theme.of(context).colorScheme.secondary, //background
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              color: Colors.white,
+              //color: Colors.white,
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             title: Text('Recover password'),
-            titleTextStyle: const TextStyle(
-              color: Colors.white,
+            titleTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
@@ -59,7 +59,7 @@ class RecoverPasswordScreen extends StatelessWidget {
                             Icon(
                               Icons.lock,
                               size: 70,
-                              color: Colors.white,
+                              //color: Colors.white,
                             ),
                           ]),
                       const SizedBox(
@@ -71,7 +71,7 @@ class RecoverPasswordScreen extends StatelessWidget {
                           Text(
                             "Recover your password",
                             style: TextStyle(
-                              color: Colors.white,
+                              //color: Colors.white,
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
@@ -171,7 +171,7 @@ class Email extends StatelessWidget {
         filled: true,
         fillColor: Color.fromARGB(128, 255, 255, 255),
         prefixIcon: Icon(Icons.email),
-        prefixIconColor: Colors.white,
+        //prefixIconColor: Colors.white,
         labelText: "Enter your email",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(

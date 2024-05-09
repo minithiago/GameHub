@@ -137,7 +137,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     },
                     icon: const Icon(
                       Icons.people,
-                      size: 28, // Tamaño más grande del icono
+                      size: 27, // Tamaño más grande del icono
                       //color: Colors.white, // Color blanco del icono
                     ),
                   ),
@@ -246,7 +246,7 @@ class _OptionCardState extends State<OptionCard> {
         decoration: BoxDecoration(
           color: isSelected
               ? const Color.fromARGB(255, 28, 231, 131)
-              : Theme.of(context).colorScheme.tertiary, // Cambiar el color si está seleccionado
+              : Theme.of(context).colorScheme.background, // Cambiar el color si está seleccionado
           borderRadius: BorderRadius.circular(25.0),
         ),
         child: Column(
@@ -257,7 +257,7 @@ class _OptionCardState extends State<OptionCard> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.black : Colors.white, // Ca,
+                color: isSelected ? Colors.black : Theme.of(context).colorScheme.primary, // Ca,
               ),
             ),
           ],

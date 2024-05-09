@@ -15,7 +15,7 @@ class IntroScreen extends StatelessWidget {
     //final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     ThemeData _themeData = Provider.of<ThemeProvider>(context).themeData;
     return Scaffold(
-      //backgroundColor: Color.fromARGB(255, 110, 153, 253), //fondo fondo
+      backgroundColor: Color.fromARGB(255, 83, 114, 188),//Color.fromARGB(255, 110, 153, 253), //fondo fondo
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
