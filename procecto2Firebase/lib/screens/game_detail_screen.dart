@@ -14,6 +14,7 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/providers.dart';
+import 'dart:ui' as ui;
 
 class GameDetailScreen extends StatefulWidget {
   final GameModel game;
@@ -34,7 +35,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     Item(id: 1, name: "IMAGES") // Corregido de "SCREESHOTS" a "SCREENSHOTS"
   ];
   final customColors = CustomSliderColors(
-    dotColor: Colors.white.withOpacity(0.8),
+    //dotColor: Colors.white.withOpacity(0.8),
     trackColor: Style.Colors.grey,
     progressBarColor: const Color.fromARGB(255, 79, 215, 84),
     hideShadow: true,
@@ -106,9 +107,28 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF20232a),
-      body: Column(children: [
-        const SizedBox(height: 50.0),
+        //backgroundColor: const Color(0xFF20232a),
+        body: Stack(children: [
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: Container(
+            color: Colors.black.withOpacity(0.5),
+          ),
+        ),
+      ),
+      Column(children: [
+        Container(
+          height: 50.0,
+          //color: Theme.of(context).colorScheme.secondary,
+        ),
         Stack(
           children: <Widget>[
             SizedBox(
@@ -152,22 +172,27 @@ class _GameDetailScreenState extends State<GameDetailScreen>
               ),*/
           ],
         ),
-        TabBar(
-          dividerColor: Colors.transparent,
-          controller: _tabController,
-          indicatorColor: Colors.orange,
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorWeight: 3.0,
-          unselectedLabelColor: Colors.white,
-          labelColor: Colors.orange,
-          isScrollable: false,
-          tabs: tabs.map((Item genre) {
-            return Container(
+        Container(
+          color: Theme.of(context)
+              .colorScheme
+              .secondary, // Color de fondo del TabBar
+          child: TabBar(
+            //Theme.of(context).colorScheme.primary,
+            dividerColor: Color.fromARGB(0, 0, 0, 0),
+            controller: _tabController,
+            indicatorColor: Color.fromARGB(255, 83, 114, 188),
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorWeight: 3.0,
+            unselectedLabelColor: Theme.of(context).colorScheme.primary,
+            labelColor: Color.fromARGB(255, 83, 114, 188),
+            isScrollable: false,
+            tabs: tabs.map((Item genre) {
+              return Container(
                 padding: const EdgeInsets.only(bottom: 13.0, top: 13.0),
-                child: Text(genre.name,
-                    style: const TextStyle(
-                        fontSize: 13.0, fontFamily: "SFPro-Medium")));
-          }).toList(),
+                child: Text(genre.name, style: const TextStyle(fontSize: 13.0)),
+              );
+            }).toList(),
+          ),
         ),
         Expanded(
           child: TabBarView(
@@ -389,7 +414,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               ));
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.blue,
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 83, 114, 188),
                                               shape: RoundedRectangleBorder(
                                                 // Forma del botón con bordes redondeados
                                                 borderRadius:
@@ -426,7 +452,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                       userId, game.id);
 
                                               UserRepository().fetchUserData();
-                                              
+
                                               favoriteGamesProvider
                                                   .removeFavorite(game);
                                               game.favorite = false;
@@ -572,23 +598,22 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                               }
                             },
                             child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        // Reemplaza el icono con una imagen de tu elección
-                                        Image.asset(
-                                          'assets/images/twitch_logo.png', // Ruta de la imagen local
-                                          width: 20, // Ancho deseado de la imagen
-                                          height: 20, // Altura deseada de la imagen
-                                          color: Colors.white, // Color de la imagen
-                                        ),
-                                        const SizedBox(width: 6),
-                                        const Text(
-                                          "Twitch",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Reemplaza el icono con una imagen de tu elección
+                                Image.asset(
+                                  'assets/images/twitch_logo.png', // Ruta de la imagen local
+                                  width: 20, // Ancho deseado de la imagen
+                                  height: 20, // Altura deseada de la imagen
+                                  color: Colors.white, // Color de la imagen
+                                ),
+                                const SizedBox(width: 6),
+                                const Text(
+                                  "Twitch",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -638,7 +663,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           game.summary,
                           style: TextStyle(
                               height: 1.5,
-                              color: Colors.white.withOpacity(0.5)),
+                              color: Colors.white.withOpacity(0.7)),
                         ),
                       ),
                     ),
@@ -649,7 +674,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         child: Text(
                           "No summary available",
                           style: TextStyle(
-                            color: Colors.grey,
+                            //color: Colors.grey,
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -991,7 +1016,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
               ]),
         )
       ]),
-    );
+    ]));
   }
 
   //widget para los listview

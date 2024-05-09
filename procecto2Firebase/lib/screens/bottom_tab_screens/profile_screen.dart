@@ -1,21 +1,16 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/editProfile_screen.dart';
 import 'package:procecto2/screens/friends_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
-import 'package:procecto2/style/theme.dart' as Style;
-
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
-
   const AccountScreen({super.key});
 
   @override
@@ -111,11 +106,12 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     UserRepository().storageGetAuthData();
-   
+
     //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     //FirebaseFirestore db = FirebaseFirestore.instance;
     String? _password;
-    String _avatar = 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
+    String _avatar =
+        'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
     String _nickname = ''; // Nombre predeterminado
     return MultiProvider(
       providers: [
@@ -127,12 +123,27 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.secondary, //Style.Colors.backgroundColor,
+        backgroundColor: Theme.of(context)
+            .colorScheme
+            .secondary, //Style.Colors.backgroundColor,
         body: SafeArea(
           bottom: true,
           child: Center(
             child: Stack(
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.secondary,
+                        Color.fromARGB(255, 83, 114, 188),
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: [0.10, 0.8],
+                    ),
+                  ),
+                ),
                 /*
                 const Positioned(
                   top: 30,
@@ -150,45 +161,41 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ),*/
                 Positioned(
-                  top: 30, // Margen arriba
-                  left: MediaQuery.of(context).size.width /
-                      2.90, // Margen a la izquierda
+                  top: 30,
+                  left: MediaQuery.of(context).size.width / 2.90,
                   child: FutureBuilder<String?>(
                     future: getUserAvatar(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        // Actualiza el valor de _avatar si el futuro ha completado
-                        _avatar = snapshot.data ?? 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
+                        _avatar = snapshot.data ??
+                            'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
                       }
 
-                      return Positioned(
-                        top: 30, // Margen arriba
-                        left: MediaQuery.of(context).size.width / 2.90, // Margen a la izquierda
-                        child: CircleAvatar(
-                          radius: 64,
-                          backgroundImage: NetworkImage(_avatar),
-                          //backgroundColor: Colors.amber,
-                        ),
+                      return CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(_avatar),
                       );
                     },
-                  )
+                  ),
                 ),
                 Positioned(
-                  top: 20, // Margen arriba
-                  left: 10, // Margen a la izquierda
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        // Cambia el estado del modo cada vez que se pulsa
-                        isLightMode = !isLightMode;
-                      });
-                      // También puedes llamar a la función para cambiar el tema aquí si lo deseas
-                      Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                    }, 
-                    icon: isLightMode ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
-                    // Muestra el icono correspondiente según el estado actual
-                  )
-                ),
+                    top: 20, // Margen arriba
+                    left: 10, // Margen a la izquierda
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          // Cambia el estado del modo cada vez que se pulsa
+                          isLightMode = !isLightMode;
+                        });
+                        // También puedes llamar a la función para cambiar el tema aquí si lo deseas
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
+                      icon: isLightMode
+                          ? const Icon(Icons.dark_mode)
+                          : const Icon(Icons.light_mode),
+                      // Muestra el icono correspondiente según el estado actual
+                    )),
 
                 Positioned(
                   top: 20, // Margen arriba
@@ -197,10 +204,29 @@ class _AccountScreenState extends State<AccountScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const editAccountScreen()),
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const editAccountScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 250),
+                        ),
                       );
-                    }, 
+                    },
                     icon: const Icon(Icons.edit),
                     //color: Colors.white,
                   ),
@@ -213,26 +239,19 @@ class _AccountScreenState extends State<AccountScreen> {
                     future: getUserNickname(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        // Actualiza el valor de _nickname si el futuro ha completado
                         _nickname = snapshot.data ?? 'user';
                       }
 
-                      return Positioned(
-                        top: 170,
-                        left: 0,
-                        right: 0,
-                        child: Text(
-                          _nickname,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            //color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      return Text(
+                        _nickname,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       );
                     },
-                  )
+                  ),
                 ),
 
                 Positioned(
@@ -253,11 +272,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MainScreen(currentIndex: 2)),
-                                    (Route<dynamic> route) => false,
-                                  );
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MainScreen(
+                                                  currentIndex: 2)),
+                                      (Route<dynamic> route) => false,
+                                    );
                                   },
                                   child: const Icon(
                                     SimpleLineIcons.game_controller,
@@ -267,35 +287,36 @@ class _AccountScreenState extends State<AccountScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 // Texto con indicador de carga condicional
-                                snapshot.connectionState == ConnectionState.waiting
+                                snapshot.connectionState ==
+                                        ConnectionState.waiting
                                     ? const Text(
                                         '',
                                         style: TextStyle(
-                                          //color: Theme.of(context).colorScheme.tertiary
-                                        ),
+                                            //color: Theme.of(context).colorScheme.tertiary
+                                            ),
                                       ) // Muestra un indicador de carga mientras se obtiene el número de juegos
                                     : Text(
                                         '$games games',
                                         style: TextStyle(
-                                          //color: Theme.of(context).colorScheme.tertiary
-                                        ),
+                                            //color: Theme.of(context).colorScheme.tertiary
+                                            ),
                                       ),
                               ],
                             );
                           },
                         ),
                       ),
-
                       Expanded(
                         child: Column(
                           children: [
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const FriendsScreen()),
-                              );
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const FriendsScreen()),
+                                );
                               },
                               child: const Icon(
                                 SimpleLineIcons.people,
@@ -303,13 +324,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                 //color: Colors.white,
                               ),
                             ),
-
                             const SizedBox(height: 10),
                             Text(
                               '3 friends',
                               style: TextStyle(
-                                //color: Theme.of(context).colorScheme.tertiary
-                              ),
+                                  //color: Theme.of(context).colorScheme.tertiary
+                                  ),
                             ),
                           ],
                         ),
@@ -326,92 +346,84 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          TextField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Theme.of(context).colorScheme.tertiary,// Color.fromARGB(128, 255, 255, 255),
-                              prefixIcon: Icon(Icons.mail),
-                              
-                              //prefixIconColor: Colors.white,
-                              hintText: FirebaseAuth.instance.currentUser!.email.toString(),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Ajusta el valor de 10.0 según sea necesario
+                          SizedBox(height: 50),
+                          SizedBox(
+                            height: 90,
+                            child: TextField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor:
+                                    Theme.of(context).colorScheme.tertiary,
+                                prefixIcon: Icon(Icons.mail),
+                                prefixIconColor:
+                                    Theme.of(context).colorScheme.primary,
+                                hintText: FirebaseAuth
+                                    .instance.currentUser!.email
+                                    .toString(),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                         
-                          Positioned(
-                            child: FutureBuilder<String?>(
+                          //SizedBox(height: 20),
+                          FutureBuilder<String?>(
                             future: getUserPass(),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
-                                // Actualiza el valor de _password si el futuro ha completado
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
                                 _password = snapshot.data ?? 'Password';
-                              } else if(snapshot.connectionState == ConnectionState.waiting)
-                                {
-                                  _password = snapshot.data ?? 'Password';
-                                }
-                              return Positioned(
-                                child: TextField(
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.lock_outline),
-                                    filled: true,
-                                    fillColor: Theme.of(context).colorScheme.tertiary,  //Color.fromARGB(128, 255, 255, 255),
-                                    hintText: _password, // Utiliza el valor actual de _password como hintText
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                _password = snapshot.data ?? 'Password';
+                              }
+                              return TextField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.lock_outline),
+                                  prefixIconColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  filled: true,
+                                  fillColor:
+                                      Theme.of(context).colorScheme.tertiary,
+                                  hintText: _password,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
                               );
                             },
-                          )
                           ),
-                          const SizedBox(
-                            height: 130,
-                          ),
-                          Positioned(
-                            //top: 580,
-                            //left: MediaQuery.of(context).size.width / 1.8,
-                            child: SizedBox(
-                              height:
-                                  50, // Establece la altura deseada del botón
-                              child: FilledButton(
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
+                          const SizedBox(height: 100),
+                          SizedBox(
+                            height: 50,
+                            child: FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              onPressed: () async {
+                                UserRepository().logout();
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => const IntroScreen(),
                                   ),
-                                ),
-                                onPressed: () async {
-                                  UserRepository().logout();
-
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const IntroScreen()),
-                                    (Route<dynamic> route) => false,
-                                  );
-                                },
-                                child: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(Icons.exit_to_app, size: 24.0),
-                                    Text("Logout"),
-                                    Icon(Icons.arrow_right, size: 32.0),
-                                  ],
-                                ),
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                              child: const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.exit_to_app, size: 24.0),
+                                  Text("Logout"),
+                                  Icon(Icons.arrow_right, size: 32.0),
+                                ],
                               ),
                             ),
                           ),

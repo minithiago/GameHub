@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
             backgroundColor:
                 Theme.of(context).colorScheme.secondary, //background
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios_new),
               //color: Colors.white,
               onPressed: () {
                 Navigator.pop(context);
@@ -370,7 +370,10 @@ class LoginButton extends StatelessWidget {
                 if (newUser != null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MainScreen(currentIndex: 0,)),
+                    MaterialPageRoute(
+                        builder: (context) => MainScreen(
+                              currentIndex: 0,
+                            )),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

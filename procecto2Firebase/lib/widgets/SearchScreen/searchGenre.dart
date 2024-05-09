@@ -27,7 +27,7 @@ class DiscoverScreenWidget4 extends StatelessWidget {
         backgroundColor: Style.Colors.introGrey,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios_new,
             color: Colors.white,
           ),
           onPressed: () {

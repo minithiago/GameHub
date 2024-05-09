@@ -31,10 +31,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background, //background
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new),
           //color: Colors.white,
           onPressed: () {
-           Navigator.of(context).pop();
+            Navigator.of(context).pop();
             /*Navigator.push(
                         context,
                         PageRouteBuilder(
@@ -59,14 +59,13 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           transitionDuration: const Duration(milliseconds: 250),
                         ),
                       );*/
-            
           },
         ),
         title: TextFormField(
           controller: _searchController,
           style: const TextStyle(
-            //color: Colors.white
-            ),
+              //color: Colors.white
+              ),
           decoration: InputDecoration(
             fillColor: Colors.grey,
             filled: true,
@@ -77,8 +76,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
             ),
             hintText: "Search users",
             hintStyle: const TextStyle(
-              //color: Colors.white
-              ),
+                //color: Colors.white
+                ),
             suffixIcon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
@@ -90,7 +89,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
               //color: Colors.white,
             ),
           ),
-          
           onFieldSubmitted: (_) {
             setState(() {
               isShowUsers = true;
@@ -138,8 +136,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         title: Text(
                           userData['nickname'],
                           style: const TextStyle(
-                            //color: Colors.white
-                            ),
+                              //color: Colors.white
+                              ),
                         ),
                       ),
                     );
@@ -151,8 +149,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
           : const Text(
               'Añadir lista de amigos',
               style: TextStyle(
-                //color: Colors.white
-              ),
+                  //color: Colors.white
+                  ),
             ),
     );
   }

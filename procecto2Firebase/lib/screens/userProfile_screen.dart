@@ -76,7 +76,7 @@ class _UserProfilePage extends State<UserProfilePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new),
           //color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
@@ -85,11 +85,9 @@ class _UserProfilePage extends State<UserProfilePage> {
         title: Text(
           userData != null ? userData['nickname'] : 'Loading...',
           style: const TextStyle(
-            //color: Colors.white
-            ),
+              //color: Colors.white
+              ),
         ),
-        
-        
         centerTitle: false,
       ),
       body: isLoading
@@ -107,9 +105,9 @@ class _UserProfilePage extends State<UserProfilePage> {
                           CircleAvatar(
                             //backgroundColor: Colors.grey,
                             backgroundImage: userData['avatar'] != ""
-                              ? NetworkImage(userData['avatar'])
-                              : const NetworkImage(
-                                  'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'),
+                                ? NetworkImage(userData['avatar'])
+                                : const NetworkImage(
+                                    'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'),
                             radius: 64,
                           ),
                           Expanded(
@@ -145,7 +143,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                                 SizedBox(height: 10),
                                 Text(
                                   '3 friends',
-                                 // style: TextStyle(color: Colors.grey),
+                                  // style: TextStyle(color: Colors.grey),
                                 ),
                               ],
                             ),

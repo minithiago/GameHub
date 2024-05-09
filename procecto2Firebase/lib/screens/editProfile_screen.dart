@@ -68,11 +68,10 @@ class _editAccountScreenState extends State<editAccountScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background, //background
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new),
           //color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
-            
           },
         ),
         title: const Text("Edit"),
@@ -135,7 +134,9 @@ class _editAccountScreenState extends State<editAccountScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               //enabled: true,
-                              fillColor:   Theme.of(context).colorScheme.tertiary, //Color.fromARGB(128, 255, 255, 255),
+                              fillColor: Theme.of(context)
+                                  .colorScheme
+                                  .tertiary, //Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: Icon(Icons.person),
                               //prefixIconColor: Colors.white,
                               hintText: "Enter a new nickname",
@@ -176,11 +177,11 @@ class _editAccountScreenState extends State<editAccountScreen> {
                             .updateUser(userEmail, nickname, profilePic!);
                         if (success) {
                           Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MainScreen(currentIndex: 3)),
-                                    (Route<dynamic> route) => false,
-                                  );
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const MainScreen(currentIndex: 3)),
+                            (Route<dynamic> route) => false,
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("User modified completed.")));

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/friends_screen.dart';
-import 'package:procecto2/screens/main_screen.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:procecto2/widgets/LibraryScreen/searchLibraryGame.dart';
 
@@ -18,7 +15,6 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenWidgetState extends State<LibraryScreen> {
   final TextEditingController _searchController = TextEditingController();
   late SwitchBloc _switchBloc;
-  
 
   @override
   void initState() {
@@ -60,7 +56,8 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String _avatar = 'assets/default_avatar.jpg';
+    String _avatar =
+        'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
     /*
     if (LoginProvider.currentUser.email == "Guest") {
       return Scaffold(
@@ -97,59 +94,77 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
               Container(
                 color: Theme.of(context).colorScheme.secondary,
                 padding: const EdgeInsets.all(20.0),
-                child: Row(children: [
-                  FutureBuilder<String?>(
-                    future: getUserAvatar(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        // Actualiza el valor de _avatar si el futuro ha completado
-                        _avatar = snapshot.data ?? "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
-                      }
+                child: Row(
+                  children: [
+                    FutureBuilder<String?>(
+                      future: getUserAvatar(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          _avatar = snapshot.data ??
+                              "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+                        }
 
-                      return Positioned(
-                        top: 30, // Margen arriba
-                        left: MediaQuery.of(context).size.width / 2.90, // Margen a la izquierda
-                        child: CircleAvatar(
+                        return CircleAvatar(
                           radius: 30,
                           backgroundImage: NetworkImage(_avatar),
-                          //backgroundColor: Colors.amber,
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 20.0),
-                  const Text(
-                    'Your Library',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                      //color: Colors.white,
+                        );
+                      },
                     ),
-                  ),
-                  const SizedBox(width: 90.0),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FriendsScreen()),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.people,
-                      size: 27, // Tamaño más grande del icono
-                      //color: Colors.white, // Color blanco del icono
+                    const SizedBox(width: 20.0),
+                    const Text(
+                      'Your Library',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                        //color: Colors.white,
+                      ),
                     ),
-                  ),
-                ]),
+                    const Spacer(), // Agregado para ocupar el espacio restante en la fila
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const FriendsScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
+                            },
+                            transitionDuration:
+                                const Duration(milliseconds: 250),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.people,
+                        size: 27,
+                        //color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
                   controller: _searchController,
                   style: const TextStyle(
-                    //color: Colors.white
-                    ),
+                      //color: Colors.white
+                      ),
                   decoration: InputDecoration(
                     fillColor: Colors.grey,
                     filled: true,
@@ -160,8 +175,8 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     ),
                     hintText: "Search your library",
                     hintStyle: const TextStyle(
-                      //color: Colors.white
-                      ),
+                        //color: Colors.white
+                        ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.search),
                       onPressed: () {
@@ -246,7 +261,9 @@ class _OptionCardState extends State<OptionCard> {
         decoration: BoxDecoration(
           color: isSelected
               ? const Color.fromARGB(255, 28, 231, 131)
-              : Theme.of(context).colorScheme.background, // Cambiar el color si está seleccionado
+              : Theme.of(context)
+                  .colorScheme
+                  .background, // Cambiar el color si está seleccionado
           borderRadius: BorderRadius.circular(25.0),
         ),
         child: Column(
@@ -257,7 +274,9 @@ class _OptionCardState extends State<OptionCard> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.black : Theme.of(context).colorScheme.primary, // Ca,
+                color: isSelected
+                    ? Colors.black
+                    : Theme.of(context).colorScheme.primary, // Ca,
               ),
             ),
           ],
