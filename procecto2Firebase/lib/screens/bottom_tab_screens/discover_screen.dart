@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-//import 'package:procecto2/model/game.dart';
 import 'package:procecto2/screens/games_screens/discover_screen_grid.dart';
 import 'package:procecto2/screens/games_screens/discover_screen_list.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider.dart';
@@ -9,7 +8,7 @@ import 'package:procecto2/widgets/DiscoverScreen/home_slider.dart';
 class DiscoverScreen extends StatelessWidget {
   final SwitchBloc _switchBloc;
 
-  DiscoverScreen(this._switchBloc);
+  const DiscoverScreen(this._switchBloc, {super.key});
 
   void _showGrid() {
     print("Single Clicked");
@@ -51,13 +50,13 @@ class DiscoverScreen extends StatelessWidget {
                 switch (snapshot.data) {
                   case SwitchItem.LIST:
                     return IconButton(
-                      icon: Icon(SimpleLineIcons.list, size: 20.0),
+                      icon: const Icon(SimpleLineIcons.list, size: 20.0),
                       //color: Colors.white,
                       onPressed: _showGrid,
                     );
                   case SwitchItem.GRID:
                     return IconButton(
-                      icon: Icon(SimpleLineIcons.grid, size: 20.0),
+                      icon: const Icon(SimpleLineIcons.grid, size: 20.0),
                       //color: Colors.white,
                       onPressed: _showList,
                     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/games_screens/librarySearch_screen.dart';
-import 'package:procecto2/screens/games_screens/search_screen_grid.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 
 class DiscoverScreenWidget6 extends StatelessWidget {
@@ -21,15 +20,15 @@ class DiscoverScreenWidget6 extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Results by $query',
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        backgroundColor: Style.Colors.introGrey,
+        backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () {
             //_switchBlocSearch.closeSearch();
@@ -37,8 +36,9 @@ class DiscoverScreenWidget6 extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor:
-          Style.Colors.backgroundColor, // Cambia el color de fondo del body
+      backgroundColor: Theme.of(context)
+          .colorScheme
+          .secondary, // Cambia el color de fondo del body
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

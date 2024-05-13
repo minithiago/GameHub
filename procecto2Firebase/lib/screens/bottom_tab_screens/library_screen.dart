@@ -54,6 +54,8 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
     return null;
   }
 
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     String _avatar =
@@ -180,8 +182,6 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.search),
                       onPressed: () {
-                        print(_searchController.text);
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -204,15 +204,41 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
               ),
 
               Center(
-                child: Container(
-                  //color: Colors.amber,
+                child: SizedBox(
                   height: 70,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: const <Widget>[
-                      OptionCard(title: 'All'),
-                      OptionCard(title: 'Wishlist'),
-                      OptionCard(title: 'Favorites'),
+                    children: [
+                      for (int i = 0; i < 3; i++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ChoiceChip(
+                            label: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                i == 0
+                                    ? 'All'
+                                    : i == 1
+                                        ? 'Wishlist'
+                                        : 'Favorites',
+                                style: TextStyle(
+                                  fontSize: 18, // Tamaño de la fuente
+                                  color: selectedIndex == i
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                            selected: selectedIndex == i,
+                            selectedColor: const Color.fromRGBO(110, 182, 255,
+                                1), // Color cuando está seleccionado
+                            onSelected: (isSelected) {
+                              setState(() {
+                                selectedIndex = isSelected ? i : -1;
+                              });
+                            },
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -230,58 +256,5 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
             ],
           ),
         ));
-  }
-}
-
-class OptionCard extends StatefulWidget {
-  final String title;
-
-  const OptionCard({Key? key, required this.title}) : super(key: key);
-
-  @override
-  _OptionCardState createState() => _OptionCardState();
-}
-
-class _OptionCardState extends State<OptionCard> {
-  bool isSelected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isSelected = !isSelected;
-        });
-      },
-      child: Center(
-          child: Container(
-        width: 110, // Ancho de cada tarjeta de opción
-        margin: const EdgeInsets.all(10.0),
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? const Color.fromARGB(255, 28, 231, 131)
-              : Theme.of(context)
-                  .colorScheme
-                  .background, // Cambiar el color si está seleccionado
-          borderRadius: BorderRadius.circular(25.0),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: isSelected
-                    ? Colors.black
-                    : Theme.of(context).colorScheme.primary, // Ca,
-              ),
-            ),
-          ],
-        ),
-      )),
-    );
   }
 }

@@ -32,12 +32,12 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
   }
 
   void _showGrid() {
-    print("Single Clicked");
+    //print("Single Clicked");
     widget._switchBloc.showGrid();
   }
 
   void _showList() {
-    print("List Clicked");
+    //print("List Clicked");
     widget._switchBloc.showList();
   }
 
@@ -69,14 +69,14 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                               children: [
                                 Icon(
                                   Icons.calendar_month,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Release date',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      //color: Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -90,14 +90,14 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                               children: [
                                 Icon(
                                   Icons.star_rounded,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Rating',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      //color: Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -111,14 +111,14 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                               children: [
                                 Icon(
                                   Icons.abc,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Name',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      //color: Colors.black,
+                                      ),
                                 ),
                               ],
                             ),

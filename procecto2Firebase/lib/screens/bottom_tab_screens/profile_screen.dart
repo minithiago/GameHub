@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/editProfile_screen.dart';
@@ -136,7 +137,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Theme.of(context).colorScheme.secondary,
-                        Color.fromARGB(255, 83, 114, 188),
+                        const Color.fromRGBO(110, 182, 255, 1)
+                        //Color.fromARGB(255, 29, 166, 251)
                       ],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
@@ -297,9 +299,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                       ) // Muestra un indicador de carga mientras se obtiene el número de juegos
                                     : Text(
                                         '$games games',
-                                        style: TextStyle(
-                                            //color: Theme.of(context).colorScheme.tertiary
-                                            ),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                               ],
                             );
@@ -325,11 +326,9 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            Text(
+                            const Text(
                               '3 friends',
-                              style: TextStyle(
-                                  //color: Theme.of(context).colorScheme.tertiary
-                                  ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -421,7 +420,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Icon(Icons.exit_to_app, size: 24.0),
-                                  Text("Logout"),
+                                  Text(
+                                    "Logout",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   Icon(Icons.arrow_right, size: 32.0),
                                 ],
                               ),

@@ -43,11 +43,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
         } else {
-          return buildLoadingWidget(
-            //color: Colors.orange,
-            //size: 6.0,
-            //message:  'Loading...', 
-          );
+          return buildLoadingWidget();
         }
       },
     );

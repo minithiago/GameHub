@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
-
-import 'package:procecto2/style/theme.dart' as Style;
-//import 'package:procecto2/widgets/home_slider.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider2.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider3.dart';
 import 'package:procecto2/widgets/SearchScreen/searchGame.dart';
@@ -29,16 +26,16 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
         slivers: <Widget>[
           SliverAppBar(
             automaticallyImplyLeading: false,
-
             pinned: false, //que se mantenga fija
-            floating: true,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            // Color de fondo de la barra de búsqueda
+            floating: true, //que aparezca cuando se desliza hacia arriba
+            backgroundColor:
+                Colors.transparent, // Color de fondo de la barra de búsqueda
+
             title: TextField(
               controller: _searchController,
               style: const TextStyle(
-                //color: Colors.white
-                ),
+                  //color: Colors.white
+                  ),
               decoration: InputDecoration(
                 fillColor: Colors.grey,
                 filled: true,
@@ -49,8 +46,8 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                 ),
                 hintText: "eg: Elden Ring",
                 hintStyle: const TextStyle(
-                  //color: Colors.white
-                  ),
+                    //color: Colors.white
+                    ),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {

@@ -5,7 +5,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:procecto2/model/game.dart';
-//import 'package:procecto2/model/game_models/screenshot.dart';
 import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/style/theme.dart' as Style;
@@ -18,7 +17,8 @@ import 'dart:ui' as ui;
 
 class GameDetailScreen extends StatefulWidget {
   final GameModel game;
-  GameDetailScreen({required Key key, required this.game}) : super(key: key);
+  const GameDetailScreen({required Key key, required this.game})
+      : super(key: key);
   @override
   _GameDetailScreenState createState() => _GameDetailScreenState(game);
 }
@@ -120,7 +120,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
         child: BackdropFilter(
           filter: ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: Container(
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
           ),
         ),
       ),
@@ -154,22 +154,6 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                     Navigator.pop(context);
                   }),
             ),
-
-            /*Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: const [
-                        0.0,
-                        0.9
-                      ],
-                      colors: [
-                        Color.fromARGB(255, 62, 112, 226).withOpacity(1.0),
-                        Style.Colors.backgroundColor.withOpacity(0.0)
-                      ]),
-                ),
-              ),*/
           ],
         ),
         Container(
@@ -178,13 +162,13 @@ class _GameDetailScreenState extends State<GameDetailScreen>
               .secondary, // Color de fondo del TabBar
           child: TabBar(
             //Theme.of(context).colorScheme.primary,
-            dividerColor: Color.fromARGB(0, 0, 0, 0),
+            dividerColor: const Color.fromARGB(0, 0, 0, 0),
             controller: _tabController,
-            indicatorColor: Color.fromARGB(255, 83, 114, 188),
+            indicatorColor: const Color.fromRGBO(110, 182, 255, 1),
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorWeight: 3.0,
             unselectedLabelColor: Theme.of(context).colorScheme.primary,
-            labelColor: Color.fromARGB(255, 83, 114, 188),
+            labelColor: const Color.fromRGBO(110, 182, 255, 1),
             isScrollable: false,
             tabs: tabs.map((Item genre) {
               return Container(
@@ -225,16 +209,17 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                   game.name,
                                   style: const TextStyle(
                                     height: 1.5,
-                                    color: Colors.white,
+                                    //color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0,
                                   ),
                                 ),
                                 Text(
                                   formattedDate,
-                                  style: TextStyle(
-                                      height: 1.5,
-                                      color: Colors.white.withOpacity(0.5)),
+                                  style: const TextStyle(
+                                    height: 1.5,
+                                    //color: Colors.white.withOpacity(0.5)
+                                  ),
                                 ),
                                 const SizedBox(
                                     height:
@@ -270,7 +255,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                           .toString()
                                                           .substring(0, 2),
                                                       style: const TextStyle(
-                                                        color: Colors.white,
+                                                        //color: Colors.white,
                                                         fontSize: 35,
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -284,6 +269,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                         ),
                                       ),
                                     ),
+                                    /*
                                     Visibility(
                                       visible: game.total_rating == null,
                                       child: Container(
@@ -313,7 +299,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                       child: const Text(
                                                         "N/A",
                                                         style: TextStyle(
-                                                          color: Colors.white,
+                                                          //color: Colors.white,
                                                           fontSize: 35,
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -327,7 +313,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                           },
                                         ),
                                       ),
-                                    ),
+                                    ),*/
                                     const SizedBox(width: 10.0),
                                     // Espacio entre la puntuación y el botón
                                     Column(
@@ -348,7 +334,6 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                             String url =
                                                 "https://www.amazon.es/s?k=${game.name}&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3AS6SWL65PXHE&sprefix=stellar+blade%2Caps%2C155&ref=nb_sb_noss_1";
 
-                                            print(url);
                                             if (await canLaunchUrl(
                                                 Uri.parse(url))) {
                                               await launchUrl(Uri.parse(url));
@@ -414,8 +399,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                               ));
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 83, 114, 188),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      110, 182, 255, 1),
                                               shape: RoundedRectangleBorder(
                                                 // Forma del botón con bordes redondeados
                                                 borderRadius:
@@ -526,15 +512,264 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                     ),
                     //const SizedBox(height: 10.0),
 
+                    Visibility(
+                      visible: game.summary != null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          game.summary,
+                          style: const TextStyle(
+                            height: 1.5,
+                            //color: Colors.white.withOpacity(0.7)
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: game.summary == null,
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: Text(
+                          "No summary available",
+                          style: TextStyle(
+                            //color: Colors.grey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    buildSection("Platforms", game.platforms,
+                        emptyMessage: "No platforms available"),
+                    buildSection("Genres", game.genres,
+                        emptyMessage: "No genres available"),
+                    buildSection("Game Modes", game.modes,
+                        emptyMessage: "No game modes available"),
+
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, bottom: 10.0, top: 15.0),
+                      child: Text(
+                        "Companies".toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          //color: Colors.white
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible:
+                          game.companies != null && game.companies!.isNotEmpty,
+                      child: Container(
+                        height: 30.0,
+                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.companies?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5.0)),
+                                    border: Border.all(
+                                      width: 1.0,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    )),
+                                child: Text(
+                                  game.companies![index].company![0].name,
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                      height: 1.4,
+                                      //color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible:
+                          game.companies == null || game.companies!.isEmpty,
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: Text(
+                          "No companies available",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, bottom: 10.0, top: 15.0),
+                      child: Text(
+                        "Languages".toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          //color: Colors.white
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      //Valida que si hay dos lenguajes iguales solo muestre uno
+                      visible:
+                          game.languages != null && game.languages!.isNotEmpty,
+                      child: Container(
+                        height: 30.0,
+                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.languages?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            final languageName =
+                                game.languages![index].language![0].name;
+                            if (index == 0 ||
+                                !game.languages!.sublist(0, index).any((lang) =>
+                                    lang.language![0].name == languageName)) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 10.0),
+                                child: Container(
+                                  padding: EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5.0)),
+                                      border: Border.all(
+                                        width: 1.0,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      )),
+                                  child: Text(
+                                    languageName,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                        height: 1.4,
+                                        //color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 9.0),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return SizedBox
+                                  .shrink(); // Ocultar si el lenguaje ya se ha mostrado antes
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible:
+                          game.languages == null || game.languages!.isEmpty,
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: Text(
+                          "No languages available",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, bottom: 10.0, top: 15.0),
+                      child: Text(
+                        "DLCs".toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          //color: Colors.white
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: game.dlc != null && game.dlc!.isNotEmpty,
+                      child: Container(
+                        height: 220.0,
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: game.dlc?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            final dlc = game.dlc![index];
+                            return dlc.cover != null
+                                ? Padding(
+                                    padding: EdgeInsets.only(right: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(5.0),
+                                          child: Image.network(
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${dlc.cover![0].imageId}.jpg",
+                                            fit: BoxFit.cover,
+                                            width: 120.0,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                            height:
+                                                5.0), // Espaciado entre la imagen y el nombre
+                                        Text(
+                                          dlc.name ??
+                                              'Unnamed DLC', // Mostrar el nombre del DLC, o 'Unnamed DLC' si el nombre es nulo
+                                          style: const TextStyle(
+                                            //color: Colors.white,
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Container(
+                                    //color: Colors.amber,
+                                    ); // No muestra el DLC si no tiene portada
+                          },
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: game.dlc == null || game.dlc!.isEmpty,
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: Text(
+                          "No DLCs available",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
                       child: Text(
                         "Socials".toUpperCase(),
                         style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          //color: Colors.white
+                        ),
                       ),
                     ),
                     Row(
@@ -543,7 +778,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           padding: const EdgeInsets.only(left: 10.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color.fromARGB(
+                              backgroundColor: const Color.fromARGB(
                                   255, 32, 50, 124), // Color de fondo del botón
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
@@ -655,265 +890,29 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         )
                       ],
                     ),
-                    Visibility(
-                      visible: game.summary != null,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          game.summary,
-                          style: TextStyle(
-                              height: 1.5,
-                              color: Colors.white.withOpacity(0.7)),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: game.summary == null,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: Text(
-                          "No summary available",
-                          style: TextStyle(
-                            //color: Colors.grey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    buildSection("Platforms", game.platforms,
-                        emptyMessage: "No platforms available"),
-                    buildSection("Genres", game.genres,
-                        emptyMessage: "No genres available"),
-                    buildSection("Game Modes", game.modes,
-                        emptyMessage: "No game modes available"),
-
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, bottom: 10.0, top: 15.0),
-                      child: Text(
-                        "Companies".toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                    Visibility(
-                      visible:
-                          game.companies != null && game.companies!.isNotEmpty,
-                      child: Container(
-                        height: 30.0,
-                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: game.companies?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(5.0)),
-                                    border: Border.all(
-                                        width: 1.0, color: Colors.white)),
-                                child: Text(
-                                  game.companies![index].company![0].name,
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                      height: 1.4,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 9.0),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible:
-                          game.companies == null || game.companies!.isEmpty,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: Text(
-                          "No companies available",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, bottom: 10.0, top: 15.0),
-                      child: Text(
-                        "Languages".toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                    Visibility(
-                      //Valida que si hay dos lenguajes iguales solo muestre uno
-                      visible:
-                          game.languages != null && game.languages!.isNotEmpty,
-                      child: Container(
-                        height: 30.0,
-                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: game.languages?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            final languageName =
-                                game.languages![index].language![0].name;
-                            if (index == 0 ||
-                                !game.languages!.sublist(0, index).any((lang) =>
-                                    lang.language![0].name == languageName)) {
-                              return Padding(
-                                padding: EdgeInsets.only(right: 10.0),
-                                child: Container(
-                                  padding: EdgeInsets.all(5.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5.0)),
-                                      border: Border.all(
-                                          width: 1.0, color: Colors.white)),
-                                  child: Text(
-                                    languageName,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                        height: 1.4,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 9.0),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return SizedBox
-                                  .shrink(); // Ocultar si el lenguaje ya se ha mostrado antes
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-
-                    Visibility(
-                      visible:
-                          game.languages == null || game.languages!.isEmpty,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: Text(
-                          "No languages available",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, bottom: 10.0, top: 15.0),
-                      child: Text(
-                        "DLCs".toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                    Visibility(
-                      visible: game.dlc != null && game.dlc!.isNotEmpty,
-                      child: Container(
-                        height: 220.0,
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: game.dlc?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            final dlc = game.dlc![index];
-                            return dlc.cover != null
-                                ? Padding(
-                                    padding: EdgeInsets.only(right: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(5.0),
-                                          child: Image.network(
-                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${dlc.cover![0].imageId}.jpg",
-                                            fit: BoxFit.cover,
-                                            width: 120.0,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                            height:
-                                                5.0), // Espaciado entre la imagen y el nombre
-                                        Text(
-                                          dlc.name ??
-                                              'Unnamed DLC', // Mostrar el nombre del DLC, o 'Unnamed DLC' si el nombre es nulo
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : Container(
-                                    //color: Colors.amber,
-                                    ); // No muestra el DLC si no tiene portada
-                          },
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: game.dlc == null || game.dlc!.isEmpty,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: Text(
-                          "No DLCs available",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
                       child: Text(
                         "Similar Games".toUpperCase(),
                         style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          //color: Colors.white
+                        ),
                       ),
                     ),
                     Visibility(
                       visible: game.similar != null && game.similar!.isNotEmpty,
                       child: Container(
                         height: 200.0,
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: game.similar?.length ?? 0,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: EdgeInsets.only(right: 20.0),
+                              padding: const EdgeInsets.only(right: 20.0),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10.0),
                                 child: Image.network(
@@ -1002,7 +1001,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                   child: Text(
                                     "Screenshots not available",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      //color: Colors.white,
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1031,33 +1030,37 @@ class _GameDetailScreenState extends State<GameDetailScreen>
           child: Text(
             title.toUpperCase(),
             style: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+              //color: Colors.white
+            ),
           ),
         ),
         Visibility(
           visible: items != null && items.isNotEmpty,
           child: Container(
             height: 30.0,
-            padding: EdgeInsets.only(left: 10.0, top: 5.0),
+            padding: const EdgeInsets.only(left: 10.0, top: 5.0),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: items?.length ?? 0,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.only(right: 10.0),
+                  padding: const EdgeInsets.only(right: 10.0),
                   child: Container(
-                    padding: EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        border: Border.all(width: 1.0, color: Colors.white)),
+                        border: Border.all(
+                          width: 1.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        )),
                     child: Text(
                       items![index].name,
                       maxLines: 2,
                       style: const TextStyle(
                           height: 1.4,
-                          color: Colors.white,
+                          //color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 9.0),
                     ),

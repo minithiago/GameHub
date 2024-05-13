@@ -43,12 +43,13 @@ class _SignupScreenState extends State<SignupScreen> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          //color: Colors.white,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: const Text('Create your account'),
+        centerTitle: true,
         titleTextStyle: TextStyle(
           color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold,
@@ -62,7 +63,7 @@ class _SignupScreenState extends State<SignupScreen> {
               gradient: LinearGradient(
                   colors: [
                     Theme.of(context).colorScheme.secondary,
-                    Color.fromARGB(255, 83, 114, 188),
+                    Color.fromRGBO(110, 182, 255, 1),
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
@@ -329,7 +330,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      Color.fromARGB(255, 83, 114, 188),
+                                      Color.fromRGBO(110, 182, 255, 1),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),

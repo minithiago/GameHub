@@ -38,6 +38,23 @@ class _editAccountScreenState extends State<editAccountScreen> {
     return "";
   }
 
+  Future<String?> getUserNickname() async {
+    // Llamamos a la función fetchUserData() para obtener los datos del usuario
+    Map<String, dynamic>? userData = await UserRepository().fetchUserData();
+
+    // Verificamos si se encontró algún usuario con el correo electrónico dado
+    if (userData != null) {
+      // Accedemos al valor del campo "nickname" del usuario
+      String? nickname = userData['nickname'];
+
+      // Devolvemos el valor del nickname
+      return nickname;
+    } else {
+      // Si no se encontró ningún usuario, devolvemos null
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //UserRepository().storageGetAuthData();
@@ -46,7 +63,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
 
     User? user = FirebaseAuth.instance.currentUser;
 
-    print(user);
+    //print(user);
 
     // Verifica si hay un usuario autenticado
     if (user != null) {
@@ -69,12 +86,13 @@ class _editAccountScreenState extends State<editAccountScreen> {
         backgroundColor: Theme.of(context).colorScheme.background, //background
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          //color: Colors.white,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text("Edit"),
+        title: const Text("Edit your account"),
+        centerTitle: true,
         titleTextStyle: TextStyle(
           color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold,
@@ -159,14 +177,19 @@ class _editAccountScreenState extends State<editAccountScreen> {
                     height: 50, // Establece la altura deseada del botón
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 83, 114, 188),
+                        backgroundColor: Color.fromRGBO(110, 182, 255, 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       onPressed: () async {
                         String? profilePic;
-                        String nickname = _nicknameController.text;
+                        String? nickname;
+                        if (_nicknameController.text == "") {
+                          nickname = await getUserNickname();
+                        } else {
+                          nickname = _nicknameController.text;
+                        }
 
                         if (imagen_to_upload != null) {
                           profilePic = await uploadImage(imagen_to_upload!);
@@ -174,7 +197,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                           profilePic = await getUserAvatar();
                         }
                         bool success = await UserRepository()
-                            .updateUser(userEmail, nickname, profilePic!);
+                            .updateUser(userEmail, nickname!, profilePic!);
                         if (success) {
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
@@ -184,11 +207,11 @@ class _editAccountScreenState extends State<editAccountScreen> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text("User modified completed.")));
+                                  content: Text("User modified completed")));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text("Error modifying the user.")));
+                                  content: Text("Error modifying the user")));
                         }
                       },
                       child: const Row(

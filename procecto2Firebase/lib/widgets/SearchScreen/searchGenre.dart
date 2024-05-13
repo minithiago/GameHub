@@ -18,17 +18,17 @@ class DiscoverScreenWidget4 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Genre',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        backgroundColor: Style.Colors.introGrey,
+        backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () {
             //_switchBlocSearch.closeSearch();
@@ -37,8 +37,9 @@ class DiscoverScreenWidget4 extends StatelessWidget {
         ),
       ),
 
-      backgroundColor:
-          Style.Colors.backgroundColor, // Cambia el color de fondo del body
+      backgroundColor: Theme.of(context)
+          .colorScheme
+          .secondary, // Cambia el color de fondo del body
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

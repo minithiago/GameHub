@@ -72,7 +72,8 @@ class GameRepository {
     int randomNumber2 = random.nextInt(3) + 1;
     print(randomNumber);
     print(randomNumber2);
-    String body = "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber; limit 10; sort first_release_date desc;";
+    String body =
+        "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & total_rating = $randomNumber; limit 10; sort first_release_date desc;";
 
     if (randomNumber2 % 2 == 0) {
       // El número es par
@@ -123,7 +124,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & first_release_date >= $nowDate & hypes >= 25 & category = 0; limit 10; sort first_release_date desc; ");
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & first_release_date >= $nowDate & hypes >= 20 & category = 0; limit 10; sort first_release_date desc; ");
     print("Slider2: ${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
@@ -228,19 +229,17 @@ class GameRepository {
   Future<GameResponse> libraryGames(List<String> gameIds) async {
     // Construye la consulta para seleccionar los juegos que estén dentro de la lista de gameIds
     String query = gameIds.join(',');
-    
+
     // Realiza la solicitud HTTP con la consulta construida
-    var response = await http.post(
-      Uri.parse(mainUrl),
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Client-ID': 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
-      },
-      body:
-          "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id = ($query) ; limit 99;");
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id = ($query) ; limit 99;");
     // Devuelve la respuesta del servidor en forma de GameResponse
     return GameResponse.fromJson(jsonDecode(response.body));
   }
-  
-
 }

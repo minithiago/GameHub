@@ -17,12 +17,13 @@ class RecoverPasswordScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.secondary, //background
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
-          //color: Colors.white,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text('Recover password'),
+        centerTitle: true,
         titleTextStyle: TextStyle(
           color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold,
@@ -35,7 +36,7 @@ class RecoverPasswordScreen extends StatelessWidget {
             gradient: LinearGradient(
                 colors: [
                   Theme.of(context).colorScheme.secondary,
-                  Color.fromARGB(255, 83, 114, 188),
+                  Color.fromRGBO(110, 182, 255, 1),
                 ],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
@@ -108,7 +109,7 @@ class RecoverPasswordScreen extends StatelessWidget {
                               child: FilledButton(
                                 style: FilledButton.styleFrom(
                                   backgroundColor:
-                                      Color.fromARGB(255, 83, 114, 188),
+                                      Color.fromRGBO(110, 182, 255, 1),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),

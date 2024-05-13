@@ -1,5 +1,6 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/bottom_tab_screens/discover_screen.dart';
@@ -53,6 +54,7 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+
     _pageController.initialPage = _currentIndex;
     return Scaffold(
       backgroundColor: Theme.of(context)
@@ -63,7 +65,7 @@ class MainScreenState extends State<MainScreen> {
         child: AppBar(
           elevation: 0.5,
           iconTheme: const IconThemeData(
-            color: Color.fromARGB(255, 83, 114, 188),
+            color: Color.fromRGBO(110, 182, 255, 1),
           ),
           centerTitle: true,
           backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -103,7 +105,7 @@ class MainScreenState extends State<MainScreen> {
             title: const Text(
               ' Discover',
               style: TextStyle(
-                  color: Color.fromARGB(255, 83, 114, 188), fontSize: 13.0),
+                  color: Color.fromRGBO(110, 182, 255, 1), fontSize: 13.0),
             ),
             icon: Padding(
               padding: const EdgeInsets.only(left: 5.0),
@@ -111,7 +113,7 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.game_controller,
                 size: 18.0,
                 color: _currentIndex == 0
-                    ? Color.fromARGB(255, 83, 114, 188)
+                    ? Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -121,7 +123,7 @@ class MainScreenState extends State<MainScreen> {
             title: const Text(
               ' Search',
               style: TextStyle(
-                  color: Color.fromARGB(255, 83, 114, 188), fontSize: 13.0),
+                  color: Color.fromRGBO(110, 182, 255, 1), fontSize: 13.0),
             ),
             icon: Padding(
               padding: const EdgeInsets.only(left: 5.0),
@@ -129,7 +131,7 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.magnifier,
                 size: 18.0,
                 color: _currentIndex == 1
-                    ? Color.fromARGB(255, 83, 114, 188)
+                    ? Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -139,7 +141,7 @@ class MainScreenState extends State<MainScreen> {
             title: const Text(
               ' Library',
               style: TextStyle(
-                  color: Color.fromARGB(255, 83, 114, 188), fontSize: 13.0),
+                  color: Color.fromRGBO(110, 182, 255, 1), fontSize: 13.0),
             ),
             icon: Padding(
               padding: const EdgeInsets.only(left: 5.0),
@@ -147,7 +149,7 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.layers,
                 size: 18.0,
                 color: _currentIndex == 2
-                    ? Color.fromARGB(255, 83, 114, 188)
+                    ? Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -157,7 +159,7 @@ class MainScreenState extends State<MainScreen> {
             title: const Text(
               ' Profile',
               style: TextStyle(
-                  color: Color.fromARGB(255, 83, 114, 188), fontSize: 13.0),
+                  color: Color.fromRGBO(110, 182, 255, 1), fontSize: 13.0),
             ),
             icon: Padding(
               padding: const EdgeInsets.only(left: 5.0),
@@ -165,7 +167,7 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.user,
                 size: 18.0,
                 color: _currentIndex == 3
-                    ? Color.fromARGB(255, 83, 114, 188)
+                    ? Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),

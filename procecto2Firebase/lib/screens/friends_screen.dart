@@ -32,7 +32,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
         backgroundColor: Theme.of(context).colorScheme.background, //background
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          //color: Colors.white,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () {
             Navigator.of(context).pop();
             /*Navigator.push(

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:procecto2/firebase_options.dart';
 import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
@@ -12,11 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.transparent, //Color(0xFF20232a), //barra de abajo
 
-  ));
   runApp(
     MultiProvider(
       providers: [
@@ -44,18 +39,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    themeProvider.loadThemePreference();
     return MaterialApp(
-      //color: Colors.transparent,
       title: 'GameHub',
       debugShowCheckedModeBanner: false,
-      /*theme: ThemeData(
-        primarySwatch: Colors.orange,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),*/
-      theme: Provider.of<ThemeProvider>(context).themeData,
-      //darkTheme: darkTheme, //Provider.of<ThemeProvider>(context).themeData,
-      
-      //darkTheme: darkTheme,
+      theme: themeProvider.themeData,
       home: const CheckAuthScreen(),
     );
   }

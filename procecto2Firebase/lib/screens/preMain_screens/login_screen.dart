@@ -1,15 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/recover_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
-//import '../widgets/widgets.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -34,12 +31,13 @@ class LoginScreen extends StatelessWidget {
                 Theme.of(context).colorScheme.secondary, //background
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new),
-              //color: Colors.white,
+              color: Theme.of(context).colorScheme.primary,
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             title: Text('Login'),
+            centerTitle: true,
             titleTextStyle: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
@@ -52,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                 gradient: LinearGradient(
                     colors: [
                       Theme.of(context).colorScheme.secondary,
-                      Color.fromARGB(255, 83, 114, 188),
+                      Color.fromRGBO(110, 182, 255, 1),
                     ],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,

@@ -15,15 +15,18 @@ class IntroScreen extends StatelessWidget {
     //final loginProvider = Provider.of<LoginProvider>(context, listen: true);
     ThemeData _themeData = Provider.of<ThemeProvider>(context).themeData;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 83, 114, 188),//Color.fromARGB(255, 110, 153, 253), //fondo fondo
+      backgroundColor: const Color.fromARGB(255, 83, 114,
+          188), //Color.fromARGB(255, 110, 153, 253), //fondo fondo
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
+                    //Color.fromRGBO(188, 186, 184, 1),
                     Theme.of(context).colorScheme.secondary,
-                    Color.fromARGB(255, 83, 114, 188),
+                    Color.fromRGBO(110, 182, 255, 1),
+                    //Color.fromRGBO(188, 186, 184, 1)
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
@@ -39,11 +42,10 @@ class IntroScreen extends StatelessWidget {
                 height: 300,
                 child: Image(
                   image: _themeData.brightness == Brightness.dark
-                      ? AssetImage("assets/images/gamehubFondo.png")
-                      : AssetImage("assets/images/gamehubNuevo.png"),
+                      ? const AssetImage("assets/images/gamehubFondo.png")
+                      : const AssetImage("assets/images/gamehubNuevo.png"),
                 ),
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -118,7 +120,7 @@ class IntroScreen extends StatelessWidget {
                   Text(
                     "Welcome to GameHub!",
                     style: TextStyle(
-                      //color: Theme.of(context).colorScheme.tertiary,
+                      //color: Color.fromRGBO(19, 21, 107, 1),
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
@@ -129,7 +131,7 @@ class IntroScreen extends StatelessWidget {
                   Text(
                     "Popular games, new releases, incoming games \n explore and add games to your library to \n show it to your friends all of this in one app ",
                     style: TextStyle(
-                      //color: Theme.of(context).colorScheme.tertiary,
+                      //color: Color.fromRGBO(19, 21, 107, 1),
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
@@ -148,7 +150,8 @@ class IntroScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       //  const Color.fromARGB(255, 255, 119, 0),//color soundcloud
-                      backgroundColor: Color.fromARGB(255, 83, 114, 188),
+                      backgroundColor: Color.fromRGBO(110, 182, 255, 1),
+                      //color soundcloud//Color.fromRGBO(144, 43, 87, 1),
                       //const Color.fromARGB(255, 255, 167, 10),  color gamehub
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
@@ -183,7 +186,7 @@ class IntroScreen extends StatelessWidget {
                     child: const Text(
                       'Create an account',
                       style: TextStyle(
-                        //color: Theme.of(context).colorScheme.background,
+                        color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ), // Color del texto
@@ -283,7 +286,6 @@ class IntroScreen extends StatelessWidget {
                       loginProvider.login("Guest", "password");*/
                       Provider.of<ThemeProvider>(context, listen: false)
                           .toggleTheme();
-                      print("cambiado");
                     },
                     child: const Text(
                       "Continue without account",

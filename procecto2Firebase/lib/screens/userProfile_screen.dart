@@ -77,18 +77,18 @@ class _UserProfilePage extends State<UserProfilePage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          //color: Colors.white,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
           userData != null ? userData['nickname'] : 'Loading...',
-          style: const TextStyle(
-              //color: Colors.white
-              ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
-        centerTitle: false,
+        centerTitle: true,
       ),
       body: isLoading
           ? Center(
@@ -124,7 +124,8 @@ class _UserProfilePage extends State<UserProfilePage> {
                                 const SizedBox(height: 10),
                                 Text(
                                   '$games Games',
-                                  //style: const TextStyle(color: Colors.grey),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -143,7 +144,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                                 SizedBox(height: 10),
                                 Text(
                                   '3 friends',
-                                  // style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),

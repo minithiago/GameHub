@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -118,38 +117,36 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   @override
-void initState() {
-  super.initState();
-  _currentFilter = widget.filtro;
-  _nameFilter = widget.busqueda;
-  _usuario = widget.usuario;
+  void initState() {
+    super.initState();
+    _currentFilter = widget.filtro;
+    _nameFilter = widget.busqueda;
+    _usuario = widget.usuario;
 
-  fetchUserGames();
-}
-
-
-Future<void> fetchUserGames() async {
-  //ponerlo en game-details y en añadri un setState() 'alomejor'
-  try {
-    // Obtiene la lista de juegos para el usuario
-    List<String> userGames = await getGamesForUserEmail(
-        //FirebaseAuth.instance.currentUser!.email.toString()
-        _usuario);
-
-    // Verifica si la lista de juegos para el usuario está vacía
-    if (userGames.isEmpty) {
-      // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
-      getlibraryGames.getlibraryGames([]);
-    } else {
-      // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
-      getlibraryGames.getlibraryGames(userGames);
-    }
-  } catch (e) {
-    // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
-    print('Error fetching user games: $e');
+    fetchUserGames();
   }
-}
 
+  Future<void> fetchUserGames() async {
+    //ponerlo en game-details y en añadri un setState() 'alomejor'
+    try {
+      // Obtiene la lista de juegos para el usuario
+      List<String> userGames = await getGamesForUserEmail(
+          //FirebaseAuth.instance.currentUser!.email.toString()
+          _usuario);
+
+      // Verifica si la lista de juegos para el usuario está vacía
+      if (userGames.isEmpty) {
+        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
+        getlibraryGames.getlibraryGames([]);
+      } else {
+        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
+        getlibraryGames.getlibraryGames(userGames);
+      }
+    } catch (e) {
+      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
+      print('Error fetching user games: $e');
+    }
+  }
 
   @override
   void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
@@ -179,9 +176,9 @@ Future<void> fetchUserGames() async {
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
-        } else if(snapshot.connectionState == ConnectionState.waiting){
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
           return buildLoadingWidget();
-         }else {
+        } else {
           // Devolvemos un widget vacío que no ocupa espacio en la pantalla
           return const SizedBox(
             child: Center(
@@ -194,7 +191,6 @@ Future<void> fetchUserGames() async {
           );
         }
       },
-        
     );
   }
 
@@ -328,7 +324,6 @@ Future<void> fetchUserGames() async {
                       GameDetailScreen(
                     key: const Key("game_detail_screen_key"),
                     game: game,
-                    
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
