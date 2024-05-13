@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/recover_screen.dart';
@@ -8,16 +9,21 @@ import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
 
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen>  {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    //final loginProvider = Provider.of<LoginProvider>(context, listen: true);
 
     return MultiProvider(
         providers: [
@@ -36,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            title: Text('Login'),
+            title: const Text('Login'),
             centerTitle: true,
             titleTextStyle: TextStyle(
               color: Theme.of(context).colorScheme.primary,
@@ -50,11 +56,11 @@ class LoginScreen extends StatelessWidget {
                 gradient: LinearGradient(
                     colors: [
                       Theme.of(context).colorScheme.secondary,
-                      Color.fromRGBO(110, 182, 255, 1),
+                      const Color.fromRGBO(110, 182, 255, 1),
                     ],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    stops: [0.15, 0.9])),
+                    stops: const [0.15, 0.9])),
             //color: Theme.of(context).colorScheme.background,
             child: Stack(
               children: [
@@ -104,17 +110,17 @@ class LoginScreen extends StatelessWidget {
                       Form(
                         key: _formKey,
                         child: Padding(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           child: Column(
                             children: [
                               Column(
                                 children: [
                                   Email(emailController: _emailController),
-                                  SizedBox(height: 30),
+                                  const SizedBox(height: 30),
 
                                   Password(
                                       passwordController: _passwordController),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -171,7 +177,7 @@ class LoginScreen extends StatelessWidget {
                                   // ROW - REGISTER
                                 ],
                               ),
-                              SizedBox(height: 30),
+                              const SizedBox(height: 30),
                               LoginButton(
                                 formKey: _formKey,
                                 emailController: _emailController,
@@ -179,7 +185,7 @@ class LoginScreen extends StatelessWidget {
                                 //loginProvider: loginProvider,
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 40),
+                                padding: const EdgeInsets.only(top: 40),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -196,7 +202,7 @@ class LoginScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  SignupScreen()),
+                                                  const SignupScreen()),
                                         );
                                       },
                                       child: const Text(
@@ -256,8 +262,8 @@ class Email extends StatelessWidget {
       },
       decoration: InputDecoration(
         filled: true,
-        fillColor: Color.fromARGB(128, 255, 255, 255),
-        prefixIcon: Icon(Icons.email),
+        fillColor: const Color.fromARGB(128, 255, 255, 255),
+        prefixIcon: const Icon(Icons.email),
         //prefixIconColor: Colors.white,
         labelText: "Enter your email",
         border: OutlineInputBorder(
@@ -304,8 +310,8 @@ class _PasswordState extends State<Password> {
       },
       decoration: InputDecoration(
         filled: true,
-        fillColor: Color.fromARGB(128, 255, 255, 255),
-        prefixIcon: Icon(Icons.lock_outline),
+        fillColor: const Color.fromARGB(128, 255, 255, 255),
+        prefixIcon: const Icon(Icons.lock_outline),
         //prefixIconColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
@@ -358,31 +364,53 @@ class LoginButton extends StatelessWidget {
             ),
           ),
           onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              String email = _emailController.text;
-              String password = _passwordController.text;
+  if (_formKey.currentState!.validate()) {
+    String email = _emailController.text;
+    String password = _passwordController.text;
 
-              try {
-                User? newUser =
-                    await UserRepository().loginUser(email, password);
-                if (newUser != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainScreen(
-                              currentIndex: 0,
-                            )),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Invalid email or password.")));
-                }
-              } on Exception catch (_) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Invalid email or password.")));
-              }
-            }
-          },
+    try {
+      // Muestra el CircularProgressIndicator mientras se procesa la solicitud
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: buildLoadingWidget(),
+          );
+        },
+      );
+
+      // Ejecuta el proceso de inicio de sesión
+      User? newUser = await UserRepository().loginUser(email, password);
+
+      // Oculta el CircularProgressIndicator después de completar el proceso
+      Navigator.pop(context);
+
+      if (newUser != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainScreen(
+              currentIndex: 0,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Invalid email or password."),
+        ));
+      }
+    } on Exception catch (_) {
+      // Oculta el CircularProgressIndicator si ocurre una excepción
+      Navigator.pop(context);
+      
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Invalid email or password."),
+      ));
+    }
+  }
+},
+
           child: const Text(
             'Login',
             style: TextStyle(

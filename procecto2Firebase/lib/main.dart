@@ -6,12 +6,20 @@ import 'package:procecto2/style/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/providers.dart';
 
+///***********************************/// 
+///                                   /// 
+///                                   /// 
+///        Author: Ivan naranjo       /// 
+///                                   /// 
+///                                   /// 
+///***********************************///
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(
     MultiProvider(
       providers: [

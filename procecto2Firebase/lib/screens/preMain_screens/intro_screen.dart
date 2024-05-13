@@ -25,7 +25,7 @@ class IntroScreen extends StatelessWidget {
                   colors: [
                     //Color.fromRGBO(188, 186, 184, 1),
                     Theme.of(context).colorScheme.secondary,
-                    Color.fromRGBO(110, 182, 255, 1),
+                    const Color.fromRGBO(110, 182, 255, 1),
                     //Color.fromRGBO(188, 186, 184, 1)
                   ],
                   begin: Alignment.bottomCenter,

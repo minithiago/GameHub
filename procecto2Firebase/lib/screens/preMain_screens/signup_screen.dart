@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/userModel.dart';
 import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
@@ -277,7 +278,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                       profilePic = "";
                                     }
 
-                                    UserModel user = UserModel(
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return Center(
+                                          child: buildLoadingWidget(),
+                                        );
+                                      },
+                                    );
+                                    try{
+                                        UserModel user = UserModel(
                                         nickname: nickname,
                                         email: email,
                                         password: password,
@@ -300,7 +311,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           PageRouteBuilder(
                                             pageBuilder: (context, animation,
                                                     secondaryAnimation) =>
-                                                MainScreen(
+                                                const MainScreen(
                                               currentIndex: 0,
                                             ),
                                             transitionsBuilder: (context,
@@ -319,13 +330,26 @@ class _SignupScreenState extends State<SignupScreen> {
                                             .showSnackBar(const SnackBar(
                                                 content: Text(
                                                     "Error creating the user.")));
+                                                    Navigator.pop(context);
                                       }
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                               content: Text(
                                                   "Email already in use.")));
+                                                  Navigator.pop(context);
                                     }
+                                    } catch (e) {
+                                          // Si hay alguna excepción durante el proceso de registro, muestra un mensaje de error
+                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                            content: Text("An error occurred during registration."),
+                                          ));
+
+                                          // Oculta el CircularProgressIndicator en caso de error
+                                          Navigator.pop(context);
+                                        }
+
+                                    
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

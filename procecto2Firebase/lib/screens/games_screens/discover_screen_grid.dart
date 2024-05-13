@@ -9,7 +9,7 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
-import 'package:procecto2/style/theme.dart' as Style;
+
 import 'package:provider/provider.dart';
 
 import '../game_detail_screen.dart';

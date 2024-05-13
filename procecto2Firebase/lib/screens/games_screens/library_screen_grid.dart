@@ -11,8 +11,6 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
-import 'package:procecto2/style/theme.dart' as Style;
-import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
@@ -36,49 +34,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
   String _nameFilter = '';
   String _usuario = '';
-
-  /*
-  Future<String?> getUserId() async {
-    // Obtener el usuario actualmente autenticado
-    User? user = FirebaseAuth.instance.currentUser;
-
-    print(user);
-
-    if (user != null) {
-      return user.uid;
-    } else {
-      return null;
-    }
-  }
-
-  Future<List<String>> getGamesForUser() async {
-    String? userId = await getUserId();
-    print(userId);
-    if (userId != null) {
-      try {
-        // Obtener la referencia a la subcolección "Games" del usuario actual
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Games')
-            .get();
-
-        // Extraer los IDs de los juegos
-        List<String> gameIds = gamesSnapshot.docs.map((doc) {
-          // Obtener el campo "id" de cada documento en la subcolección "Games"
-          return doc['id']
-              .toString(); // Ajusta esto según la estructura de tus documentos
-        }).toList();
-
-        return gameIds;
-      } catch (e) {
-        print('Error getting games for user: $e');
-        return [];
-      }
-    } else {
-      return [];
-    }
-  }*/
 
   Future<List<String>> getGamesForUserEmail(String userEmail) async {
     try {

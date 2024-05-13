@@ -163,23 +163,30 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ),*/
                 Positioned(
-                  top: 30,
-                  left: MediaQuery.of(context).size.width / 2.90,
-                  child: FutureBuilder<String?>(
-                    future: getUserAvatar(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        _avatar = snapshot.data ??
-                            'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
-                      }
+  top: 30,
+  left: MediaQuery.of(context).size.width / 2.90,
+  child: FutureBuilder<String?>(
+    future: getUserAvatar(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        _avatar = snapshot.data ??
+            'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
+      }
 
-                      return CircleAvatar(
-                        radius: 64,
-                        backgroundImage: NetworkImage(_avatar),
-                      );
-                    },
-                  ),
-                ),
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 4.0),
+        ),
+        child: CircleAvatar(
+          radius: 64,
+          backgroundImage: NetworkImage(_avatar),
+        ),
+      );
+    },
+  ),
+),
+
                 Positioned(
                     top: 20, // Margen arriba
                     left: 10, // Margen a la izquierda
