@@ -81,7 +81,7 @@ class MainScreenState extends State<MainScreen> {
           },
           children: <Widget>[
             //aqui van las paginas del bottomBar
-            DiscoverScreen(SwitchBloc()),
+            DiscoverScreen(SwitchBloc(),SwitchBloc(),SwitchBloc()),
             const SearchScreen(),
             const LibraryScreen(),
             const AccountScreen(),

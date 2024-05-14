@@ -89,8 +89,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
     }*/
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        body: SingleChildScrollView(
-          child: Column(
+        body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -213,6 +212,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ChoiceChip(
+                            
                             label: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
@@ -244,9 +244,8 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                 ),
               ),
 
-              SizedBox(
-                height:
-                    563, //MediaQuery.of(context).size.height - 280, // Altura del contenedor hasta abajo de la pantalla
+              
+              Expanded(
                 child: LibraryScreenWidget(
                   switchBloc,
                 ),
@@ -254,7 +253,10 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
 
               // Add more widgets for the rest of your content here
             ],
+            
           ),
-        ));
+
+
+        );
   }
 }

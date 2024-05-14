@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:procecto2/model/game.dart'; // Asegúrate de importar tu modelo GameModel aquí
 
 class FavoriteGamesProvider with ChangeNotifier {
+
   List<GameModel> _favoriteGames = [];
   static const String _kFavoriteGamesKey = 'favorite_games';
   final FlutterSecureStorage _storage = const FlutterSecureStorage();

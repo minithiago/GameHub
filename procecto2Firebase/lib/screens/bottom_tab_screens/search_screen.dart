@@ -3,7 +3,7 @@ import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider2.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider3.dart';
 import 'package:procecto2/widgets/SearchScreen/searchGame.dart';
-import 'package:procecto2/widgets/SearchScreen/searchGamesScroll.dart';
+import 'package:procecto2/widgets/SearchScreen/searchGamesGrid.dart';
 import 'package:procecto2/widgets/SearchScreen/search_slider.dart';
 import 'package:procecto2/widgets/SearchScreen/search_slider2.dart';
 import 'package:procecto2/widgets/SearchScreen/search_slider3.dart';
@@ -82,7 +82,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      
                       children: [
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -195,7 +195,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                         ),
                         const SizedBox(height: 10),
                         SizedBox(
-                          height: 600,
+                          height: 5500, //600
                           child: DiscoverScreenWidget5(SwitchBloc()),
                         )
                         //DiscoverScreenWidget2(SwitchBlocSearch(), "fifa")

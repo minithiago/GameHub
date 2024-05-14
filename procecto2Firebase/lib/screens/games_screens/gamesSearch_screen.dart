@@ -9,7 +9,6 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 
 import '../game_detail_screen.dart';
@@ -57,6 +56,8 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
           mainAxisSpacing: 7.0,
@@ -107,14 +108,14 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                           children: [
                             Icon(
                               Icons.add_circle,
-                              color: Colors.black, // Color del icono
+                              //color: Colors.black, // Color del icono
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Add to library",
                               style: TextStyle(
-                                color: Colors.black, // Color del texto
+                                //color: Colors.black, // Color del texto
                               ),
                             ),
                           ],
@@ -139,14 +140,14 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                           children: [
                             Icon(
                               Icons.star,
-                              color: Colors.black, // Color del icono
+                              //color: Colors.black, // Color del icono
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Add to favorites",
                               style: TextStyle(
-                                color: Colors.black,
+                                //color: Colors.black,
                               ),
                             )
                           ],

@@ -10,9 +10,9 @@ class GameRepository {
 
   final String apiKey = "7ke8gbpbre42gkjtpp5anax289bh6b";
 
-  Future<GameResponse> getGames() async {
+  Future<GameResponse> getGamesDiscover() async {
     //new releases
-    //juegos con rating > 80 ;sort date desc;
+    //juegos con rating > 60 ;sort date desc;
 
     try {
       final response = await http.post(Uri.parse(mainUrl),
@@ -22,7 +22,61 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & total_rating >= 60 ;sort first_release_date desc;");
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 ;sort first_release_date desc;");
+      print("Juegos: ${response.statusCode}");
+      //print(response.body);
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        return GameResponse.fromJson(data);
+      } else {
+        throw Exception('Error al obtener datos de la API');
+      }
+    } catch (error) {
+      print("Exception occurred: $error");
+      return GameResponse.withError("$error");
+    }
+  }
+  Future<GameResponse> getGamesDiscover2() async {
+    //Released this year
+
+    var nowDate = 1704118499;
+
+    try {
+      final response = await http.post(Uri.parse(mainUrl),
+          headers: {
+            'Authorization': 'Bearer $apiKey',
+            'Client-ID':
+                'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+          },
+          body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 & first_release_date >= $nowDate;");
+      print("Juegos: ${response.statusCode}");
+      //print(response.body);
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        return GameResponse.fromJson(data);
+      } else {
+        throw Exception('Error al obtener datos de la API');
+      }
+    } catch (error) {
+      print("Exception occurred: $error");
+      return GameResponse.withError("$error");
+    }
+  }
+  Future<GameResponse> getGamesDiscover3() async {
+    //Most hyped
+
+    try {
+      final response = await http.post(Uri.parse(mainUrl),
+          headers: {
+            'Authorization': 'Bearer $apiKey',
+            'Client-ID':
+                'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+          },
+          body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 ;sort hypes desc;");
       print("Juegos: ${response.statusCode}");
       //print(response.body);
 
@@ -114,7 +168,7 @@ class GameRepository {
   Future<GameResponse> getSlider2() async {
     final now = DateTime.parse(DateTime.now().toString());
     var nowDate = now.millisecondsSinceEpoch;
-    print(nowDate);
+    //print(nowDate);
     //Search slider
     //Incoming Games
     var response = await http.post(Uri.parse(mainUrl),

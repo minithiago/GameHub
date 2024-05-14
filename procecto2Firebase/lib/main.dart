@@ -9,7 +9,7 @@ import 'providers/providers.dart';
 ///***********************************/// 
 ///                                   /// 
 ///                                   /// 
-///        Author: Ivan naranjo       /// 
+///        Autor: Ivan naranjo       /// 
 ///                                   /// 
 ///                                   /// 
 ///***********************************///

@@ -59,11 +59,13 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
+        scrollDirection: Axis.horizontal, 
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
           mainAxisSpacing: 7.0,
-          childAspectRatio: 0.75,
-          crossAxisCount: 3,
+          childAspectRatio: 1.3,
+          crossAxisCount: 2,
+
         ),
         itemCount: games.length,
         itemBuilder: (BuildContext context, int index) {
@@ -95,7 +97,7 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                               SnackBar(
                                 content:
                                     Text("${game.name} added to the library"),
-                                duration: Duration(
+                                duration: const Duration(
                                     seconds: 1), // Duración del SnackBar
                               ),
                             );
@@ -107,13 +109,14 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         },
                         child: const Row(
                           children: [
-                            Icon(Icons.add_circle, color: Colors.black),
+                            Icon(Icons.add_circle, //color: Colors.black
+                            ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Add to library",
                               style: TextStyle(
-                                color: Colors.black, // Color del texto
+                                //color: Colors.black, // Color del texto
                               ),
                             ),
                           ],
@@ -130,14 +133,14 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                           children: [
                             Icon(
                               Icons.star,
-                              color: Colors.black, // Color del icono
+                              //color: Colors.black, // Color del icono
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Add to favorites",
                               style: TextStyle(
-                                color: Colors.black,
+                                //color: Colors.black,
                               ),
                             )
                           ],
@@ -159,9 +162,9 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    final begin = Offset(1.0, 0.0);
-                    final end = Offset.zero;
-                    final curve = Curves.ease;
+                    const begin = Offset(1.0, 0.0);
+                    const end = Offset.zero;
+                    const curve = Curves.ease;
 
                     var tween = Tween(begin: begin, end: end)
                         .chain(CurveTween(curve: curve));

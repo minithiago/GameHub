@@ -1,246 +1,123 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:procecto2/bloc/get_games_bloc.dart';
-import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
+
 import 'package:provider/provider.dart';
+
 import '../game_detail_screen.dart';
 
-class LibraryScreenGrid extends StatefulWidget {
-  final String filtro;
-  final String busqueda;
-  final String usuario;
-
-  const LibraryScreenGrid(
-      {Key? key,
-      required this.filtro,
-      required this.busqueda,
-      required this.usuario})
-      : super(key: key);
+class DiscoverScreenGrid2 extends StatefulWidget {
+  DiscoverScreenGrid2({super.key});
 
   @override
-  _LibraryScreenGridState createState() => _LibraryScreenGridState();
+  _DiscoverScreenGridState2 createState() => _DiscoverScreenGridState2();
 }
 
-class _LibraryScreenGridState extends State<LibraryScreenGrid> {
-  String _currentFilter = '';
-  String _nameFilter = '';
-  String _usuario = '';
-
-  /*
-  Future<List<String>> getGamesForUserEmail(String userEmail) async {
-    try {
-      // Obtener la referencia al documento del usuario en Firestore utilizando su email
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: userEmail)
-          .get();
-
-      if (userSnapshot.docs.isNotEmpty) {
-        String userId = userSnapshot.docs.first.id;
-        // Obtener la referencia a la subcolección "Games" del usuario
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Games')
-            .get();
-
-        // Extraer los IDs de los juegos
-        List<String> gameIds = gamesSnapshot.docs.map((doc) {
-          // Obtener el campo "id" de cada documento en la subcolección "Games"
-          return doc['id']
-              .toString(); // Ajusta esto según la estructura de tus documentos
-        }).toList();
-
-        return gameIds;
-      } else {
-        print(
-            'No se encontró ningún usuario con el correo electrónico $userEmail.');
-        return [];
-      }
-    } catch (e) {
-      print('Error getting games for user: $e');
-      return [];
-    }
-  }*/
-
+class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
   @override
   void initState() {
+    getGamesBloc2.getGames2();
     super.initState();
-    _currentFilter = widget.filtro;
-    _nameFilter = widget.busqueda;
-    _usuario = widget.usuario;
-
-    //fetchUserGames();
   }
 
-  /*
-  Future<void> fetchUserGames() async {
-    //ponerlo en game-details y en añadri un setState() 'alomejor'
-    try {
-      // Obtiene la lista de juegos para el usuario
-      List<String> userGames = await getGamesForUserEmail(
-          //FirebaseAuth.instance.currentUser!.email.toString()
-          _usuario);
-
-      // Verifica si la lista de juegos para el usuario está vacía
-      if (userGames.isEmpty) {
-        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
-        getlibraryGames.getlibraryGames([]);
-      } else {
-        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
-        getlibraryGames.getlibraryGames(userGames);
-      }
-    } catch (e) {
-      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
-      print('Error fetching user games: $e');
-    }
-  }*/
-
-  @override
-  void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.filtro != widget.filtro) {
-      setState(() {
-        _currentFilter = widget.filtro;
-        print(widget.filtro);
-      });
-    }
-  }
-
-  //List<GameModel> favoriteGamess = [];
-  /*
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getlibraryGames.subject.stream,
+      stream: getGamesBloc2.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
-          final gameResponse = snapshot.data;
-          if (gameResponse != null && gameResponse.error.isNotEmpty) {
+          final gameResponse = snapshot.data!;
+          if (gameResponse.error.isNotEmpty) {
             return buildErrorWidget(gameResponse.error);
           } else {
-            //favoriteGamess = gameResponse!.games;
-            return _build(gameResponse!);
+            return _buildGameGridWidget(gameResponse);
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return buildLoadingWidget();
         } else {
-          // Devolvemos un widget vacío que no ocupa espacio en la pantalla
-          return const SizedBox(
-            child: Center(
-              child: Text(
-                "Search for games",
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+          return buildLoadingWidget();
         }
       },
     );
-  }*/
+  }
 
-  @override
-  Widget build(BuildContext context) { //GameResponse data
+  Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    var favoriteGamess = favoriteGamesProvider.favoriteGames;
 
-    //var favoriteGamess = data.games;
+    final List<String> favoriteGameNames =
+        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
-    List<GameModel> _filterGamesByName(List<GameModel> games) {
-      if (_nameFilter.isEmpty) {
-        return games;
-      } else {
-        return games
-            .where((game) =>
-                game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
-            .toList();
-      }
-    }
-
-    switch (_currentFilter) {
-      case "Name":
-        favoriteGamess.sort((b, a) => b.name.compareTo(a.name));
-        break;
-      case "Rating":
-        favoriteGamess.sort((a, b) => b.total_rating.compareTo(a.total_rating));
-        break;
-      case "Release date":
-        favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
-        break;
-      default:
-        favoriteGamess =favoriteGamesProvider.favoriteGames; //data.games;
-    }
-
-    if (favoriteGamess.isEmpty) {
-      favoriteGamess = [];
-    }
-
-    // Ordenar los juegos por rating (en orden descendente)
-
+    List<GameModel> games = data.games;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        //scrollDirection: Axis.horizontal, 
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
           mainAxisSpacing: 7.0,
           childAspectRatio: 0.75,
           crossAxisCount: 3,
+
         ),
-        itemCount: favoriteGamess.length,
+        itemCount: games.length,
         itemBuilder: (BuildContext context, int index) {
-          GameModel game = favoriteGamess[index];
+          GameModel game = games[index];
           return GestureDetector(
             onLongPress: () {
               HapticFeedback.lightImpact();
               showCupertinoModalPopup(
-                //barrierColor: const Color.fromARGB(96, 0, 0, 0),
-
                 context: context,
                 builder: (context) {
                   return CupertinoActionSheet(
                     actions: <CupertinoActionSheetAction>[
                       CupertinoActionSheetAction(
                         onPressed: () {
+                          //Navigator.pop(context);
                           HapticFeedback.lightImpact();
-                          game.favorite = false;
-                          favoriteGamesProvider.removeFavorite(game);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("${game.name} removed from library"),
-                            action: SnackBarAction(
-                              label: "Undo",
-                              onPressed: () {
-                                favoriteGamesProvider.addToFavorites(game);
-                                game.favorite = true;
-                              },
-                            ),
-                            duration: Duration(seconds: 1),
-                          ));
-                          Navigator.pop(context);
+                          if (favoriteGameNames.contains(game.name)) {
+                            // El juego ya está en la lista de favoritos
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Game already in library"),
+                                duration: Duration(
+                                    seconds: 1), // Duración del SnackBar
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text("${game.name} added to the library"),
+                                duration: const Duration(
+                                    seconds: 1), // Duración del SnackBar
+                              ),
+                            );
+                            // El juego no está en la lista de favoritos, así que lo añadimos
+                            game.favorite = true;
+                            favoriteGamesProvider.addToFavorites(game);
+                            Navigator.of(context).pop();
+                          }
                         },
                         child: const Row(
                           children: [
-                            Icon(
-                              Icons.remove_circle_outline,
-                              color: Colors.red, // Color del icono
+                            Icon(Icons.add_circle, //color: Colors.black
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
-                              "Remove from library",
+                              "Add to library",
                               style: TextStyle(
-                                color: Colors.red, // Color del texto
+                                //color: Colors.black, // Color del texto
                               ),
                             ),
                           ],
@@ -250,11 +127,13 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                         onPressed: () {
                           Navigator.pop(context);
                           HapticFeedback.lightImpact();
+                          favoriteGamesProvider.addToFavorites(game);
+                          game.favorite = true;
                         },
                         child: const Row(
                           children: [
                             Icon(
-                              Icons.favorite,
+                              Icons.star,
                               //color: Colors.black, // Color del icono
                             ),
                             SizedBox(
@@ -284,9 +163,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    final begin = Offset(1.0, 0.0);
-                    final end = Offset.zero;
-                    final curve = Curves.ease;
+                    const begin = Offset(1.0, 0.0);
+                    const end = Offset.zero;
+                    const curve = Curves.ease;
 
                     var tween = Tween(begin: begin, end: end)
                         .chain(CurveTween(curve: curve));
@@ -300,12 +179,11 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
-              //setState(() => fetchUserGames());
             },
             child: Stack(
               children: [
                 Hero(
-                  tag: favoriteGamess[index].id,
+                  tag: games[index].id,
                   child: AspectRatio(
                     aspectRatio: 3 / 4,
                     child: Container(
@@ -314,7 +192,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                               const BorderRadius.all(Radius.circular(5.0)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
+                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${games[index].cover!.imageId}.jpg",
                               ),
                               fit: BoxFit.cover)),
                     ),
@@ -331,7 +209,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withOpacity(0.8),
+                              Colors.black.withOpacity(0.7),
                               Colors.black.withOpacity(0.0)
                             ],
                             stops: const [
@@ -341,7 +219,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                   ),
                 ),
                 Positioned(
-                  bottom: 20.0,
+                  bottom: 10.0,
                   left: 5.0,
                   child: Container(
                     width: 90.0,
@@ -356,6 +234,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                     ),
                   ),
                 ),
+                
                 Positioned(
                   bottom: 5.0,
                   left: 5.0,
