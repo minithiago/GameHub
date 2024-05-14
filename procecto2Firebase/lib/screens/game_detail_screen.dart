@@ -178,6 +178,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
             }).toList(),
           ),
         ),
+        //INTENTAR MEJORAR RENDIMIENTO
         Expanded(
           child: TabBarView(
               controller: _tabController,

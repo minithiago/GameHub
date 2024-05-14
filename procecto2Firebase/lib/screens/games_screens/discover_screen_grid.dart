@@ -59,13 +59,12 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
-        scrollDirection: Axis.horizontal, 
+        scrollDirection: Axis.horizontal,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
           mainAxisSpacing: 7.0,
           childAspectRatio: 1.3,
           crossAxisCount: 2,
-
         ),
         itemCount: games.length,
         itemBuilder: (BuildContext context, int index) {
@@ -109,15 +108,16 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                         },
                         child: const Row(
                           children: [
-                            Icon(Icons.add_circle, //color: Colors.black
+                            Icon(
+                              Icons.add_circle, //color: Colors.black
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Add to library",
                               style: TextStyle(
-                                //color: Colors.black, // Color del texto
-                              ),
+                                  //color: Colors.black, // Color del texto
+                                  ),
                             ),
                           ],
                         ),
@@ -140,8 +140,8 @@ class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                             Text(
                               "Add to favorites",
                               style: TextStyle(
-                                //color: Colors.black,
-                              ),
+                                  //color: Colors.black,
+                                  ),
                             )
                           ],
                         ),

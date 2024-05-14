@@ -82,13 +82,12 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     child: Column(
-                      
                       children: [
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "  Browse by genre",
+                              "Browse by genre",
                               style: TextStyle(
                                 //color: Colors.white,
                                 fontSize: 22,
@@ -104,7 +103,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "  Incoming games",
+                              "Most Anticipated Games",
                               style: TextStyle(
                                 //color: Colors.white,
                                 fontSize: 22,
@@ -120,7 +119,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "  Search by platform",
+                              "Search by platform",
                               style: TextStyle(
                                 //color: Colors.white,
                                 fontSize: 22,
@@ -151,7 +150,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "  Incoming expansions",
+                              "Incoming expansions",
                               style: TextStyle(
                                 //color: Colors.white,
                                 fontSize: 22,
@@ -167,7 +166,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "  Popular franchises",
+                              "Popular franchises",
                               style: TextStyle(
                                 //color: Colors.white,
                                 fontSize: 22,
@@ -183,7 +182,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "  Top rated games",
+                              "Top rated games",
                               style: TextStyle(
                                 //color: Colors.white,
                                 fontSize: 22,

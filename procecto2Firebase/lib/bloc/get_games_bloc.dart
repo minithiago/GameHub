@@ -11,8 +11,14 @@ class GetGamesBloc {
     GameResponse response = await _repository.getGamesDiscover();
     _subject.sink.add(response);
   }
+
   getGames2() async {
     GameResponse response = await _repository.getGamesDiscover2();
+    _subject.sink.add(response);
+  }
+
+  getGames3() async {
+    GameResponse response = await _repository.getGamesDiscover3();
     _subject.sink.add(response);
   }
 
@@ -63,33 +69,24 @@ class GetGamesBloc2 {
     _subject.sink.add(response);
   }
 
-  /*
-
-  getGames2() async {
-    GameResponse response = await _repository.getGames2();
-    _subject.sink.add(response);
+  dispose() {
+    _subject.close();
   }
 
-  getBestGames() async {
-    GameResponse response = await _repository.getBestGames();
-    _subject.sink.add(response);
-  }
+  BehaviorSubject<GameResponse> get subject => _subject;
+}
 
-  getSearchedGames(String query) async {
-    GameResponse response = await _repository.searchGame(query);
-    _subject.sink.add(response);
-  }
+final getGamesBloc2 = GetGamesBloc2();
 
-  getPlatformSearchedGames(String query) async {
-    GameResponse response = await _repository.searchPlatformGame(query);
-    _subject.sink.add(response);
-  }
+class GetGamesBloc3 {
+  final GameRepository _repository = GameRepository();
+  final BehaviorSubject<GameResponse> _subject =
+      BehaviorSubject<GameResponse>();
 
-  getGenreSearchedGames(String query) async {
-    GameResponse response = await _repository.searchGenreGame(query);
+  getGames3() async {
+    GameResponse response = await _repository.getGamesDiscover3();
     _subject.sink.add(response);
   }
-  */
 
   dispose() {
     _subject.close();
@@ -97,4 +94,5 @@ class GetGamesBloc2 {
 
   BehaviorSubject<GameResponse> get subject => _subject;
 }
-final getGamesBloc2 = GetGamesBloc2();
+
+final getGamesBloc3 = GetGamesBloc3();

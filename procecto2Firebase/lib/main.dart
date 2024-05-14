@@ -6,14 +6,13 @@ import 'package:procecto2/style/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/providers.dart';
 
-///***********************************/// 
-///                                   /// 
-///                                   /// 
-///        Autor: Ivan naranjo       /// 
-///                                   /// 
-///                                   /// 
 ///***********************************///
-
+///                                   ///
+///                                   ///
+///        Autor: Ivan naranjo        ///
+///                                   ///
+///                                   ///
+///***********************************///
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

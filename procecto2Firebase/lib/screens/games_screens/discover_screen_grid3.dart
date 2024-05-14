@@ -14,24 +14,24 @@ import 'package:provider/provider.dart';
 
 import '../game_detail_screen.dart';
 
-class DiscoverScreenGrid2 extends StatefulWidget {
-  DiscoverScreenGrid2({super.key});
+class DiscoverScreenGrid3 extends StatefulWidget {
+  DiscoverScreenGrid3({super.key});
 
   @override
-  _DiscoverScreenGridState2 createState() => _DiscoverScreenGridState2();
+  _DiscoverScreenGridState3 createState() => _DiscoverScreenGridState3();
 }
 
-class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
+class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
   @override
   void initState() {
-    getGamesBloc2.getGames2();
+    getGamesBloc3.getGames3();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc2.subject.stream,
+      stream: getGamesBloc3.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data!;
@@ -59,13 +59,12 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        //scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.horizontal,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
           mainAxisSpacing: 7.0,
-          childAspectRatio: 0.75,
-          crossAxisCount: 3,
+          childAspectRatio: 1.3,
+          crossAxisCount: 2,
         ),
         itemCount: games.length,
         itemBuilder: (BuildContext context, int index) {

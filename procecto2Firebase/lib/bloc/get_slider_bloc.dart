@@ -8,11 +8,7 @@ class GetSliderBloc {
       BehaviorSubject<GameResponse>();
 
   getSliderRandom() async {
-    GameResponse response = await _repository.getSlider();
-
-    response = await _repository.getSliderRandomDelTO();
-
-    //GameResponse response = await _repository.getSlider();
+    GameResponse response = await _repository.getSliderRandomDelTO();
     _subject.sink.add(response);
   }
 

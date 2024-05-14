@@ -53,14 +53,14 @@ class _HomeSliderState extends State<HomeSlider> {
   }
 
   Widget _buildHomeSliderWidget(GameResponse data) {
-    List<GameModel> games = data.games;
+    /*
     // Crear el PageController fuera del cuerpo de la función
     PageController pageController = PageController(
       viewportFraction: 1,
       keepPage: true,
     );
 
-/* Iniciar el temporizador dentro de la función initState o dentro de un StatefulWidget
+ Iniciar el temporizador dentro de la función initState o dentro de un StatefulWidget
     Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (currentPage < games.take(10).length - 1) {
         currentPage++;
@@ -74,17 +74,18 @@ class _HomeSliderState extends State<HomeSlider> {
         curve: Curves.ease,
       );
     });*/
+    List<GameModel> games = data.games;
 
     return SizedBox(
-      height: 230,
+      height: 250,
       child: PageIndicatorContainer(
         align: IndicatorAlign.bottom,
         length: games.take(10).length,
         indicatorSpace: 8.0,
         padding: const EdgeInsets.all(10.0),
         indicatorColor: Colors.white,
-        indicatorSelectorColor: const Color.fromARGB(255, 28, 231, 131),  
-        shape: IndicatorShape.circle(size: 5.0),
+        indicatorSelectorColor: const Color.fromRGBO(110, 182, 255, 1),
+        shape: IndicatorShape.circle(size: 5.5),
         child: PageView.builder(
           controller: pageController,
           scrollDirection: Axis.horizontal,
@@ -103,9 +104,9 @@ class _HomeSliderState extends State<HomeSlider> {
                     ),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
-                      final begin = Offset(1.0, 0.0);
-                      final end = Offset.zero;
-                      final curve = Curves.ease;
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
 
                       var tween = Tween(begin: begin, end: end)
                           .chain(CurveTween(curve: curve));
@@ -126,7 +127,7 @@ class _HomeSliderState extends State<HomeSlider> {
                     tag: games[index].id,
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 220.0,
+                      height: 250.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         image: DecorationImage(
