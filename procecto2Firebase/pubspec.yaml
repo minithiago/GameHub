@@ -107,6 +107,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/default_avatar.jpg
+    - assets/images/G_logo.png
     - assets/images/gamehub.png
     - assets/images/gamehubFondo.png
     - assets/images/gamehubNuevo.png

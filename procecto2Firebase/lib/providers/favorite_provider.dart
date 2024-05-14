@@ -7,7 +7,7 @@ import 'package:procecto2/model/game.dart'; // Asegúrate de importar tu modelo 
 class FavoriteGamesProvider with ChangeNotifier {
   List<GameModel> _favoriteGames = [];
   static const String _kFavoriteGamesKey = 'favorite_games';
-  final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   List<GameModel> get favoriteGames => _favoriteGames;
 

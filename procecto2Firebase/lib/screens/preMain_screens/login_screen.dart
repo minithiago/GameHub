@@ -214,9 +214,28 @@ class _LoginScreenState extends State<LoginScreen>  {
                                         ),
                                       ),
                                     ),
+
                                   ],
                                 ),
                               ),
+                              const SizedBox(height: 30),
+                              Container(
+                                height: 90,
+                                width: 90,
+                                //padding: EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  image: const DecorationImage(image: AssetImage('assets/images/G_logo.png'),
+                                  fit: BoxFit.cover
+                                  )
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    //POR HACER
+                                  },
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -364,52 +383,52 @@ class LoginButton extends StatelessWidget {
             ),
           ),
           onPressed: () async {
-  if (_formKey.currentState!.validate()) {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+            if (_formKey.currentState!.validate()) {
+              String email = _emailController.text;
+              String password = _passwordController.text;
 
-    try {
-      // Muestra el CircularProgressIndicator mientras se procesa la solicitud
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return Center(
-            child: buildLoadingWidget(),
-          );
-        },
-      );
+              try {
+                // Muestra el CircularProgressIndicator mientras se procesa la solicitud
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return Center(
+                      child: buildLoadingWidget(),
+                    );
+                  },
+                );
 
-      // Ejecuta el proceso de inicio de sesión
-      User? newUser = await UserRepository().loginUser(email, password);
+                // Ejecuta el proceso de inicio de sesión
+                User? newUser = await UserRepository().loginUser(email, password);
 
-      // Oculta el CircularProgressIndicator después de completar el proceso
-      Navigator.pop(context);
+                // Oculta el CircularProgressIndicator después de completar el proceso
+                Navigator.pop(context);
 
-      if (newUser != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainScreen(
-              currentIndex: 0,
-            ),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Invalid email or password."),
-        ));
-      }
-    } on Exception catch (_) {
-      // Oculta el CircularProgressIndicator si ocurre una excepción
-      Navigator.pop(context);
-      
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Invalid email or password."),
-      ));
-    }
-  }
-},
+                if (newUser != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainScreen(
+                        currentIndex: 0,
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Invalid email or password."),
+                  ));
+                }
+              } on Exception catch (_) {
+                // Oculta el CircularProgressIndicator si ocurre una excepción
+                Navigator.pop(context);
+                
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Invalid email or password."),
+                ));
+              }
+            }
+          },
 
           child: const Text(
             'Login',
