@@ -22,8 +22,8 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 ;sort first_release_date desc; limit 99;");
-      print("Juegos: ${response.statusCode}");
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 ;sort first_release_date desc; limit 33;");
+      print("Juegos New releases: ${response.statusCode}");
       //print(response.body);
 
       if (response.statusCode == 200) {
@@ -52,7 +52,7 @@ class GameRepository {
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
               "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 & first_release_date >= $nowDate;sort first_release_date asc ; limit 99;");
-      print("Juegos: ${response.statusCode}");
+      print("Juegos released this year: ${response.statusCode}");
       //print(response.body);
 
       if (response.statusCode == 200) {
@@ -81,8 +81,8 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & first_release_date >= ${nowDate2} ; sort first_release_date asc; limit 99;");
-      print("Juegos: ${response.statusCode}");
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where cover.image_id != null & screenshots != null & first_release_date >= ${nowDate2} ; sort first_release_date asc; limit 33;");
+      print("Juegos incoming Games: ${response.statusCode}");
       //print(response.body);
 
       if (response.statusCode == 200) {
@@ -98,7 +98,7 @@ class GameRepository {
   }
 
   Future<GameResponse> getBestGames() async {
-    //Best games all time
+    //Top Rated Games
     //sort follows desc depcreated
     try {
       final response = await http.post(Uri.parse(mainUrl),
@@ -134,7 +134,7 @@ class GameRepository {
         where cover.image_id != null & total_rating >= 60 ;
         limit 150 ;
       ''');
-    print("SliderRandom: ${response.statusCode}");
+    print("Discover SliderRandom: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       //List<dynamic> data = json.decode(response.body);

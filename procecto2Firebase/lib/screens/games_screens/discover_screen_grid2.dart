@@ -43,7 +43,11 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
         } else {
-          return buildLoadingWidget();
+          return Container(
+            height: 300,
+            child: buildLoadingWidget(),
+          );
+          
         }
       },
     );

@@ -26,8 +26,7 @@ class GameDetailScreen extends StatefulWidget {
 class _GameDetailScreenState extends State<GameDetailScreen>
     with SingleTickerProviderStateMixin {
   late YoutubePlayerController _controller;
-  PageController pageController =
-      PageController(viewportFraction: 1, keepPage: true);
+  //PageController pageController =PageController(viewportFraction: 1, keepPage: true);
   late TabController _tabController;
   final GameModel game;
   final tabs = <Item>[
@@ -41,13 +40,15 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     hideShadow: true,
   );
 
+  late ImageProvider backgroundImage;
+
   // Utiliza el constructor super para inicializar la clase base
   _GameDetailScreenState(this.game) : super();
 
   @override
   void dispose() {
     //_controller.dispose();
-    pageController.dispose();
+    //pageController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -56,6 +57,10 @@ class _GameDetailScreenState extends State<GameDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: tabs.length);
+
+    backgroundImage = NetworkImage(
+    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+  );
 
     if (game.videos != null) {
       _controller = YoutubePlayerController(
@@ -86,13 +91,13 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     String userId = "";
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    LoginProvider().storageGetAuthData();
+    //LoginProvider().storageGetAuthData();
 
     //favoriteGamesProvider.loadFavoriteGames;
     List<String> favoriteGameNames =
         favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
-    User? user = FirebaseAuth.instance.currentUser;
+    /*User? user = FirebaseAuth.instance.currentUser;
 
     print(user);
 
@@ -104,7 +109,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     } else {
       // No hay usuario autenticado
       print('No user logged in');
-    }
+    }*/
 
     return Scaffold(
         //backgroundColor: const Color(0xFF20232a),
@@ -112,8 +117,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
       Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(
-                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg"),
+            image: backgroundImage,
             fit: BoxFit.cover,
           ),
         ),
@@ -270,51 +274,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                         ),
                                       ),
                                     ),
-                                    /*
-                                    Visibility(
-                                      visible: game.total_rating == null,
-                                      child: Container(
-                                        height: 85,
-                                        width: 85,
-                                        alignment: Alignment.centerLeft,
-                                        child: SleekCircularSlider(
-                                          appearance: CircularSliderAppearance(
-                                            angleRange: 360,
-                                            customColors: customColors,
-                                            customWidths: CustomSliderWidths(
-                                              progressBarWidth: 7,
-                                              trackWidth: 4,
-                                            ),
-                                          ),
-                                          min: 0,
-                                          max: 100,
-                                          initialValue: 0,
-                                          innerWidget: (double value) {
-                                            return Column(
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: Hero(
-                                                      tag: game.id,
-                                                      child: const Text(
-                                                        "N/A",
-                                                        style: TextStyle(
-                                                          //color: Colors.white,
-                                                          fontSize: 35,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),*/
+                                    
                                     const SizedBox(width: 10.0),
                                     // Espacio entre la puntuación y el botón
                                     Column(

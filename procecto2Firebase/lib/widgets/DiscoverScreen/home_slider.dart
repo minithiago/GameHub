@@ -46,7 +46,10 @@ class _HomeSliderState extends State<HomeSlider> {
           String errorMessage = snapshot.error?.toString() ?? "Unknown error";
           return buildErrorWidget(errorMessage);
         } else {
-          return buildLoadingWidget();
+          return Container(
+            height: 250,
+            child: buildLoadingWidget(),
+          );
         }
       },
     );
