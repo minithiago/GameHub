@@ -35,7 +35,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _nameFilter = '';
   String _usuario = '';
 
-  /*
+  
   Future<List<String>> getGamesForUserEmail(String userEmail) async {
     try {
       // Obtener la referencia al documento del usuario en Firestore utilizando su email
@@ -70,7 +70,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
       print('Error getting games for user: $e');
       return [];
     }
-  }*/
+  }
 
   @override
   void initState() {
@@ -79,10 +79,10 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     _nameFilter = widget.busqueda;
     _usuario = widget.usuario;
 
-    //fetchUserGames();
+    fetchUserGames();
   }
 
-  /*
+  
   Future<void> fetchUserGames() async {
     //ponerlo en game-details y en añadri un setState() 'alomejor'
     try {
@@ -103,7 +103,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
       // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
       print('Error fetching user games: $e');
     }
-  }*/
+  }
 
   @override
   void didUpdateWidget(covariant LibraryScreenGrid oldWidget) {
@@ -117,7 +117,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   //List<GameModel> favoriteGamess = [];
-  /*
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
@@ -149,14 +149,14 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         }
       },
     );
-  }*/
+  }
 
   @override
-  Widget build(BuildContext context) { //GameResponse data
+  Widget _build(GameResponse data) { //  BuildContext context
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    var favoriteGamess = favoriteGamesProvider.favoriteGames;
+    //var favoriteGamess = favoriteGamesProvider.favoriteGames;
 
-    //var favoriteGamess = data.games;
+    var favoriteGamess = data.games;
 
     List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
@@ -180,7 +180,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
         break;
       default:
-        favoriteGamess =favoriteGamesProvider.favoriteGames; //data.games;
+        favoriteGamess = data.games;  //  favoriteGamesProvider.favoriteGames;
     }
 
     if (favoriteGamess.isEmpty) {
@@ -311,7 +311,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(5.0)),
+                              const BorderRadius.all(Radius.circular(10.0)),
                           image: DecorationImage(
                               image: NetworkImage(
                                 "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",

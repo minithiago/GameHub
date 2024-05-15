@@ -17,7 +17,7 @@ class _SearchSliderState extends State<SearchSlider> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 160,
+      height: 170,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [

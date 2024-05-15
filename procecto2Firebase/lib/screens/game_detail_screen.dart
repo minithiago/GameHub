@@ -20,10 +20,10 @@ class GameDetailScreen extends StatefulWidget {
   const GameDetailScreen({required Key key, required this.game})
       : super(key: key);
   @override
-  _GameDetailScreenState createState() => _GameDetailScreenState(game);
+  GameDetailScreenState createState() => GameDetailScreenState(game);
 }
 
-class _GameDetailScreenState extends State<GameDetailScreen>
+class GameDetailScreenState extends State<GameDetailScreen>
     with SingleTickerProviderStateMixin {
   late YoutubePlayerController _controller;
   //PageController pageController =PageController(viewportFraction: 1, keepPage: true);
@@ -31,23 +31,21 @@ class _GameDetailScreenState extends State<GameDetailScreen>
   final GameModel game;
   final tabs = <Item>[
     Item(id: 0, name: "OVERVIEW"),
-    Item(id: 1, name: "IMAGES") // Corregido de "SCREESHOTS" a "SCREENSHOTS"
+    Item(id: 1, name: "IMAGES") 
   ];
   final customColors = CustomSliderColors(
     //dotColor: Colors.white.withOpacity(0.8),
     trackColor: Style.Colors.grey,
-    progressBarColor: const Color.fromARGB(255, 79, 215, 84),
+    progressBarColor: const Color.fromARGB(255, 79, 215, 84), //color verde interesante
     hideShadow: true,
   );
 
-  late ImageProvider backgroundImage;
-
   // Utiliza el constructor super para inicializar la clase base
-  _GameDetailScreenState(this.game) : super();
+  GameDetailScreenState(this.game) : super();
 
   @override
   void dispose() {
-    //_controller.dispose();
+    _controller.dispose();
     //pageController.dispose();
     _tabController.dispose();
     super.dispose();
@@ -58,15 +56,12 @@ class _GameDetailScreenState extends State<GameDetailScreen>
     super.initState();
     _tabController = TabController(vsync: this, length: tabs.length);
 
-    backgroundImage = NetworkImage(
-    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-  );
 
     if (game.videos != null) {
       _controller = YoutubePlayerController(
         initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
         flags: const YoutubePlayerFlags(
-          autoPlay: false,
+          autoPlay: true,
           loop: true,
           mute: false,
           hideThumbnail: true,
@@ -117,7 +112,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
       Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: backgroundImage,
+            image: NetworkImage(
+    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+    ),
             fit: BoxFit.cover,
           ),
         ),
@@ -136,7 +133,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
         Stack(
           children: <Widget>[
             SizedBox(
-              height: 230.0, //220
+              height: 230.0,
+               //220
               child: YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
@@ -153,7 +151,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    _controller.pause();
+                    //_controller.pause();
                     _controller.dispose();
                     Navigator.pop(context);
                   }),
@@ -312,7 +310,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                   width:
                                                       3), // Espacio entre el icono y el texto
                                               Text(
-                                                "Buy Now",
+                                                "Buy",
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
@@ -336,13 +334,13 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                   .addToFavorites(game);
                                               game.favorite = true;
                                               favoriteGameNames.add(game.name);
-                                              print(favoriteGameNames);
+                                              //print(favoriteGameNames);
 
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "${game.name} added to library"),
-                                                duration: Duration(seconds: 1),
+                                                duration: const Duration(seconds: 1),
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
@@ -354,7 +352,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                                     favoriteGameNames
                                                         .remove(game.name);
                                                     game.favorite = false;
-                                                    print(favoriteGameNames);
+                                                    //print(favoriteGameNames);
                                                   },
                                                 ),
                                               ));
@@ -500,13 +498,14 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         ),
                       ),
                     ),
+                    
                     buildSection("Platforms", game.platforms,
                         emptyMessage: "No platforms available"),
                     buildSection("Genres", game.genres,
                         emptyMessage: "No genres available"),
                     buildSection("Game Modes", game.modes,
                         emptyMessage: "No game modes available"),
-
+                    
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
@@ -530,9 +529,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           itemCount: game.companies?.length ?? 0,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: EdgeInsets.only(right: 10.0),
+                              padding: const EdgeInsets.only(right: 10.0),
                               child: Container(
-                                padding: EdgeInsets.all(5.0),
+                                padding: const EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(5.0)),
@@ -584,11 +583,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         ),
                       ),
                     ),
-                    Visibility(
-                      //Valida que si hay dos lenguajes iguales solo muestre uno
-                      visible:
-                          game.languages != null && game.languages!.isNotEmpty,
-                      child: Container(
+                    if (game.languages != null && game.languages!.isNotEmpty)
+                      Container(
                         height: 30.0,
                         padding: const EdgeInsets.only(left: 10.0, top: 5.0),
                         child: ListView.builder(
@@ -601,9 +597,9 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                 !game.languages!.sublist(0, index).any((lang) =>
                                     lang.language![0].name == languageName)) {
                               return Padding(
-                                padding: EdgeInsets.only(right: 10.0),
+                                padding: const EdgeInsets.only(right: 10.0),
                                 child: Container(
-                                  padding: EdgeInsets.all(5.0),
+                                  padding: const EdgeInsets.all(5.0),
                                   decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(5.0)),
@@ -625,74 +621,64 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                 ),
                               );
                             } else {
-                              return SizedBox
+                              return const SizedBox
                                   .shrink(); // Ocultar si el lenguaje ya se ha mostrado antes
                             }
                           },
                         ),
                       ),
-                    ),
-
-                    Visibility(
-                      visible:
-                          game.languages == null || game.languages!.isEmpty,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: Text(
-                          "No languages available",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                      
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, bottom: 10.0, top: 15.0),
+                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, top: 15.0),
                       child: Text(
                         "DLCs".toUpperCase(),
                         style: const TextStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,
-                          //color: Colors.white
                         ),
                       ),
                     ),
-                    Visibility(
-                      visible: game.dlc != null && game.dlc!.isNotEmpty,
-                      child: Container(
+                    if (game.dlc != null && game.dlc!.isNotEmpty)
+                      Container(
                         height: 220.0,
-                        padding: EdgeInsets.only(left: 10.0, top: 5.0),
+                        padding: const EdgeInsets.only(left: 10.0, top: 5.0),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: game.dlc?.length ?? 0,
+                          itemCount: game.dlc!.length,
                           itemBuilder: (context, index) {
                             final dlc = game.dlc![index];
                             return dlc.cover != null
                                 ? Padding(
-                                    padding: EdgeInsets.only(right: 10.0),
+                                    padding: const EdgeInsets.only(right: 10.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.all(5.0),
+                                          padding: const EdgeInsets.all(5.0),
                                           child: Image.network(
                                             "https://images.igdb.com/igdb/image/upload/t_cover_big/${dlc.cover![0].imageId}.jpg",
                                             fit: BoxFit.cover,
                                             width: 120.0,
+                                            loadingBuilder: (BuildContext context, Widget child,
+                                                ImageChunkEvent? loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Center(
+                                                child: CircularProgressIndicator(
+                                                  value: loadingProgress.expectedTotalBytes != null
+                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                          (loadingProgress.expectedTotalBytes ?? 1)
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder: (context, error, stackTrace) =>
+                                                const Icon(Icons.error),
                                           ),
                                         ),
-                                        const SizedBox(
-                                            height:
-                                                5.0), // Espaciado entre la imagen y el nombre
+                                        const SizedBox(height: 5.0),
                                         Text(
-                                          dlc.name ??
-                                              'Unnamed DLC', // Mostrar el nombre del DLC, o 'Unnamed DLC' si el nombre es nulo
+                                          dlc.name,
                                           style: const TextStyle(
-                                            //color: Colors.white,
                                             fontSize: 10.0,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -700,16 +686,12 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                       ],
                                     ),
                                   )
-                                : Container(
-                                    //color: Colors.amber,
-                                    ); // No muestra el DLC si no tiene portada
+                                : const SizedBox.shrink(); // No muestra el DLC si no tiene portada
                           },
                         ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: game.dlc == null || game.dlc!.isEmpty,
-                      child: const Padding(
+                      )
+                    else
+                      const Padding(
                         padding: EdgeInsets.only(left: 10.0, top: 5.0),
                         child: Text(
                           "No DLCs available",
@@ -720,7 +702,8 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           ),
                         ),
                       ),
-                    ),
+
+                    
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
@@ -750,7 +733,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             onPressed: () async {
                               String url =
                                   "https://www.igdb.com/games/${game.slug}";
-                              print(url);
+                              
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
@@ -786,7 +769,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             onPressed: () async {
                               String url =
                                   "https://www.twitch.tv/directory/category/${game.slug}";
-                              print(url);
+                              
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
@@ -829,7 +812,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                             onPressed: () async {
                               String url =
                                   "https://www.youtube.com/results?search_query=${game.name}";
-                              print(url);
+                              
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
@@ -851,21 +834,20 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         )
                       ],
                     ),
+                    
+                    
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, bottom: 10.0, top: 15.0),
+                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, top: 15.0),
                       child: Text(
                         "Similar Games".toUpperCase(),
                         style: const TextStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,
-                          //color: Colors.white
                         ),
                       ),
                     ),
-                    Visibility(
-                      visible: game.similar != null && game.similar!.isNotEmpty,
-                      child: Container(
+                    if (game.similar != null && game.similar!.isNotEmpty)
+                      Container(
                         height: 200.0,
                         padding: const EdgeInsets.only(left: 10.0, top: 5.0),
                         child: ListView.builder(
@@ -880,17 +862,27 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                   "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId}.jpg",
                                   fit: BoxFit.fill,
                                   width: 140.0,
+                                  loadingBuilder: (BuildContext context, Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                (loadingProgress.expectedTotalBytes ?? 1)
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                                 ),
                               ),
                             );
                           },
                         ),
-                      ),
-                    ),
-
-                    Visibility(
-                      visible: game.similar == null || game.similar!.isEmpty,
-                      child: const Padding(
+                      )
+                    else
+                      const Padding(
                         padding: EdgeInsets.only(left: 10.0, top: 5.0),
                         child: Text(
                           "No similar games available",
@@ -901,8 +893,10 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10.0),
+
+                    const SizedBox(height: 10.0)
+                    
+                    
                   ],
                 ),
                 Column(
@@ -1011,7 +1005,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                   child: Container(
                     padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                         border: Border.all(
                           width: 1.0,
                           color: Theme.of(context).colorScheme.primary,

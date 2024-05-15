@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/services/upload_image.dart';
@@ -183,6 +184,15 @@ class _editAccountScreenState extends State<editAccountScreen> {
                         ),
                       ),
                       onPressed: () async {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return Center(
+                              child: buildLoadingWidget(),
+                            );
+                          },
+                        );
                         String? profilePic;
                         String? nickname;
                         if (_nicknameController.text == "") {

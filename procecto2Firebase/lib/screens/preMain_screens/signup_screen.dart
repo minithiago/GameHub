@@ -6,13 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/userModel.dart';
-import 'package:procecto2/providers/login_provider.dart';
+//import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/services/upload_image.dart';
-import 'package:procecto2/style/theme.dart' as Style;
-import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -185,8 +183,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: Color.fromARGB(128, 255, 255, 255),
-                              prefixIcon: Icon(Icons.mail),
+                              fillColor: const Color.fromARGB(128, 255, 255, 255),
+                              prefixIcon: const Icon(Icons.mail),
                               //prefixIconColor: Colors.white,
                               labelText: "Email",
                               border: OutlineInputBorder(
@@ -216,8 +214,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: Color.fromARGB(128, 255, 255, 255),
-                              prefixIcon: Icon(Icons.lock_outline),
+                              fillColor: const Color.fromARGB(128, 255, 255, 255),
+                              prefixIcon: const Icon(Icons.lock_outline),
                               //prefixIconColor: Colors.white,
                               labelText: "Password",
                               border: OutlineInputBorder(

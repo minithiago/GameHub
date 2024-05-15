@@ -51,7 +51,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 & first_release_date >= $nowDate;sort first_release_date asc ; limit 99;");
+              "fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;where id != 192153 & cover.image_id != null & total_rating >= 60 & first_release_date >= $nowDate;sort first_release_date asc ; limit 10;");
       print("Juegos released this year: ${response.statusCode}");
       //print(response.body);
 
@@ -132,7 +132,7 @@ class GameRepository {
     }, body: '''
         fields *, cover.*, dlcs.name, dlcs.cover.*, similar_games.cover.*, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.*, videos.* ;
         where cover.image_id != null & total_rating >= 60 ;
-        limit 150 ;
+        limit 15 ;
       ''');
     print("Discover SliderRandom: ${response.statusCode}");
 

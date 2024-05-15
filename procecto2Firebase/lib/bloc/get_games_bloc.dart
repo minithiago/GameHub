@@ -68,6 +68,7 @@ class GetGamesBloc2 {
     GameResponse response = await _repository.getGamesDiscover2();
     _subject.sink.add(response);
   }
+  
 
   dispose() {
     _subject.close();

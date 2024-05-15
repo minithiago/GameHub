@@ -23,13 +23,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => LoginProvider(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (_) => LoginFormProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (context) => FavoriteGamesProvider(),
         ),
         ChangeNotifierProvider(

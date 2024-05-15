@@ -13,12 +13,12 @@ class DiscoverScreen extends StatelessWidget {
   const DiscoverScreen(this._switchBloc, {super.key});
 
   void _showGrid() {
-    print("Single Clicked");
+    //print("Single Clicked");
     _switchBloc.showGrid();
   }
 
   void _showList() {
-    print("List Clicked");
+    //print("List Clicked");
     _switchBloc.showList();
   }
 
@@ -187,7 +187,7 @@ class DiscoverScreen extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 1000,
+            height: 600,
             child: StreamBuilder<SwitchItem>(
               stream: _switchBloc.itemStream,
               initialData: _switchBloc.defaultItem,

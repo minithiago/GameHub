@@ -1,6 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/bottom_tab_screens/discover_screen.dart';
@@ -20,7 +19,7 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   late int _currentIndex;
   late PageController _pageController;
-  late SwitchBloc _switchBloc;
+  //late SwitchBloc _switchBloc;
   //late SwitchBlocSearch _switchBlocSearch;
 
   GlobalKey bottomNavigationKey = GlobalKey();
@@ -28,7 +27,7 @@ class MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    _switchBloc = SwitchBloc();
+    //_switchBloc = SwitchBloc();
     //_switchBlocSearch = SwitchBlocSearch();
     _currentIndex = widget.currentIndex;
   }
@@ -39,7 +38,7 @@ class MainScreenState extends State<MainScreen> {
     _pageController.dispose();
   }
 
-  void _showGrid() {
+  /*void _showGrid() {
     print("Grid Clicked");
     _switchBloc.showGrid();
     //_switchBlocSearch.showGridSearch();
@@ -50,10 +49,10 @@ class MainScreenState extends State<MainScreen> {
     _switchBloc.showList();
     //_switchBlocSearch.showListSearch();
   }
+  */
 
   @override
   Widget build(BuildContext context) {
-    //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
 
     _pageController.initialPage = _currentIndex;
     return Scaffold(
@@ -77,7 +76,6 @@ class MainScreenState extends State<MainScreen> {
           controller: _pageController,
           onPageChanged: (index) {
             setState(() => _currentIndex = index);
-            //favoriteGamesProvider.loadFavoriteGames();
           },
           children: <Widget>[
             //aqui van las paginas del bottomBar
@@ -101,7 +99,7 @@ class MainScreenState extends State<MainScreen> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            activeColor: Color(0xFF010101),
+            activeColor: const Color(0xFF010101),
             title: const Text(
               ' Discover',
               style: TextStyle(
@@ -113,13 +111,13 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.game_controller,
                 size: 18.0,
                 color: _currentIndex == 0
-                    ? Color.fromRGBO(110, 182, 255, 1)
+                    ? const Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
           BottomNavyBarItem(
-            activeColor: Color(0xFF010101),
+            activeColor: const Color(0xFF010101),
             title: const Text(
               ' Search',
               style: TextStyle(
@@ -131,13 +129,13 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.magnifier,
                 size: 18.0,
                 color: _currentIndex == 1
-                    ? Color.fromRGBO(110, 182, 255, 1)
+                    ? const Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
           BottomNavyBarItem(
-            activeColor: Color(0xFF010101),
+            activeColor: const Color(0xFF010101),
             title: const Text(
               ' Library',
               style: TextStyle(
@@ -149,13 +147,13 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.layers,
                 size: 18.0,
                 color: _currentIndex == 2
-                    ? Color.fromRGBO(110, 182, 255, 1)
+                    ? const Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
           BottomNavyBarItem(
-            activeColor: Color(0xFF010101),
+            activeColor: const Color(0xFF010101),
             title: const Text(
               ' Profile',
               style: TextStyle(
@@ -167,7 +165,7 @@ class MainScreenState extends State<MainScreen> {
                 SimpleLineIcons.user,
                 size: 18.0,
                 color: _currentIndex == 3
-                    ? Color.fromRGBO(110, 182, 255, 1)
+                    ? const Color.fromRGBO(110, 182, 255, 1)
                     : Theme.of(context).colorScheme.primary,
               ),
             ),

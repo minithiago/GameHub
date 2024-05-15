@@ -15,13 +15,13 @@ import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
 class DiscoverScreenGrid extends StatefulWidget {
-  DiscoverScreenGrid({super.key});
+  const DiscoverScreenGrid({super.key});
 
   @override
-  _DiscoverScreenGridState createState() => _DiscoverScreenGridState();
+  DiscoverScreenGridState createState() => DiscoverScreenGridState();
 }
 
-class _DiscoverScreenGridState extends State<DiscoverScreenGrid> {
+class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
   @override
   void initState() {
     getGamesBloc.getGames();

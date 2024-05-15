@@ -6,8 +6,6 @@ import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/recover_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
-import 'package:provider/provider.dart';
-import '../../providers/providers.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -25,11 +23,7 @@ class _LoginScreenState extends State<LoginScreen>  {
   @override
   Widget build(BuildContext context) {
 
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LoginFormProvider()),
-        ],
-        child: Scaffold(
+    return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.secondary,
           appBar: AppBar(
@@ -246,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen>  {
               ],
             ),
           )),
-        ));
+        );
   }
 }
 

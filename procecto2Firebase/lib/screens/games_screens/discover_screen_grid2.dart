@@ -22,6 +22,8 @@ class DiscoverScreenGrid2 extends StatefulWidget {
 }
 
 class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
+  
+
   @override
   void initState() {
     getGamesBloc2.getGames2();
@@ -43,7 +45,7 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
         } else {
-          return Container(
+          return SizedBox(
             height: 300,
             child: buildLoadingWidget(),
           );
@@ -59,11 +61,12 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
     final List<String> favoriteGameNames =
         favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
+
     List<GameModel> games = data.games;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         //scrollDirection: Axis.horizontal,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
