@@ -78,7 +78,7 @@ class UserRepository extends ChangeNotifier {
       print("Recover password");
       return true;
     } catch (e) {
-      print("Error adding user: $e");
+      print("Error recovering password: $e");
       return false;
     }
   }
@@ -153,6 +153,169 @@ class UserRepository extends ChangeNotifier {
       }
     } catch (e) {
       print("Error removing game from user: $e");
+      return false;
+    }
+  }
+
+  Future<bool> acceptFriendRequest(
+      String email, String nickname, String avatar, String emailFriend) async {
+    try {
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+
+        // Obtén una referencia a la colección de juegos del usuario
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+
+        // Agrega el juego a la colección de juegos del usuario
+        await userRef.collection('Friends').add({
+          "nickname": nickname,
+          "avatar": avatar,
+          "email": emailFriend,
+        });
+        print("Friend added to user successfully");
+        //quita la request
+        QuerySnapshot friendQuery = await userRef
+            .collection('Requests')
+            .where('email', isEqualTo: emailFriend)
+            .get();
+        if (friendQuery.docs.isNotEmpty) {
+          await friendQuery.docs.first.reference.delete();
+          print("Friend removed from user successfully");
+          return true;
+        } else {
+          print("Friend not found in user's collection");
+          return false;
+        }
+
+        //return true;
+      } else {
+        print("User with email $email not found");
+        return false;
+      }
+    } catch (e) {
+      print("Error adding friend to user: $e");
+      return false;
+    }
+  }
+
+  Future<bool> removeFriend(String email, String emailFriend) async {
+    try {
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+
+        // Obtén una referencia al documento del usuario
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+
+        // Elimina el juego de la colección de juegos del usuario usando el ID del juego
+        QuerySnapshot gameQuery = await userRef
+            .collection('Friends')
+            .where('email', isEqualTo: emailFriend)
+            .get();
+        if (gameQuery.docs.isNotEmpty) {
+          await gameQuery.docs.first.reference.delete();
+          print("Friend removed successfully");
+          return true;
+        } else {
+          print("Friend not found in user's collection");
+          return false;
+        }
+      } else {
+        print("User with email $email not found");
+        return false;
+      }
+    } catch (e) {
+      print("Error removing game from user: $e");
+      return false;
+    }
+  }
+
+  Future<bool> sendFriendRequest(
+      String email, String nickname, String avatar, String emailFriend) async {
+    try {
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: emailFriend)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+
+        // Obtén una referencia a la colección de juegos del usuario
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+
+        // Agrega el juego a la colección de juegos del usuario
+        await userRef.collection('Requests').add({
+          "nickname": nickname,
+          "avatar": avatar,
+          "email": email,
+        });
+        print("Friend requested successfully");
+        //quita la request
+
+        return true;
+      } else {
+        print("User with email $email not found");
+        return false;
+      }
+    } catch (e) {
+      print("Error requesting friend to user: $e");
+      return false;
+    }
+  }
+
+  Future<bool> declineFriendRequest(
+      String email, String nickname, String avatar, String emailFriend) async {
+    try {
+      // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+
+        // Obtén una referencia a la colección de juegos del usuario
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+
+        //quita la request
+        QuerySnapshot friendQuery = await userRef
+            .collection('Requests')
+            .where('email', isEqualTo: emailFriend)
+            .get();
+        if (friendQuery.docs.isNotEmpty) {
+          await friendQuery.docs.first.reference.delete();
+          print("Request removed from user successfully");
+          return true;
+        } else {
+          print("Request not found in user's collection");
+          return false;
+        }
+
+        //return true;
+      } else {
+        print("User with email $email not found");
+        return false;
+      }
+    } catch (e) {
+      print("Error declining request to user: $e");
       return false;
     }
   }

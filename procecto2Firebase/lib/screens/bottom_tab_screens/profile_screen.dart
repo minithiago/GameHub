@@ -20,6 +20,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   int games = 0;
+  int friends = 0;
   bool isLightMode = true;
 
   Future<String?> getUserNickname() async {
@@ -37,6 +38,31 @@ class _AccountScreenState extends State<AccountScreen> {
       // Si no se encontró ningún usuario, devolvemos null
       return null;
     }
+  }
+  Future<int?> getUserFriendsCountByEmail() async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        QuerySnapshot friendsSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Friends')
+            .get();
+        friends = friendsSnapshot.size;
+      } else {
+        print(
+            'No user with this email ${FirebaseAuth.instance.currentUser!.email.toString()}.');
+      }
+    } catch (e) {
+      print('Error obtaining friends from user: $e');
+    }
+    return null;
   }
 
   Future<int?> getUserGamesCountByEmail() async {
@@ -299,7 +325,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 snapshot.connectionState ==
                                         ConnectionState.waiting
                                     ? const Text(
-                                        '',
+                                        '0 games',
                                         style: TextStyle(
                                             //color: Theme.of(context).colorScheme.tertiary
                                             ),
@@ -314,11 +340,17 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                         ),
                       ),
+                      
                       Expanded(
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
+                        child: FutureBuilder<int?>(
+                          future: getUserFriendsCountByEmail(),
+                          builder: (context, snapshot) {
+                            //final nickname = snapshot.data ?? 'user'; // Obtiene el nickname o establece "user" si no hay ninguno
+
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -326,18 +358,30 @@ class _AccountScreenState extends State<AccountScreen> {
                                           const FriendsScreen()),
                                 );
                               },
-                              child: const Icon(
-                                SimpleLineIcons.people,
-                                size: 60,
-                                //color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              '3 friends',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                                  child: const Icon(
+                                    SimpleLineIcons.people,
+                                    size: 60,
+                                    //color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                // Texto con indicador de carga condicional
+                                snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? const Text(
+                                        '0 friends',
+                                        style: TextStyle(
+                                            //color: Theme.of(context).colorScheme.tertiary
+                                            ),
+                                      ) // Muestra un indicador de carga mientras se obtiene el número de juegos
+                                    : Text(
+                                        '$friends friends',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ],

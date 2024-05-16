@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/elements/loader_element.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:procecto2/widgets/LibraryScreen/userLibraryGames.dart';
@@ -17,13 +19,17 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePage extends State<UserProfilePage> {
   var userData;
+  var userData2;
   int games = 0;
+  int friends = 0;
+  int contieneAmigo = 0;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     getUserData();
+    getUserData2();
   }
 
   getUserData() async {
@@ -34,6 +40,8 @@ class _UserProfilePage extends State<UserProfilePage> {
           .get();
       userData = snap.docs.first.data();
       await getUserGamesCountByEmail();
+      await getUserFriendsCountByEmail();
+      await getUserContainsEmailFriend();
       setState(() {
         isLoading = false;
       });
@@ -42,6 +50,75 @@ class _UserProfilePage extends State<UserProfilePage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  getUserData2() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+          .get();
+      userData2 = snap.docs.first.data();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  getUserFriendsCountByEmail() async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: widget.uid)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        QuerySnapshot friendsSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Friends')
+            .get();
+        friends = friendsSnapshot.size;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
+      }
+    } catch (e) {
+      print('Error obteniendo la cantidad de juegos del usuario: $e');
+    }
+  }
+
+  getUserContainsEmailFriend() async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: userData2['email'])
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Friends')
+            .where('email', isEqualTo: userData['email'])
+            .get();
+
+        contieneAmigo = gamesSnapshot.size;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
+      }
+    } catch (e) {
+      print('Error obteniendo la cantidad de juegos del usuario: $e');
     }
   }
 
@@ -85,8 +162,8 @@ class _UserProfilePage extends State<UserProfilePage> {
         title: Text(
           userData != null ? userData['nickname'] : 'Loading...',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -108,7 +185,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                                 ? NetworkImage(userData['avatar'])
                                 : const NetworkImage(
                                     'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'),
-                            radius: 64,
+                            radius: 60,
                           ),
                           Expanded(
                             child: Column(
@@ -130,35 +207,117 @@ class _UserProfilePage extends State<UserProfilePage> {
                               ],
                             ),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
-                                Icon(
+                                const Icon(
                                   SimpleLineIcons.people,
                                   size: 60,
                                   //color: Colors.white,
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Text(
-                                  '3 friends',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  '$friends Friends',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                          height:
-                              20), // Añade un espacio entre los widgets existentes y el contenedor
-                      SizedBox(
-                        // Aquí puedes personalizar el contenedor según tus necesidades
-                        height: 523,
-                        width: double.infinity,
-                        //color: Colors.blue,
+                      Visibility(
+                        visible: contieneAmigo == 1,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.red, // Color de fondo del botón
+                            shape: RoundedRectangleBorder(
+                              // Forma del botón con bordes redondeados
+                              borderRadius: BorderRadius.circular(
+                                  20), // Radio de los bordes
+                            ),
+                            minimumSize: const Size(130, 40),
+                          ),
+                          onPressed: () async {
+                            UserRepository().removeFriend(
+                                FirebaseAuth.instance.currentUser!.email
+                                    .toString(),
+                                userData['email']);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text("Friend removed successfully")));
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.group_add_rounded,
+                                //color: Colors.white
+                              ), // Icono de cesto de la compra
+                              SizedBox(
+                                  width:
+                                      3), // Espacio entre el icono y el texto
+                              Text(
+                                "   Remove friend",
+                                style: TextStyle(
+                                    //color: Colors.white
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: contieneAmigo == 0,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromRGBO(
+                                110, 182, 255, 1), // Color de fondo del botón
+                            shape: RoundedRectangleBorder(
+                              // Forma del botón con bordes redondeados
+                              borderRadius: BorderRadius.circular(
+                                  20), // Radio de los bordes
+                            ),
+                            minimumSize: const Size(130, 40),
+                          ),
+                          onPressed: () async {
+                            UserRepository().sendFriendRequest(
+                                FirebaseAuth.instance.currentUser!.email
+                                    .toString(),
+                                userData2['nickname'],
+                                userData2['avatar'],
+                                userData['email']);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Friend Request sended")));
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.group_add_rounded,
+                                //color: Colors.white
+                              ), // Icono de cesto de la compra
+                              SizedBox(
+                                  width:
+                                      3), // Espacio entre el icono y el texto
+                              Text(
+                                "   Add as friend",
+                                style: TextStyle(
+                                    //color: Colors.white
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      Expanded(
                         child: SizedBox(
                           //MediaQuery.of(context).size.height - 280, // Altura del contenedor hasta abajo de la pantalla
                           child: UserLibraryScreenWidget(
@@ -166,7 +325,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                             userData['email'],
                           ),
                         ),
-                      ),
+                      ) // Añade un espacio entre los widgets existentes y el contenedor
                     ],
                   ),
                 )
