@@ -23,13 +23,14 @@ class _UserProfilePage extends State<UserProfilePage> {
   int games = 0;
   int friends = 0;
   int contieneAmigo = 0;
+  int requestSent = 0;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    getUserData();
     getUserData2();
+    getUserData();
   }
 
   getUserData() async {
@@ -39,9 +40,27 @@ class _UserProfilePage extends State<UserProfilePage> {
           .where('email', isEqualTo: widget.uid)
           .get();
       userData = snap.docs.first.data();
+
+      if (snap.docs.isNotEmpty) {
+        String userId2 = snap.docs.first.id;
+        QuerySnapshot email2Snapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId2)
+            .collection('Requests')
+            .where('email', isEqualTo: userData2['email'])
+            .get();
+        requestSent = email2Snapshot.size;
+        if (requestSent >= 1) {
+          contieneAmigo == 3;
+        }
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
+      }
+      await getUserContainsEmailFriend();
       await getUserGamesCountByEmail();
       await getUserFriendsCountByEmail();
-      await getUserContainsEmailFriend();
+
       setState(() {
         isLoading = false;
       });
@@ -61,6 +80,7 @@ class _UserProfilePage extends State<UserProfilePage> {
               isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
           .get();
       userData2 = snap.docs.first.data();
+
       setState(() {
         isLoading = false;
       });
@@ -105,14 +125,20 @@ class _UserProfilePage extends State<UserProfilePage> {
 
       if (userSnapshot.docs.isNotEmpty) {
         String userId = userSnapshot.docs.first.id;
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+        QuerySnapshot emailSnapshot = await FirebaseFirestore.instance
             .collection('Users')
             .doc(userId)
             .collection('Friends')
             .where('email', isEqualTo: userData['email'])
             .get();
 
-        contieneAmigo = gamesSnapshot.size;
+        contieneAmigo = emailSnapshot.size;
+
+        if (requestSent >= 1) {
+          contieneAmigo = 3;
+        } else {
+          contieneAmigo = contieneAmigo;
+        }
       } else {
         print(
             'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
@@ -146,8 +172,42 @@ class _UserProfilePage extends State<UserProfilePage> {
     }
   }
 
+  Widget buildFriendButton({
+    required bool isFriend,
+    required VoidCallback onPressed,
+    required Color backgroundColor,
+    required Icon icon,
+    required String text,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor, // Color de fondo del botón
+        shape: RoundedRectangleBorder(
+          // Forma del botón con bordes redondeados
+          borderRadius: BorderRadius.circular(20), // Radio de los bordes
+        ),
+        minimumSize: const Size(130, 40),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon, // Icono
+          const SizedBox(width: 3), // Espacio entre el icono y el texto
+          Text(
+            text,
+            style: const TextStyle(),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(contieneAmigo);
+    print(requestSent);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: AppBar(
@@ -230,90 +290,61 @@ class _UserProfilePage extends State<UserProfilePage> {
                         ],
                       ),
                       Visibility(
-                        visible: contieneAmigo == 1,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.red, // Color de fondo del botón
-                            shape: RoundedRectangleBorder(
-                              // Forma del botón con bordes redondeados
-                              borderRadius: BorderRadius.circular(
-                                  20), // Radio de los bordes
-                            ),
-                            minimumSize: const Size(130, 40),
-                          ),
+                        visible: contieneAmigo == 3,
+                        child: buildFriendButton(
+                          isFriend: true,
                           onPressed: () async {
-                            UserRepository().removeFriend(
-                                FirebaseAuth.instance.currentUser!.email
-                                    .toString(),
-                                userData['email']);
                             ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text("Friend removed successfully")));
+                              const SnackBar(
+                                  content: Text("Request already sent")),
+                            );
                           },
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.group_add_rounded,
-                                //color: Colors.white
-                              ), // Icono de cesto de la compra
-                              SizedBox(
-                                  width:
-                                      3), // Espacio entre el icono y el texto
-                              Text(
-                                "   Remove friend",
-                                style: TextStyle(
-                                    //color: Colors.white
-                                    ),
-                              ),
-                            ],
-                          ),
+                          backgroundColor: Colors.orange,
+                          icon: const Icon(Icons.schedule_send_rounded),
+                          text: "  Request sent",
+                        ),
+                      ),
+                      Visibility(
+                        visible: contieneAmigo == 1,
+                        child: buildFriendButton(
+                          isFriend: true,
+                          onPressed: () async {
+                            await UserRepository().removeFriend(
+                              FirebaseAuth.instance.currentUser!.email
+                                  .toString(),
+                              userData['email'],
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Friend removed successfully")),
+                            );
+                          },
+                          backgroundColor: Colors.red,
+                          icon: const Icon(Icons.group_remove_rounded),
+                          text: "  Remove friend",
                         ),
                       ),
                       Visibility(
                         visible: contieneAmigo == 0,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromRGBO(
-                                110, 182, 255, 1), // Color de fondo del botón
-                            shape: RoundedRectangleBorder(
-                              // Forma del botón con bordes redondeados
-                              borderRadius: BorderRadius.circular(
-                                  20), // Radio de los bordes
-                            ),
-                            minimumSize: const Size(130, 40),
-                          ),
+                        child: buildFriendButton(
+                          isFriend: false,
                           onPressed: () async {
-                            UserRepository().sendFriendRequest(
-                                FirebaseAuth.instance.currentUser!.email
-                                    .toString(),
-                                userData2['nickname'],
-                                userData2['avatar'],
-                                userData['email']);
+                            await UserRepository().sendFriendRequest(
+                              FirebaseAuth.instance.currentUser!.email
+                                  .toString(),
+                              userData2['nickname'],
+                              userData2['avatar'],
+                              userData['email'],
+                            );
                             ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Friend Request sended")));
+                              const SnackBar(
+                                  content: Text("Friend Request sent")),
+                            );
                           },
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.group_add_rounded,
-                                //color: Colors.white
-                              ), // Icono de cesto de la compra
-                              SizedBox(
-                                  width:
-                                      3), // Espacio entre el icono y el texto
-                              Text(
-                                "   Add as friend",
-                                style: TextStyle(
-                                    //color: Colors.white
-                                    ),
-                              ),
-                            ],
-                          ),
+                          backgroundColor:
+                              const Color.fromRGBO(110, 182, 255, 1),
+                          icon: const Icon(Icons.group_add_rounded),
+                          text: "  Add as friend",
                         ),
                       ),
 

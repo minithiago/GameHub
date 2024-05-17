@@ -88,110 +88,97 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
       );
     }*/
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                color: Theme.of(context).colorScheme.secondary,
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    FutureBuilder<String?>(
-                      future: getUserAvatar(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          _avatar = snapshot.data ??
-                              "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
-                        }
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: Theme.of(context).colorScheme.secondary,
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                FutureBuilder<String?>(
+                  future: getUserAvatar(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      _avatar = snapshot.data ??
+                          "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+                    }
 
-                        return CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(_avatar),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 20.0),
-                    const Text(
-                      'Your Library',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        //color: Colors.white,
-                      ),
-                    ),
-                    const Spacer(), // Agregado para ocupar el espacio restante en la fila
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    const FriendsScreen(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              const begin = Offset(1.0, 0.0);
-                              const end = Offset.zero;
-                              const curve = Curves.ease;
-
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
-                              var offsetAnimation = animation.drive(tween);
-
-                              return SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              );
-                            },
-                            transitionDuration:
-                                const Duration(milliseconds: 250),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.people,
-                        size: 27,
-                        //color: Colors.white,
-                      ),
-                    ),
-                  ],
+                    return CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(_avatar),
+                    );
+                  },
                 ),
-              ),
-
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextField(
-                  controller: _searchController,
-                  style: const TextStyle(
-                      //color: Colors.white
-                      ),
-                  decoration: InputDecoration(
-                    fillColor: Colors.grey,
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: "Search your library",
-                    hintStyle: const TextStyle(
-                        //color: Colors.white
-                        ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DiscoverScreenWidget6(
-                                  SwitchBlocSearch(), _searchController.text)),
-                        );
-                      },
-                      //color: Colors.white,
-                    ),
+                const SizedBox(width: 20.0),
+                const Text(
+                  'Your Library',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    //color: Colors.white,
                   ),
-                  onSubmitted: (_) {
+                ),
+                const Spacer(), // Agregado para ocupar el espacio restante en la fila
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const FriendsScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 250),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.people,
+                    size: 27,
+                    //color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              controller: _searchController,
+              style: const TextStyle(
+                  //color: Colors.white
+                  ),
+              decoration: InputDecoration(
+                fillColor: Colors.grey,
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: "Search your library",
+                hintStyle: const TextStyle(
+                    //color: Colors.white
+                    ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -199,64 +186,75 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                               SwitchBlocSearch(), _searchController.text)),
                     );
                   },
+                  //color: Colors.white,
                 ),
               ),
-
-              Center(
-                child: SizedBox(
-                  height: 70,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      for (int i = 0; i < 3; i++)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ChoiceChip(
-                            
-                            label: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                i == 0
-                                    ? 'All'
-                                    : i == 1
-                                        ? 'Wishlist'
-                                        : 'Favorites',
-                                style: TextStyle(
-                                  fontSize: 18, // Tamaño de la fuente
-                                  color: selectedIndex == i
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                            selected: selectedIndex == i,
-                            selectedColor: const Color.fromRGBO(110, 182, 255,
-                                1), // Color cuando está seleccionado
-                            onSelected: (isSelected) {
-                              setState(() {
-                                selectedIndex = isSelected ? i : -1;
-                              });
-                            },
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-
-              
-              Expanded(
-                child: LibraryScreenWidget(
-                  switchBloc,
-                ),
-              ),
-
-              // Add more widgets for the rest of your content here
-            ],
-            
+              onSubmitted: (_) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DiscoverScreenWidget6(
+                          SwitchBlocSearch(), _searchController.text)),
+                );
+              },
+            ),
           ),
 
+          Center(
+            child: SizedBox(
+              height: 70,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (int i = 0; i < 3; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ChoiceChip(
+                        label: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            i == 0
+                                ? 'All'
+                                : i == 1
+                                    ? 'Wishlist'
+                                    : 'Favorites',
+                            style: TextStyle(
+                              fontSize: 18, // Tamaño de la fuente
+                              color: selectedIndex == i
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
 
-        );
+                        selected: selectedIndex == i,
+                        selectedColor: const Color.fromRGBO(
+                            110, 182, 255, 1), // Color cuando está seleccionado
+                        onSelected: (isSelected) {
+                          setState(() {
+                            selectedIndex = isSelected ? i : -1;
+                          });
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              50), // Ajusta el radio según tus necesidades
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+
+          Expanded(
+            child: LibraryScreenWidget(
+              switchBloc,
+            ),
+          ),
+
+          // Add more widgets for the rest of your content here
+        ],
+      ),
+    );
   }
 }
