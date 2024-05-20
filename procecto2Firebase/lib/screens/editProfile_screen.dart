@@ -180,7 +180,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                       style: FilledButton.styleFrom(
                         backgroundColor: Color.fromRGBO(110, 182, 255, 1),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () async {

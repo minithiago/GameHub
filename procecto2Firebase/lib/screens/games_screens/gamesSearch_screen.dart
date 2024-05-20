@@ -56,7 +56,7 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
 
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 7.0,
@@ -115,8 +115,8 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                             Text(
                               "Add to library",
                               style: TextStyle(
-                                //color: Colors.black, // Color del texto
-                              ),
+                                  //color: Colors.black, // Color del texto
+                                  ),
                             ),
                           ],
                         ),
@@ -147,8 +147,8 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                             Text(
                               "Add to favorites",
                               style: TextStyle(
-                                //color: Colors.black,
-                              ),
+                                  //color: Colors.black,
+                                  ),
                             )
                           ],
                         ),

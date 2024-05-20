@@ -183,7 +183,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: const Color.fromARGB(128, 255, 255, 255),
+                              fillColor:
+                                  const Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: const Icon(Icons.mail),
                               //prefixIconColor: Colors.white,
                               labelText: "Email",
@@ -214,7 +215,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: const Color.fromARGB(128, 255, 255, 255),
+                              fillColor:
+                                  const Color.fromARGB(128, 255, 255, 255),
                               prefixIcon: const Icon(Icons.lock_outline),
                               //prefixIconColor: Colors.white,
                               labelText: "Password",
@@ -285,83 +287,83 @@ class _SignupScreenState extends State<SignupScreen> {
                                         );
                                       },
                                     );
-                                    try{
-                                        UserModel user = UserModel(
-                                        nickname: nickname,
-                                        email: email,
-                                        password: password,
-                                        profilePicUrl: profilePic!);
+                                    try {
+                                      UserModel user = UserModel(
+                                          nickname: nickname,
+                                          email: email,
+                                          password: password,
+                                          profilePicUrl: profilePic!);
 
-                                    User? newUser = await UserRepository()
-                                        .registerUser(email, password);
+                                      User? newUser = await UserRepository()
+                                          .registerUser(email, password);
 
-                                    if (newUser != null) {
-                                      bool success = await UserRepository()
-                                          .addUser(newUser.uid, nickname, email,
-                                              password, profilePic);
-                                      if (success) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "User register completed.")));
-                                        Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                const MainScreen(
-                                              currentIndex: 0,
+                                      if (newUser != null) {
+                                        bool success = await UserRepository()
+                                            .addUser(newUser.uid, nickname,
+                                                email, password, profilePic);
+                                        if (success) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "User register completed.")));
+                                          Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  const MainScreen(
+                                                currentIndex: 0,
+                                              ),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
                                             ),
-                                            transitionsBuilder: (context,
-                                                animation,
-                                                secondaryAnimation,
-                                                child) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                          ),
-                                        );
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "Error creating the user.")));
+                                          Navigator.pop(context);
+                                        }
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
                                                 content: Text(
-                                                    "Error creating the user.")));
-                                                    Navigator.pop(context);
+                                                    "Email already in use.")));
+                                        Navigator.pop(context);
                                       }
-                                    } else {
+                                    } catch (e) {
+                                      // Si hay alguna excepción durante el proceso de registro, muestra un mensaje de error
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  "Email already in use.")));
-                                                  Navigator.pop(context);
+                                        content: Text(
+                                            "An error occurred during registration."),
+                                      ));
+
+                                      // Oculta el CircularProgressIndicator en caso de error
+                                      Navigator.pop(context);
                                     }
-                                    } catch (e) {
-                                          // Si hay alguna excepción durante el proceso de registro, muestra un mensaje de error
-                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                            content: Text("An error occurred during registration."),
-                                          ));
-
-                                          // Oculta el CircularProgressIndicator en caso de error
-                                          Navigator.pop(context);
-                                        }
-
-                                    
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
                                       Color.fromRGBO(110, 182, 255, 1),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: const Text(
                                   'Register',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      //color: Colors.white,
+                                      color: Colors.white,
                                       fontSize: 16),
                                   // Color del texto
                                 ),

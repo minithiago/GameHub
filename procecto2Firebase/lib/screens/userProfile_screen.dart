@@ -29,8 +29,8 @@ class _UserProfilePage extends State<UserProfilePage> {
   @override
   void initState() {
     super.initState();
-    getUserData2();
     getUserData();
+    getUserData2();
   }
 
   getUserData() async {
@@ -205,9 +205,6 @@ class _UserProfilePage extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(contieneAmigo);
-    print(requestSent);
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: AppBar(

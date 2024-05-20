@@ -31,12 +31,13 @@ class GameDetailScreenState extends State<GameDetailScreen>
   final GameModel game;
   final tabs = <Item>[
     Item(id: 0, name: "OVERVIEW"),
-    Item(id: 1, name: "IMAGES") 
+    Item(id: 1, name: "IMAGES")
   ];
   final customColors = CustomSliderColors(
     //dotColor: Colors.white.withOpacity(0.8),
     trackColor: Style.Colors.grey,
-    progressBarColor: const Color.fromARGB(255, 79, 215, 84), //color verde interesante
+    progressBarColor:
+        const Color.fromARGB(255, 79, 215, 84), //color verde interesante
     hideShadow: true,
   );
 
@@ -55,7 +56,6 @@ class GameDetailScreenState extends State<GameDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: tabs.length);
-
 
     if (game.videos != null) {
       _controller = YoutubePlayerController(
@@ -86,25 +86,9 @@ class GameDetailScreenState extends State<GameDetailScreen>
     String userId = "";
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    //LoginProvider().storageGetAuthData();
 
-    //favoriteGamesProvider.loadFavoriteGames;
     List<String> favoriteGameNames =
         favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
-
-    /*User? user = FirebaseAuth.instance.currentUser;
-
-    print(user);
-
-    // Verifica si hay un usuario autenticado
-    if (user != null) {
-      // El usuario está autenticado, puedes obtener su ID
-      userId = user.email!;
-      print('email: $userId');
-    } else {
-      // No hay usuario autenticado
-      print('No user logged in');
-    }*/
 
     return Scaffold(
         //backgroundColor: const Color(0xFF20232a),
@@ -113,8 +97,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
-    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-    ),
+              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+            ),
             fit: BoxFit.cover,
           ),
         ),
@@ -134,7 +118,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
           children: <Widget>[
             SizedBox(
               height: 230.0,
-               //220
+              //220
               child: YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
@@ -272,7 +256,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                         ),
                                       ),
                                     ),
-                                    
+
                                     const SizedBox(width: 10.0),
                                     // Espacio entre la puntuación y el botón
                                     Column(
@@ -285,7 +269,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                               // Forma del botón con bordes redondeados
                                               borderRadius:
                                                   BorderRadius.circular(
-                                                      20), // Radio de los bordes
+                                                      10), // Radio de los bordes
                                             ),
                                             minimumSize: const Size(130, 40),
                                           ),
@@ -310,7 +294,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                   width:
                                                       3), // Espacio entre el icono y el texto
                                               Text(
-                                                "Buy",
+                                                "  Buy",
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
@@ -340,7 +324,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "${game.name} added to library"),
-                                                duration: const Duration(seconds: 1),
+                                                duration:
+                                                    const Duration(seconds: 1),
                                                 action: SnackBarAction(
                                                   label: "Undo",
                                                   onPressed: () {
@@ -365,7 +350,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                 // Forma del botón con bordes redondeados
                                                 borderRadius:
                                                     BorderRadius.circular(
-                                                        20), // Radio de los bordes
+                                                        10), // Radio de los bordes
                                               ),
                                               minimumSize: const Size(130, 40),
                                             ),
@@ -436,7 +421,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                               shape: RoundedRectangleBorder(
                                                 // Forma del botón con bordes redondeados
                                                 borderRadius:
-                                                    BorderRadius.circular(20),
+                                                    BorderRadius.circular(10),
                                                 // Radio de los bordes
                                               ),
                                               minimumSize: const Size(130, 40),
@@ -498,14 +483,14 @@ class GameDetailScreenState extends State<GameDetailScreen>
                         ),
                       ),
                     ),
-                    
+
                     buildSection("Platforms", game.platforms,
                         emptyMessage: "No platforms available"),
                     buildSection("Genres", game.genres,
                         emptyMessage: "No genres available"),
                     buildSection("Game Modes", game.modes,
                         emptyMessage: "No game modes available"),
-                    
+
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
@@ -627,9 +612,10 @@ class GameDetailScreenState extends State<GameDetailScreen>
                           },
                         ),
                       ),
-                      
+
                     Padding(
-                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, top: 15.0),
+                      padding: const EdgeInsets.only(
+                          left: 10.0, bottom: 10.0, top: 15.0),
                       child: Text(
                         "DLCs".toUpperCase(),
                         style: const TextStyle(
@@ -651,7 +637,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                 ? Padding(
                                     padding: const EdgeInsets.only(right: 10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.all(5.0),
@@ -659,20 +646,31 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                             "https://images.igdb.com/igdb/image/upload/t_cover_big/${dlc.cover![0].imageId}.jpg",
                                             fit: BoxFit.cover,
                                             width: 120.0,
-                                            loadingBuilder: (BuildContext context, Widget child,
-                                                ImageChunkEvent? loadingProgress) {
-                                              if (loadingProgress == null) return child;
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
                                               return Center(
-                                                child: CircularProgressIndicator(
-                                                  value: loadingProgress.expectedTotalBytes != null
-                                                      ? loadingProgress.cumulativeBytesLoaded /
-                                                          (loadingProgress.expectedTotalBytes ?? 1)
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          (loadingProgress
+                                                                  .expectedTotalBytes ??
+                                                              1)
                                                       : null,
                                                 ),
                                               );
                                             },
-                                            errorBuilder: (context, error, stackTrace) =>
-                                                const Icon(Icons.error),
+                                            errorBuilder:
+                                                (context, error, stackTrace) =>
+                                                    const Icon(Icons.error),
                                           ),
                                         ),
                                         const SizedBox(height: 5.0),
@@ -686,7 +684,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                       ],
                                     ),
                                   )
-                                : const SizedBox.shrink(); // No muestra el DLC si no tiene portada
+                                : const SizedBox
+                                    .shrink(); // No muestra el DLC si no tiene portada
                           },
                         ),
                       )
@@ -703,7 +702,6 @@ class GameDetailScreenState extends State<GameDetailScreen>
                         ),
                       ),
 
-                    
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
@@ -726,14 +724,14 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                   255, 32, 50, 124), // Color de fondo del botón
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    20), // Radio de los bordes
+                                    10), // Radio de los bordes
                               ),
                               minimumSize: const Size(110, 40),
                             ),
                             onPressed: () async {
                               String url =
                                   "https://www.igdb.com/games/${game.slug}";
-                              
+
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
@@ -762,14 +760,14 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                   .purple[400], // Color de fondo del botón
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    20), // Radio de los bordes
+                                    10), // Radio de los bordes
                               ),
                               minimumSize: const Size(110, 40),
                             ),
                             onPressed: () async {
                               String url =
                                   "https://www.twitch.tv/directory/category/${game.slug}";
-                              
+
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
@@ -788,7 +786,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                 ),
                                 const SizedBox(width: 6),
                                 const Text(
-                                  "Twitch",
+                                  " Twitch",
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
@@ -805,14 +803,14 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                   Colors.red, // Color de fondo del botón
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    20), // Radio de los bordes
+                                    10), // Radio de los bordes
                               ),
                               minimumSize: const Size(110, 40),
                             ),
                             onPressed: () async {
                               String url =
                                   "https://www.youtube.com/results?search_query=${game.name}";
-                              
+
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
@@ -834,10 +832,10 @@ class GameDetailScreenState extends State<GameDetailScreen>
                         )
                       ],
                     ),
-                    
-                    
+
                     Padding(
-                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, top: 15.0),
+                      padding: const EdgeInsets.only(
+                          left: 10.0, bottom: 10.0, top: 15.0),
                       child: Text(
                         "Similar Games".toUpperCase(),
                         style: const TextStyle(
@@ -862,19 +860,26 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                   "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId}.jpg",
                                   fit: BoxFit.fill,
                                   width: 140.0,
-                                  loadingBuilder: (BuildContext context, Widget child,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
                                       ImageChunkEvent? loadingProgress) {
                                     if (loadingProgress == null) return child;
                                     return Center(
                                       child: CircularProgressIndicator(
-                                        value: loadingProgress.expectedTotalBytes != null
-                                            ? loadingProgress.cumulativeBytesLoaded /
-                                                (loadingProgress.expectedTotalBytes ?? 1)
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                (loadingProgress
+                                                        .expectedTotalBytes ??
+                                                    1)
                                             : null,
                                       ),
                                     );
                                   },
-                                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(Icons.error),
                                 ),
                               ),
                             );
@@ -895,8 +900,6 @@ class GameDetailScreenState extends State<GameDetailScreen>
                       ),
 
                     const SizedBox(height: 10.0)
-                    
-                    
                   ],
                 ),
                 Column(
@@ -1005,7 +1008,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
                   child: Container(
                     padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5.0)),
                         border: Border.all(
                           width: 1.0,
                           color: Theme.of(context).colorScheme.primary,

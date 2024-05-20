@@ -39,6 +39,7 @@ class _AccountScreenState extends State<AccountScreen> {
       return null;
     }
   }
+
   Future<int?> getUserFriendsCountByEmail() async {
     try {
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
@@ -340,7 +341,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                         ),
                       ),
-                      
                       Expanded(
                         child: FutureBuilder<int?>(
                           future: getUserFriendsCountByEmail(),
@@ -351,13 +351,13 @@ class _AccountScreenState extends State<AccountScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const FriendsScreen()),
-                                );
-                              },
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const FriendsScreen()),
+                                    );
+                                  },
                                   child: const Icon(
                                     SimpleLineIcons.people,
                                     size: 60,
@@ -454,7 +454,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               style: FilledButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
                               onPressed: () async {

@@ -81,20 +81,23 @@ dev_dependencies:
 flutter_native_splash:
   #android: true
   ios: true
-  color: "#6eb6ff"
-  image: "assets/images/iconGB.png"
+  color: "#FFFFFF"
+  color_dark: "#000000"
+  image: "assets/images/play_store_512.png"
   
   android_12:
-    color: "#6eb6ff"
-    image: "assets/images/iconGB.png"
-    image_dark: "assets/images/iconGB.png"
+    color: "#FFFFFF"
+    color_dark: "#000000"
+    image: "assets/images/play_store_512.png"
+    image_dark: "assets/images/play_store_512.png"
 
 flutter_launcher_icons:
   android: true
-  ios: true
-  image_path: "assets/images/iconGB.png"   #"assets/images/icon.png"
-  adaptive_icon_foreground: "assets/images/iconGB.png"
-  adaptive_icon_background: "#6eb6ff"
+  #ios: true
+  image_path: "assets/images/play_store_512.png"   #"assets/images/icon.png"
+  adaptive_icon_foreground: "assets/images/play_store_512.png"
+  adaptive_icon_background: "#6EB6FF"
+  remove_alpha_ios: true
 
 
 flutter:
@@ -106,7 +109,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/default_avatar.jpg
+    - assets/images/default_avatar.jpg 
+    - assets/images/play_store_512.png
     - assets/images/G_logo.png
     - assets/images/gamehubFondo.png
     - assets/images/gamehubNuevo.png

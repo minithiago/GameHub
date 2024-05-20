@@ -71,7 +71,7 @@ class DiscoverScreen extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 300,
+            height: 360,
             child: StreamBuilder<SwitchItem>(
               stream: _switchBloc.itemStream,
               initialData: _switchBloc.defaultItem,
@@ -129,7 +129,7 @@ class DiscoverScreen extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 300,
+            height: 360,
             child: StreamBuilder<SwitchItem>(
               stream: _switchBloc.itemStream,
               initialData: _switchBloc.defaultItem,
