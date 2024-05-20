@@ -12,16 +12,23 @@ class LibraryScreenWidget extends StatefulWidget {
   const LibraryScreenWidget(this._switchBloc, {Key? key}) : super(key: key);
 
   @override
-  _LibraryScreenWidgetState createState() => _LibraryScreenWidgetState();
+  LibraryScreenWidgetState createState() => LibraryScreenWidgetState();
 }
 
-class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
+class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
   String _filter = '';
   String _nameFilter = '';
+  String lista = '';
 
   void _updateFilter(String newFilter) {
     setState(() {
       _filter = newFilter;
+    });
+  }
+
+  void _updatelista(String newLista) {
+    setState(() {
+      lista = newLista;
     });
   }
 

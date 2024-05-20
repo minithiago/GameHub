@@ -336,6 +336,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                               userData2['avatar'],
                               userData['email'],
                             );
+                            contieneAmigo == 3;
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("Friend Request sent")),

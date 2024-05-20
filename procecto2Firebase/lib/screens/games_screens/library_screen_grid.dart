@@ -150,10 +150,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     );
   }
 
-  @override
   Widget _build(GameResponse data) {
     //  BuildContext context
-    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     //var favoriteGamess = favoriteGamesProvider.favoriteGames;
 
     var favoriteGamess = data.games;
@@ -243,20 +242,14 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                     CupertinoActionSheetAction(
                                       onPressed: () {
                                         HapticFeedback.lightImpact();
-                                        game.favorite = false;
-                                        favoriteGamesProvider
-                                            .removeFavorite(game);
+
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                           content: Text(
                                               "${game.name} removed from library"),
                                           action: SnackBarAction(
                                             label: "Undo",
-                                            onPressed: () {
-                                              favoriteGamesProvider
-                                                  .addToFavorites(game);
-                                              game.favorite = true;
-                                            },
+                                            onPressed: () {},
                                           ),
                                           duration: const Duration(seconds: 1),
                                         ));
@@ -298,6 +291,29 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                                   8), // Espacio entre el icono y el texto
                                           Text(
                                             "Add to favorites",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.add_circle_outline_rounded,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to Wishlist",
                                             style: TextStyle(
                                                 //color: Colors.black,
                                                 ),

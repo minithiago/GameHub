@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
@@ -25,7 +27,7 @@ class GameDetailScreen extends StatefulWidget {
 
 class GameDetailScreenState extends State<GameDetailScreen>
     with SingleTickerProviderStateMixin {
-  late YoutubePlayerController _controller;
+  //late YoutubePlayerController _controller;
   //PageController pageController =PageController(viewportFraction: 1, keepPage: true);
   late TabController _tabController;
   final GameModel game;
@@ -41,23 +43,59 @@ class GameDetailScreenState extends State<GameDetailScreen>
     hideShadow: true,
   );
 
+  late Future<List<String>> favoriteGameIDss;
+
   // Utiliza el constructor super para inicializar la clase base
   GameDetailScreenState(this.game) : super();
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     //pageController.dispose();
     _tabController.dispose();
+
     super.dispose();
+  }
+
+  Future<List<String>> getGamesForUserEmail() async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Games')
+            .get();
+
+        List<String> gameIds = gamesSnapshot.docs.map((doc) {
+          return doc['id'].toString();
+        }).toList();
+
+        return gameIds;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email}.');
+        return [];
+      }
+    } catch (e) {
+      print('Error getting games for user: $e');
+      return [];
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: tabs.length);
+    favoriteGameIDss = getGamesForUserEmail();
 
-    if (game.videos != null) {
+    /*if (game.videos != null) {
       _controller = YoutubePlayerController(
         initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
         flags: const YoutubePlayerFlags(
@@ -76,19 +114,14 @@ class GameDetailScreenState extends State<GameDetailScreen>
           mute: true,
         ),
       );
-    }
+    }*/
   }
 
   @override
   Widget build(BuildContext context) {
     var date = DateTime.fromMillisecondsSinceEpoch(game.firstRelease * 1000);
     var formattedDate = DateFormat('dd/MM/yyyy').format(date);
-    String userId = "";
-
-    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-
-    List<String> favoriteGameNames =
-        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
+    String userId = FirebaseAuth.instance.currentUser!.email.toString();
 
     return Scaffold(
         //backgroundColor: const Color(0xFF20232a),
@@ -116,15 +149,15 @@ class GameDetailScreenState extends State<GameDetailScreen>
         ),
         Stack(
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 230.0,
               //220
-              child: YoutubePlayer(
+              /*child: YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
                 progressIndicatorColor: Colors.red, //true
                 thumbnail: Image.asset('assets/images/videoError.jpg'),
-              ),
+              ),*/
             ),
             Positioned(
               top: 0.0,
@@ -136,7 +169,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                   ),
                   onPressed: () {
                     //_controller.pause();
-                    _controller.dispose();
+                    //_controller.dispose();
                     Navigator.pop(context);
                   }),
             ),
@@ -301,149 +334,203 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                             ],
                                           ),
                                         ),
-                                        Visibility(
-                                          visible: favoriteGameNames
-                                                  .contains(game.name) !=
-                                              true,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              UserRepository().addGameToUser(
-                                                  userId,
-                                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                                  game.name,
-                                                  game.total_rating,
-                                                  game.id);
+                                        FutureBuilder<List<String>>(
+                                            future: favoriteGameIDss,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Container();
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else if (!snapshot.hasData ||
+                                                  snapshot.data!.isEmpty) {
+                                                return const Text(
+                                                    'No favorite games found.');
+                                              } else {
+                                                List<String> favoriteGameIDs =
+                                                    snapshot.data!;
+                                                bool isFavorite =
+                                                    favoriteGameIDs.contains(
+                                                        widget.game.id
+                                                            .toString());
 
-                                              favoriteGamesProvider
-                                                  .addToFavorites(game);
-                                              game.favorite = true;
-                                              favoriteGameNames.add(game.name);
-                                              //print(favoriteGameNames);
+                                                return Visibility(
+                                                    visible: !isFavorite,
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          favoriteGameIDs.add(
+                                                              widget.game.id
+                                                                  .toString());
+                                                        });
+                                                        UserRepository()
+                                                            .addGameToUser(
+                                                                userId,
+                                                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                                                game.name,
+                                                                game.total_rating,
+                                                                game.id);
 
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "${game.name} added to library"),
-                                                duration:
-                                                    const Duration(seconds: 1),
-                                                action: SnackBarAction(
-                                                  label: "Undo",
-                                                  onPressed: () {
-                                                    UserRepository()
-                                                        .removeGameFromUser(
-                                                            userId, game.id);
-                                                    favoriteGamesProvider
-                                                        .removeFavorite(game);
-                                                    favoriteGameNames
-                                                        .remove(game.name);
-                                                    game.favorite = false;
-                                                    //print(favoriteGameNames);
-                                                  },
-                                                ),
-                                              ));
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      110, 182, 255, 1),
-                                              shape: RoundedRectangleBorder(
-                                                // Forma del botón con bordes redondeados
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        10), // Radio de los bordes
-                                              ),
-                                              minimumSize: const Size(130, 40),
-                                            ),
-                                            child: const Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(Icons.add_circle,
-                                                    color: Colors
-                                                        .white), // Icono de cesto de la compra
-                                                SizedBox(
-                                                    width:
-                                                        3), // Espacio entre el icono y el texto
-                                                Text(
-                                                  "to library",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: favoriteGameNames
-                                              .contains(game.name),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              UserRepository()
-                                                  .removeGameFromUser(
-                                                      userId, game.id);
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                              "${game.name} added to library"),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 1),
+                                                          action:
+                                                              SnackBarAction(
+                                                            label: "Undo",
+                                                            onPressed: () {
+                                                              UserRepository()
+                                                                  .removeGameFromUser(
+                                                                      userId,
+                                                                      game.id);
+                                                            },
+                                                          ),
+                                                        ));
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            const Color
+                                                                .fromRGBO(110,
+                                                                182, 255, 1),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          // Forma del botón con bordes redondeados
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10), // Radio de los bordes
+                                                        ),
+                                                        minimumSize:
+                                                            const Size(130, 40),
+                                                      ),
+                                                      child: const Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Icon(
+                                                                Icons
+                                                                    .add_circle,
+                                                                color: Colors
+                                                                    .white), // Icono de cesto de la compra
+                                                            SizedBox(
+                                                                width:
+                                                                    3), // Espacio entre el icono y el texto
+                                                            Text(
+                                                              "to library",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ]),
+                                                    ));
+                                              }
+                                            }),
 
-                                              UserRepository().fetchUserData();
+                                        // El widget que quieres mostrar/ocultar
 
-                                              favoriteGamesProvider
-                                                  .removeFavorite(game);
-                                              game.favorite = false;
-                                              favoriteGamesProvider
-                                                  .removeFavoriteByName(
-                                                      game.name);
+                                        FutureBuilder<List<String>>(
+                                            future: favoriteGameIDss,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return buildLoadingWidget();
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else if (!snapshot.hasData ||
+                                                  snapshot.data!.isEmpty) {
+                                                return const Text(
+                                                    'No favorite games found.');
+                                              } else {
+                                                List<String> favoriteGameIDs =
+                                                    snapshot.data!;
+                                                bool isFavorite =
+                                                    favoriteGameIDs.contains(
+                                                        widget.game.id
+                                                            .toString());
 
-                                              // Remover el juego de la lista
+                                                return Visibility(
+                                                  visible: isFavorite,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        favoriteGameIDs.remove(
+                                                            widget.game.id
+                                                                .toString());
+                                                      });
+                                                      UserRepository()
+                                                          .removeGameFromUser(
+                                                              userId, game.id);
 
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "${game.name} removed from library"),
-                                                action: SnackBarAction(
-                                                  label: "Undo",
-                                                  onPressed: () {
-                                                    UserRepository().addGameToUser(
-                                                        userId,
-                                                        "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                                        game.name,
-                                                        game.total_rating,
-                                                        game.id);
-                                                    favoriteGamesProvider
-                                                        .addToFavorites(game);
-                                                    game.favorite = true;
-                                                    favoriteGameNames
-                                                        .add(game.name);
+                                                      //UserRepository().fetchUserData();
 
-                                                    // Agregar el juego a la lista
-                                                  },
-                                                ),
-                                              ));
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.red,
-                                              shape: RoundedRectangleBorder(
-                                                // Forma del botón con bordes redondeados
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                // Radio de los bordes
-                                              ),
-                                              minimumSize: const Size(130, 40),
-                                            ),
-                                            child: const Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(Icons.remove_circle,
-                                                    color: Colors
-                                                        .white), // Icono de cesto de la compra
-                                                SizedBox(
-                                                    width:
-                                                        8), // Espacio entre el icono y el texto
-                                                Text(
-                                                  "Remove",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                                      // Remover el juego de la lista
+
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                        content: Text(
+                                                            "${game.name} removed from library"),
+                                                        action: SnackBarAction(
+                                                          label: "Undo",
+                                                          onPressed: () {
+                                                            UserRepository()
+                                                                .addGameToUser(
+                                                                    userId,
+                                                                    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                                                    game.name,
+                                                                    game.total_rating,
+                                                                    game.id);
+                                                            // Agregar el juego a la lista
+                                                          },
+                                                        ),
+                                                      ));
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        // Forma del botón con bordes redondeados
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        // Radio de los bordes
+                                                      ),
+                                                      minimumSize:
+                                                          const Size(130, 40),
+                                                    ),
+                                                    child: const Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Icon(
+                                                            Icons.remove_circle,
+                                                            color: Colors
+                                                                .white), // Icono de cesto de la compra
+                                                        SizedBox(
+                                                            width:
+                                                                8), // Espacio entre el icono y el texto
+                                                        Text(
+                                                          "Remove",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            }),
                                       ],
                                     ),
                                   ],
