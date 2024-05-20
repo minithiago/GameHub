@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:procecto2/bloc/get_games_bloc.dart';
 import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
@@ -35,7 +36,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _nameFilter = '';
   String _usuario = '';
 
-  
   Future<List<String>> getGamesForUserEmail(String userEmail) async {
     try {
       // Obtener la referencia al documento del usuario en Firestore utilizando su email
@@ -82,7 +82,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     fetchUserGames();
   }
 
-  
   Future<void> fetchUserGames() async {
     //ponerlo en game-details y en añadri un setState() 'alomejor'
     try {
@@ -117,7 +116,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   //List<GameModel> favoriteGamess = [];
-  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
@@ -152,7 +151,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   @override
-  Widget _build(GameResponse data) { //  BuildContext context
+  Widget _build(GameResponse data) {
+    //  BuildContext context
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     //var favoriteGamess = favoriteGamesProvider.favoriteGames;
 
@@ -180,7 +180,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
         break;
       default:
-        favoriteGamess = data.games;  //  favoriteGamesProvider.favoriteGames;
+        favoriteGamess = data.games; //  favoriteGamesProvider.favoriteGames;
     }
 
     if (favoriteGamess.isEmpty) {
@@ -189,138 +189,177 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
     // Ordenar los juegos por rating (en orden descendente)
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 7.0,
-          mainAxisSpacing: 7.0,
-          childAspectRatio: 0.75,
-          crossAxisCount: 3,
+    if (favoriteGamess.isEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Text(
+                  "No game to show",
+                  style: TextStyle(
+                      //color: Colors.black45
+                      ),
+                )
+              ],
+            )
+          ],
         ),
-        itemCount: favoriteGamess.length,
-        itemBuilder: (BuildContext context, int index) {
-          GameModel game = favoriteGamess[index];
-          return GestureDetector(
-            onLongPress: () {
-              HapticFeedback.lightImpact();
-              showCupertinoModalPopup(
-                //barrierColor: const Color.fromARGB(96, 0, 0, 0),
+      );
+    } else {
+      return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: AnimationLimiter(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 7.0,
+                childAspectRatio: 0.75,
+                crossAxisCount: 3,
+              ),
+              itemCount: favoriteGamess.length,
+              itemBuilder: (BuildContext context, int index) {
+                GameModel game = favoriteGamess[index];
+                return AnimationConfiguration.staggeredGrid(
+                    columnCount: 3,
+                    position: index,
+                    duration: const Duration(milliseconds: 400),
+                    child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                            child: GestureDetector(
+                          onLongPress: () {
+                            HapticFeedback.lightImpact();
+                            showCupertinoModalPopup(
+                              //barrierColor: const Color.fromARGB(96, 0, 0, 0),
 
-                context: context,
-                builder: (context) {
-                  return CupertinoActionSheet(
-                    actions: <CupertinoActionSheetAction>[
-                      CupertinoActionSheetAction(
-                        onPressed: () {
-                          HapticFeedback.lightImpact();
-                          game.favorite = false;
-                          favoriteGamesProvider.removeFavorite(game);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("${game.name} removed from library"),
-                            action: SnackBarAction(
-                              label: "Undo",
-                              onPressed: () {
-                                favoriteGamesProvider.addToFavorites(game);
-                                game.favorite = true;
+                              context: context,
+                              builder: (context) {
+                                return CupertinoActionSheet(
+                                  actions: <CupertinoActionSheetAction>[
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        HapticFeedback.lightImpact();
+                                        game.favorite = false;
+                                        favoriteGamesProvider
+                                            .removeFavorite(game);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "${game.name} removed from library"),
+                                          action: SnackBarAction(
+                                            label: "Undo",
+                                            onPressed: () {
+                                              favoriteGamesProvider
+                                                  .addToFavorites(game);
+                                              game.favorite = true;
+                                            },
+                                          ),
+                                          duration: const Duration(seconds: 1),
+                                        ));
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.remove_circle_outline,
+                                            color:
+                                                Colors.red, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Remove from library",
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.red, // Color del texto
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to favorites",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
                               },
-                            ),
-                            duration: Duration(seconds: 1),
-                          ));
-                          Navigator.pop(context);
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.remove_circle_outline,
-                              color: Colors.red, // Color del icono
-                            ),
-                            SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              "Remove from library",
-                              style: TextStyle(
-                                color: Colors.red, // Color del texto
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      CupertinoActionSheetAction(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          HapticFeedback.lightImpact();
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.favorite,
-                              //color: Colors.black, // Color del icono
-                            ),
-                            SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              "Add to favorites",
-                              style: TextStyle(
-                                //color: Colors.black,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      GameDetailScreen(
-                    key: const Key("game_detail_screen_key"),
-                    game: game,
-                  ),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    final begin = Offset(1.0, 0.0);
-                    final end = Offset.zero;
-                    final curve = Curves.ease;
+                            );
+                          },
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        GameDetailScreen(
+                                  key: const Key("game_detail_screen_key"),
+                                  game: game,
+                                ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
 
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  var offsetAnimation = animation.drive(tween);
 
-                    return SlideTransition(
-                      position: offsetAnimation,
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 300),
-                ),
-              );
-              //setState(() => fetchUserGames());
-            },
-            child: Stack(
-              children: [
-                Hero(
-                  tag: favoriteGamess[index].id,
-                  child: AspectRatio(
-                    aspectRatio: 3 / 4,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10.0)),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
+                                  return SlideTransition(
+                                    position: offsetAnimation,
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 300),
                               ),
-                              fit: BoxFit.cover)),
-                    ),
-                  ),
-                ),
-                /*
+                            );
+                            //setState(() => fetchUserGames());
+                          },
+                          child: Stack(
+                            children: [
+                              Hero(
+                                tag: favoriteGamess[index].id,
+                                child: AspectRatio(
+                                  aspectRatio: 3 / 4,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10.0)),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
+                                            ),
+                                            fit: BoxFit.cover)),
+                                  ),
+                                ),
+                              ),
+                              /*
                 AspectRatio(
                   aspectRatio: 3 / 4,
                   child: Container(
@@ -392,11 +431,12 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                     ],
                   ),
                 ),*/
-              ],
+                            ],
+                          ),
+                        ))));
+              },
             ),
-          );
-        },
-      ),
-    );
+          ));
+    }
   }
 }

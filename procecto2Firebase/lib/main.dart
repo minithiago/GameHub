@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:procecto2/firebase_options.dart';
 import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
@@ -41,6 +42,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     themeProvider.loadThemePreference();
+    /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor:
+          Colors.transparent, //Theme.of(context).colorScheme.background,
+      //statusBarBrightness: Brightness.dark
+    ));*/
     return MaterialApp(
       title: 'GameHub',
       debugShowCheckedModeBanner: false,

@@ -18,7 +18,7 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
   @override
   void initState() {
     super.initState();
-    getGamesBloc.getGames();
+    getGamesBloc.getGames2();
   }
 
   @override
@@ -45,7 +45,7 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
   Widget _buildGameListWidget(GameResponse data) {
     List<GameModel> games = data.games;
     if (games.isEmpty) {
-      return Container(
+      return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +55,9 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
               children: <Widget>[
                 Text(
                   "No game to show",
-                  style: TextStyle(color: Colors.black45),
+                  style: TextStyle(
+                      //color: Colors.black45
+                      ),
                 )
               ],
             )

@@ -72,14 +72,14 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                               children: [
                                 Icon(
                                   Icons.calendar_month,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Release date',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      //color: Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -93,14 +93,14 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                               children: [
                                 Icon(
                                   Icons.star_rounded,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Rating',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      //color: Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -114,14 +114,14 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                               children: [
                                 Icon(
                                   Icons.abc,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Name',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      //color: Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -185,7 +185,11 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                     usuario: widget._usuario,
                   );
                 case SwitchItem.GRID:
-                  return LibraryScreenList();
+                  return LibraryScreenList(
+                    filtro: _filter,
+                    busqueda: _nameFilter,
+                    usuario: widget._usuario,
+                  );
                 default:
                   return Container();
               }

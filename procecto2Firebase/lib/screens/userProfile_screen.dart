@@ -31,6 +31,9 @@ class _UserProfilePage extends State<UserProfilePage> {
     super.initState();
     getUserData();
     getUserData2();
+    getUserGamesCountByEmail();
+    getUserFriendsCountByEmail();
+    getUserContainsEmailFriend();
   }
 
   getUserData() async {
@@ -57,9 +60,6 @@ class _UserProfilePage extends State<UserProfilePage> {
         print(
             'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
       }
-      await getUserContainsEmailFriend();
-      await getUserGamesCountByEmail();
-      await getUserFriendsCountByEmail();
 
       setState(() {
         isLoading = false;
@@ -230,12 +230,15 @@ class _UserProfilePage extends State<UserProfilePage> {
             )
           : userData != null
               ? Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.only(top: 16, left: 0, right: 0),
                   child: Column(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(
+                            width: 15,
+                          ),
                           CircleAvatar(
                             //backgroundColor: Colors.grey,
                             backgroundImage: userData['avatar'] != ""

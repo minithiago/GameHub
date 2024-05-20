@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:procecto2/bloc/get_friendsLibraryGames_bloc.dart';
 import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
@@ -70,38 +72,36 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
   }
 
   @override
-void initState() {
-  super.initState();
-  _currentFilter = widget.filtro;
-  _nameFilter = widget.busqueda;
-  _usuario = widget.usuario;
+  void initState() {
+    super.initState();
+    _currentFilter = widget.filtro;
+    _nameFilter = widget.busqueda;
+    _usuario = widget.usuario;
 
-  fetchUserGames();
-}
-
-
-Future<void> fetchUserGames() async {
-  //ponerlo en game-details y en añadri un setState() 'alomejor'
-  try {
-    // Obtiene la lista de juegos para el usuario
-    List<String> userGames = await getGamesForUserEmail(
-        //FirebaseAuth.instance.currentUser!.email.toString()
-        _usuario);
-
-    // Verifica si la lista de juegos para el usuario está vacía
-    if (userGames.isEmpty) {
-      // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
-      getlibraryGames2.getlibraryGames2([]);
-    } else {
-      // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
-      getlibraryGames2.getlibraryGames2(userGames);
-    }
-  } catch (e) {
-    // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
-    print('Error fetching user games: $e');
+    fetchUserGames();
   }
-}
 
+  Future<void> fetchUserGames() async {
+    //ponerlo en game-details y en añadri un setState() 'alomejor'
+    try {
+      // Obtiene la lista de juegos para el usuario
+      List<String> userGames = await getGamesForUserEmail(
+          //FirebaseAuth.instance.currentUser!.email.toString()
+          _usuario);
+
+      // Verifica si la lista de juegos para el usuario está vacía
+      if (userGames.isEmpty) {
+        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
+        getlibraryGames2.getlibraryGames2([]);
+      } else {
+        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
+        getlibraryGames2.getlibraryGames2(userGames);
+      }
+    } catch (e) {
+      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
+      print('Error fetching user games: $e');
+    }
+  }
 
   @override
   void didUpdateWidget(covariant LibraryScreenGridUser oldWidget) {
@@ -131,9 +131,9 @@ Future<void> fetchUserGames() async {
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
-        } else if(snapshot.connectionState == ConnectionState.waiting){
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
           return buildLoadingWidget();
-         }else {
+        } else {
           // Devolvemos un widget vacío que no ocupa espacio en la pantalla
           return const SizedBox(
             child: Center(
@@ -146,7 +146,6 @@ Future<void> fetchUserGames() async {
           );
         }
       },
-        
     );
   }
 
@@ -254,15 +253,15 @@ Future<void> fetchUserGames() async {
                           children: [
                             Icon(
                               Icons.favorite,
-                              color: Colors.black, // Color del icono
+                              //color: Colors.black, // Color del icono
                             ),
                             SizedBox(
                                 width: 8), // Espacio entre el icono y el texto
                             Text(
                               "Add to favorites",
                               style: TextStyle(
-                                color: Colors.black,
-                              ),
+                                  //color: Colors.black,
+                                  ),
                             )
                           ],
                         ),
@@ -280,7 +279,6 @@ Future<void> fetchUserGames() async {
                       GameDetailScreen(
                     key: const Key("game_detail_screen_key"),
                     game: game,
-                    
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
@@ -320,7 +318,6 @@ Future<void> fetchUserGames() async {
                     ),
                   ),
                 ),
-                /*
                 AspectRatio(
                   aspectRatio: 3 / 4,
                   child: Container(
@@ -372,7 +369,7 @@ Future<void> fetchUserGames() async {
                             const EdgeInsets.symmetric(horizontal: 2.0),
                         itemBuilder: (context, _) => const Icon(
                           EvaIcons.star,
-                          color: Style.Colors.starsColor,
+                          color: Colors.yellow,
                         ),
                         onRatingUpdate: (rating) {
                           print(rating);
@@ -391,7 +388,7 @@ Future<void> fetchUserGames() async {
                       ),
                     ],
                   ),
-                ),*/
+                ),
               ],
             ),
           );

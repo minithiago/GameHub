@@ -183,7 +183,12 @@ class _LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                         FirebaseAuth.instance.currentUser!.email.toString(),
                   );
                 case SwitchItem.GRID:
-                  return LibraryScreenList();
+                  return LibraryScreenList(
+                    filtro: _filter,
+                    busqueda: _nameFilter,
+                    usuario:
+                        FirebaseAuth.instance.currentUser!.email.toString(),
+                  );
                 default:
                   return Container();
               }

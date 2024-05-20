@@ -35,65 +35,28 @@ class DiscoverScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 10.0, top: 10, bottom: 10),
                 child: Text(
                   "New releases".toUpperCase(),
                   style: const TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,
-                    //color: Colors.white,
                   ),
                 ),
               ),
-              StreamBuilder<SwitchItem>(
-                stream: _switchBloc.itemStream,
-                initialData: _switchBloc.defaultItem,
-                builder:
-                    (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
-                  switch (snapshot.data) {
-                    case SwitchItem.LIST:
-                      return IconButton(
-                        icon: const Icon(SimpleLineIcons.list, size: 20.0),
-                        //color: Colors.white,
-                        onPressed: _showGrid,
-                      );
-                    case SwitchItem.GRID:
-                      return IconButton(
-                        icon: const Icon(SimpleLineIcons.grid, size: 20.0),
-                        //color: Colors.white,
-                        onPressed: _showList,
-                      );
-                    default:
-                      return Container();
-                  }
-                },
-              ),
             ],
           ),
-          SizedBox(
-            height: 360,
-            child: StreamBuilder<SwitchItem>(
-              stream: _switchBloc.itemStream,
-              initialData: _switchBloc.defaultItem,
-              builder:
-                  (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
-                switch (snapshot.data) {
-                  case SwitchItem.LIST:
-                    return DiscoverScreenGrid(); // Usa la clase DiscoverScreenGrid
-                  case SwitchItem.GRID:
-                    return DiscoverScreenList(); // Usa la clase DiscoverScreenList
-                  default:
-                    return Container();
-                }
-              },
-            ),
+          const SizedBox(
+            height: 300,
+            child:
+                DiscoverScreenGrid(), // Muestra por defecto DiscoverScreenGrid
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 10.0, top: 15, bottom: 10),
                 child: Text(
                   "Incoming Games".toUpperCase(),
                   style: const TextStyle(
@@ -103,48 +66,12 @@ class DiscoverScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              StreamBuilder<SwitchItem>(
-                stream: _switchBloc.itemStream,
-                initialData: _switchBloc.defaultItem,
-                builder:
-                    (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
-                  switch (snapshot.data) {
-                    case SwitchItem.LIST:
-                      return IconButton(
-                        icon: const Icon(SimpleLineIcons.list, size: 20.0),
-                        //color: Colors.white,
-                        onPressed: _showGrid,
-                      );
-                    case SwitchItem.GRID:
-                      return IconButton(
-                        icon: const Icon(SimpleLineIcons.grid, size: 20.0),
-                        //color: Colors.white,
-                        onPressed: _showList,
-                      );
-                    default:
-                      return Container();
-                  }
-                },
-              ),
             ],
           ),
           SizedBox(
-            height: 360,
-            child: StreamBuilder<SwitchItem>(
-              stream: _switchBloc.itemStream,
-              initialData: _switchBloc.defaultItem,
-              builder:
-                  (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
-                switch (snapshot.data) {
-                  case SwitchItem.LIST:
-                    return DiscoverScreenGrid3(); // Usa la clase DiscoverScreenGrid
-                  case SwitchItem.GRID:
-                    return DiscoverScreenList(); // Usa la clase DiscoverScreenList
-                  default:
-                    return Container();
-                }
-              },
-            ),
+            height: 300,
+            child:
+                DiscoverScreenGrid3(), // Muestra por defecto DiscoverScreenGrid
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

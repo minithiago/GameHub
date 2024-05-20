@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:procecto2/bloc/get_games_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
@@ -22,8 +23,6 @@ class DiscoverScreenGrid2 extends StatefulWidget {
 }
 
 class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
-  
-
   @override
   void initState() {
     getGamesBloc2.getGames2();
@@ -49,7 +48,6 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
             height: 300,
             child: buildLoadingWidget(),
           );
-          
         }
       },
     );
@@ -61,151 +59,191 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
     final List<String> favoriteGameNames =
         favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
 
-
     List<GameModel> games = data.games;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: GridView.builder(
-        //physics: NeverScrollableScrollPhysics(),
-        //scrollDirection: Axis.horizontal,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 7.0,
-          mainAxisSpacing: 7.0,
-          childAspectRatio: 0.75,
-          crossAxisCount: 3,
+
+    if (games.isEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Text(
+                  "No game to show",
+                  style: TextStyle(
+                      //color: Colors.black45
+                      ),
+                )
+              ],
+            )
+          ],
         ),
-        itemCount: games.length,
-        itemBuilder: (BuildContext context, int index) {
-          GameModel game = games[index];
-          return GestureDetector(
-            onLongPress: () {
-              HapticFeedback.lightImpact();
-              showCupertinoModalPopup(
-                context: context,
-                builder: (context) {
-                  return CupertinoActionSheet(
-                    actions: <CupertinoActionSheetAction>[
-                      CupertinoActionSheetAction(
-                        onPressed: () {
-                          //Navigator.pop(context);
-                          HapticFeedback.lightImpact();
-                          if (favoriteGameNames.contains(game.name)) {
-                            // El juego ya está en la lista de favoritos
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Game already in library"),
-                                duration: Duration(
-                                    seconds: 1), // Duración del SnackBar
+      );
+    } else {
+      return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: AnimationLimiter(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 7.0,
+                childAspectRatio: 0.75,
+                crossAxisCount: 3,
+              ),
+              itemCount: games.length,
+              itemBuilder: (BuildContext context, int index) {
+                GameModel game = games[index];
+                return AnimationConfiguration.staggeredGrid(
+                    columnCount: 3,
+                    position: index,
+                    duration: const Duration(milliseconds: 400),
+                    child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                            child: GestureDetector(
+                          onLongPress: () {
+                            HapticFeedback.lightImpact();
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoActionSheet(
+                                  actions: <CupertinoActionSheetAction>[
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        //Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        if (favoriteGameNames
+                                            .contains(game.name)) {
+                                          // El juego ya está en la lista de favoritos
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  "Game already in library"),
+                                              duration: Duration(
+                                                  seconds:
+                                                      1), // Duración del SnackBar
+                                            ),
+                                          );
+                                          Navigator.of(context).pop();
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  "${game.name} added to the library"),
+                                              duration: const Duration(
+                                                  seconds:
+                                                      1), // Duración del SnackBar
+                                            ),
+                                          );
+                                          // El juego no está en la lista de favoritos, así que lo añadimos
+                                          game.favorite = true;
+                                          favoriteGamesProvider
+                                              .addToFavorites(game);
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .add_circle, //color: Colors.black
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to library",
+                                            style: TextStyle(
+                                                //color: Colors.black, // Color del texto
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        favoriteGamesProvider
+                                            .addToFavorites(game);
+                                        game.favorite = true;
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to favorites",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        GameDetailScreen(
+                                  key: const Key("game_detail_screen_key"),
+                                  game: game,
+                                ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  var offsetAnimation = animation.drive(tween);
+
+                                  return SlideTransition(
+                                    position: offsetAnimation,
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 300),
                               ),
                             );
-                            Navigator.of(context).pop();
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                    Text("${game.name} added to the library"),
-                                duration: const Duration(
-                                    seconds: 1), // Duración del SnackBar
-                              ),
-                            );
-                            // El juego no está en la lista de favoritos, así que lo añadimos
-                            game.favorite = true;
-                            favoriteGamesProvider.addToFavorites(game);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.add_circle, //color: Colors.black
-                            ),
-                            SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              "Add to library",
-                              style: TextStyle(
-                                  //color: Colors.black, // Color del texto
+                          },
+                          child: Stack(
+                            children: [
+                              Hero(
+                                tag: games[index].id,
+                                child: AspectRatio(
+                                  aspectRatio: 3 / 4,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(5.0)),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${games[index].cover!.imageId}.jpg",
+                                            ),
+                                            fit: BoxFit.cover)),
                                   ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      CupertinoActionSheetAction(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          HapticFeedback.lightImpact();
-                          favoriteGamesProvider.addToFavorites(game);
-                          game.favorite = true;
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.star,
-                              //color: Colors.black, // Color del icono
-                            ),
-                            SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              "Add to favorites",
-                              style: TextStyle(
-                                  //color: Colors.black,
-                                  ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      GameDetailScreen(
-                    key: const Key("game_detail_screen_key"),
-                    game: game,
-                  ),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.ease;
-
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
-
-                    return SlideTransition(
-                      position: offsetAnimation,
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 300),
-                ),
-              );
-            },
-            child: Stack(
-              children: [
-                Hero(
-                  tag: games[index].id,
-                  child: AspectRatio(
-                    aspectRatio: 3 / 4,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5.0)),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${games[index].cover!.imageId}.jpg",
+                                ),
                               ),
-                              fit: BoxFit.cover)),
-                    ),
-                  ),
-                ),
-                /*
+                              /*
                 AspectRatio(
                   aspectRatio: 3 / 4,
                   child: Container(
@@ -278,11 +316,12 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
                     ],
                   ),
                 ),*/
-              ],
+                            ],
+                          ),
+                        ))));
+              },
             ),
-          );
-        },
-      ),
-    );
+          ));
+    }
   }
 }
