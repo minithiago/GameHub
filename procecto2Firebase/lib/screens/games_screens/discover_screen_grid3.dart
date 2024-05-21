@@ -10,6 +10,7 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
+import 'package:procecto2/services/switch_games.dart';
 
 import 'package:provider/provider.dart';
 
@@ -241,79 +242,53 @@ class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
                                   ),
                                 ),
                               ),
-                              /*
-                AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.7),
-                              Colors.black.withOpacity(0.0)
-                            ],
-                            stops: const [
-                              0.0,
-                              0.5
-                            ])),
-                  ),
-                ),
-                Positioned(
-                  bottom: 10.0,
-                  left: 5.0,
-                  child: Container(
-                    width: 90.0,
-                    child: Text(
-                      game.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                
-                Positioned(
-                  bottom: 5.0,
-                  left: 5.0,
-                  child: Row(
-                    children: [
-                      RatingBar.builder(
-                        itemSize: 8.0,
-                        initialRating: game.total_rating / 20,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => const Icon(
-                          EvaIcons.star,
-                          color: Style.Colors.starsColor,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                      const SizedBox(
-                        width: 3.0,
-                      ),
-                      Text(
-                        (game.total_rating / 20).toStringAsFixed(2),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),*/
+                              Consumer<SwitchState>(
+                                builder: (context, switchState, child) {
+                                  if (switchState.isSwitchedOn) {
+                                    return Stack(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 3 / 4,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(5.0)),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                                colors: [
+                                                  Colors.black.withOpacity(0.8),
+                                                  Colors.black.withOpacity(0.0)
+                                                ],
+                                                stops: const [0.0, 0.5],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 10.0,
+                                          left: 5.0,
+                                          child: Container(
+                                            width: 90.0,
+                                            child: Text(
+                                              game.name, // Cambia esto por el nombre del juego
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Container(); // O cualquier otro widget
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ))));

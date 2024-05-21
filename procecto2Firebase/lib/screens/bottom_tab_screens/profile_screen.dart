@@ -8,6 +8,7 @@ import 'package:procecto2/screens/editProfile_screen.dart';
 import 'package:procecto2/screens/friends_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
+import 'package:procecto2/services/switch_games.dart';
 import 'package:procecto2/style/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -447,7 +448,42 @@ class _AccountScreenState extends State<AccountScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 100),
+                          const SizedBox(height: 30),
+                          Center(
+                            child: Consumer<SwitchState>(
+                              builder: (context, switchState, child) {
+                                return Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Switch(
+                                      value: switchState.isSwitchedOn,
+                                      onChanged: (value) {
+                                        switchState.toggleSwitch(value);
+                                      },
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    const Text(
+                                      "Show details on cover",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                      /*
+                                      switchState.isSwitchedOn
+                                          ? 'Encendido'
+                                          : 'Apagado',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: switchState.isSwitchedOn
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),*/
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 40),
                           SizedBox(
                             height: 50,
                             child: FilledButton(

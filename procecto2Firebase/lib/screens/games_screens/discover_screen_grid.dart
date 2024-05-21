@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,8 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
+import 'package:procecto2/repository/user_repository.dart';
+import 'package:procecto2/services/switch_games.dart';
 
 import 'package:provider/provider.dart';
 
@@ -23,10 +27,44 @@ class DiscoverScreenGrid extends StatefulWidget {
 }
 
 class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
+  late Future<List<String>> favoriteGameIDss;
   @override
   void initState() {
     getGamesBloc.getGames();
     super.initState();
+    favoriteGameIDss = getGamesForUserEmail();
+  }
+
+  Future<List<String>> getGamesForUserEmail() async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Games')
+            .get();
+
+        List<String> gameIds = gamesSnapshot.docs.map((doc) {
+          return doc['id'].toString();
+        }).toList();
+
+        return gameIds;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email}.');
+        return [];
+      }
+    } catch (e) {
+      print('Error getting games for user: $e');
+      return [];
+    }
   }
 
   @override
@@ -51,6 +89,8 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
   }
 
   Widget _buildGameGridWidget(GameResponse data) {
+    String userId = FirebaseAuth.instance.currentUser!.email.toString();
+
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
 
     final List<String> favoriteGameNames =
@@ -137,7 +177,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                             ),
                                           );
                                           // El juego no está en la lista de favoritos, así que lo añadimos
-                                          game.favorite = true;
+                                          //game.favorite = true;
                                           favoriteGamesProvider
                                               .addToFavorites(game);
                                           Navigator.of(context).pop();
@@ -161,18 +201,24 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                         ],
                                       ),
                                     ),
+                                    /*
+                                    */
                                     CupertinoActionSheetAction(
                                       onPressed: () {
+                                        UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id);
+                                        print(userId);
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        favoriteGamesProvider
-                                            .addToFavorites(game);
-                                        game.favorite = true;
                                       },
                                       child: const Row(
                                         children: [
                                           Icon(
-                                            Icons.star,
+                                            Icons.favorite_rounded,
                                             //color: Colors.black, // Color del icono
                                           ),
                                           SizedBox(
@@ -180,6 +226,29 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                                   8), // Espacio entre el icono y el texto
                                           Text(
                                             "Add to favorites",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.list_alt_rounded,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to Wishlist",
                                             style: TextStyle(
                                                 //color: Colors.black,
                                                 ),
@@ -195,11 +264,30 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => GameDetailScreen(
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        GameDetailScreen(
                                   key: const Key("game_detail_screen_key"),
                                   game: game,
                                 ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  var offsetAnimation = animation.drive(tween);
+
+                                  return SlideTransition(
+                                    position: offsetAnimation,
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 300),
                               ),
                             );
                           },
@@ -221,79 +309,93 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                   ),
                                 ),
                               ),
-                              /*
-                AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.7),
-                              Colors.black.withOpacity(0.0)
-                            ],
-                            stops: const [
-                              0.0,
-                              0.5
-                            ])),
-                  ),
-                ),
-                Positioned(
-                  bottom: 10.0,
-                  left: 5.0,
-                  child: Container(
-                    width: 90.0,
-                    child: Text(
-                      game.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                
-                Positioned(
-                  bottom: 5.0,
-                  left: 5.0,
-                  child: Row(
-                    children: [
-                      RatingBar.builder(
-                        itemSize: 8.0,
-                        initialRating: game.total_rating / 20,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => const Icon(
-                          EvaIcons.star,
-                          color: Style.Colors.starsColor,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                      const SizedBox(
-                        width: 3.0,
-                      ),
-                      Text(
-                        (game.total_rating / 20).toStringAsFixed(2),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),*/
+                              Consumer<SwitchState>(
+                                builder: (context, switchState, child) {
+                                  if (switchState.isSwitchedOn) {
+                                    return Stack(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 3 / 4,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(5.0)),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                                colors: [
+                                                  Colors.black.withOpacity(0.7),
+                                                  Colors.black.withOpacity(0.0)
+                                                ],
+                                                stops: const [0.0, 0.5],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 20.0,
+                                          left: 5.0,
+                                          child: SizedBox(
+                                            width: 90.0,
+                                            child: Text(
+                                              game.name, // Cambia esto por el nombre del juego
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 5.0,
+                                          left: 5.0,
+                                          child: Row(
+                                            children: [
+                                              RatingBar.builder(
+                                                itemSize: 8.0,
+                                                initialRating:
+                                                    3.5, // Ajusta esto a tu calificación
+                                                minRating: 0,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  EvaIcons.star,
+                                                  color: Colors.yellow,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  //print(rating);
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                width: 3.0,
+                                              ),
+                                              Text(
+                                                (game.total_rating / 20)
+                                                    .toStringAsFixed(2),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Container(); // O cualquier otro widget
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ))));

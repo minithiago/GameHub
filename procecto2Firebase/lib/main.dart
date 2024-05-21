@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:procecto2/firebase_options.dart';
 import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
+import 'package:procecto2/services/switch_games.dart';
 import 'package:procecto2/style/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/providers.dart';
@@ -28,6 +29,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SwitchState(),
         ),
       ],
       child: const MyApp(),

@@ -8,6 +8,8 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/screens/game_detail_screen.dart';
+import 'package:procecto2/services/switch_games.dart';
+import 'package:provider/provider.dart';
 
 class DiscoverScreenList extends StatefulWidget {
   @override
@@ -18,13 +20,13 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
   @override
   void initState() {
     super.initState();
-    getGamesBloc.getGames2();
+    getGamesBloc2.getGames2();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc.subject.stream,
+      stream: getGamesBloc2.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data;
@@ -88,9 +90,9 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                           ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
-                            final begin = Offset(1.0, 0.0);
-                            final end = Offset.zero;
-                            final curve = Curves.ease;
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
 
                             var tween = Tween(begin: begin, end: end)
                                 .chain(CurveTween(curve: curve));
@@ -106,8 +108,8 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                       );
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
+                      padding: const EdgeInsets.only(
+                          top: 15.0, left: 10.0, right: 10.0),
                       height: 150.0,
                       child: Row(
                         children: [
@@ -117,8 +119,8 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                               aspectRatio: 3 / 4,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5.0)),
                                     image: DecorationImage(
                                         image: NetworkImage(
                                           "https://images.igdb.com/igdb/image/upload/t_cover_big/${games[index].cover!.imageId}.jpg",
@@ -127,7 +129,7 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10.0,
                           ),
                           Expanded(
@@ -142,56 +144,74 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                                       games[index].name,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          //color: Colors.white,
                                           fontSize: 14.0),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5.0,
                                     ),
                                     Text(
                                       games[index].summary,
                                       maxLines: 4,
-                                      style: TextStyle(
-                                          color: Colors.white.withOpacity(0.2),
+                                      style: const TextStyle(
+                                          //color: Colors.white.withOpacity(0.4),
                                           fontSize: 12.0),
                                     )
                                   ],
                                 ),
-                                /*
-                                Row(
-                                  children: [
-                                    RatingBar.builder(
-                                      itemSize: 8.0,
-                                      initialRating:
-                                          games[index].total_rating / 20,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemPadding:
-                                          EdgeInsets.symmetric(horizontal: 2.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        EvaIcons.star,
-                                        color: Style.Colors.starsColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 3.0,
-                                    ),
-                                    Text(
-                                      (games[index].total_rating / 20)
-                                          .toString()
-                                          .substring(0, 3),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 12.0),
-                                    )
-                                  ],
-                                )*/
+                                Consumer<SwitchState>(
+                                  builder: (context, switchState, child) {
+                                    if (switchState.isSwitchedOn) {
+                                      return Stack(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              RatingBar.builder(
+                                                itemSize: 10.0,
+                                                initialRating:
+                                                    games[index].total_rating /
+                                                        20,
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                //glow: true,
+
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  EvaIcons.star,
+                                                  color: Colors.yellow,
+                                                  //size: 40,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  //print(rating);
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                width: 3.0,
+                                              ),
+                                              Text(
+                                                (games[index].total_rating / 20)
+                                                    .toString()
+                                                    .substring(0, 3),
+                                                style: const TextStyle(
+                                                    //color: Colors.white,
+                                                    fontSize: 12.0),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    } else {
+                                      return Container(); // O cualquier otro widget
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           )

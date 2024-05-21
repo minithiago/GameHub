@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,8 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
+import 'package:procecto2/repository/user_repository.dart';
+import 'package:procecto2/services/switch_games.dart';
 import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
@@ -140,7 +143,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
             child: Center(
               child: Text(
                 "Search for games",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                    //color: Colors.white
+                    ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -151,9 +156,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   Widget _build(GameResponse data) {
-    //  BuildContext context
-    //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    //var favoriteGamess = favoriteGamesProvider.favoriteGames;
+    String userId = FirebaseAuth.instance.currentUser!.email.toString();
 
     var favoriteGamess = data.games;
 
@@ -233,8 +236,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                           onLongPress: () {
                             HapticFeedback.lightImpact();
                             showCupertinoModalPopup(
-                              //barrierColor: const Color.fromARGB(96, 0, 0, 0),
-
                               context: context,
                               builder: (context) {
                                 return CupertinoActionSheet(
@@ -242,6 +243,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                     CupertinoActionSheetAction(
                                       onPressed: () {
                                         HapticFeedback.lightImpact();
+                                        UserRepository().removeGameFromUser(
+                                            userId, game.id);
 
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
@@ -283,7 +286,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                       child: const Row(
                                         children: [
                                           Icon(
-                                            Icons.favorite,
+                                            Icons.favorite_rounded,
                                             //color: Colors.black, // Color del icono
                                           ),
                                           SizedBox(
@@ -306,7 +309,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                       child: const Row(
                                         children: [
                                           Icon(
-                                            Icons.add_circle_outline_rounded,
+                                            Icons.list_alt_rounded,
                                             //color: Colors.black, // Color del icono
                                           ),
                                           SizedBox(
@@ -375,78 +378,95 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                   ),
                                 ),
                               ),
+                              Consumer<SwitchState>(
+                                builder: (context, switchState, child) {
+                                  if (switchState.isSwitchedOn) {
+                                    return Stack(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 3 / 4,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(5.0)),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                                colors: [
+                                                  Colors.black.withOpacity(0.8),
+                                                  Colors.black.withOpacity(0.0)
+                                                ],
+                                                stops: const [0.0, 0.5],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 20.0,
+                                          left: 5.0,
+                                          child: SizedBox(
+                                            width: 90.0,
+                                            child: Text(
+                                              game.name, // Cambia esto por el nombre del juego
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 5.0,
+                                          left: 5.0,
+                                          child: Row(
+                                            children: [
+                                              RatingBar.builder(
+                                                itemSize: 8.0,
+                                                initialRating:
+                                                    3.5, // Ajusta esto a tu calificación
+                                                minRating: 0,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  EvaIcons.star,
+                                                  color: Colors.yellow,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  //print(rating);
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                width: 3.0,
+                                              ),
+                                              Text(
+                                                (game.total_rating / 20)
+                                                    .toStringAsFixed(2),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Container(); // O cualquier otro widget
+                                  }
+                                },
+                              ),
                               /*
-                AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.8),
-                              Colors.black.withOpacity(0.0)
-                            ],
-                            stops: const [
-                              0.0,
-                              0.5
-                            ])),
-                  ),
-                ),
-                Positioned(
-                  bottom: 20.0,
-                  left: 5.0,
-                  child: Container(
-                    width: 90.0,
-                    child: Text(
-                      game.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 5.0,
-                  left: 5.0,
-                  child: Row(
-                    children: [
-                      RatingBar.builder(
-                        itemSize: 8.0,
-                        initialRating: game.total_rating / 20,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => const Icon(
-                          EvaIcons.star,
-                          color: Style.Colors.starsColor,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                      const SizedBox(
-                        width: 3.0,
-                      ),
-                      Text(
-                        (game.total_rating / 20).toStringAsFixed(2),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),*/
+                              */
                             ],
                           ),
                         ))));

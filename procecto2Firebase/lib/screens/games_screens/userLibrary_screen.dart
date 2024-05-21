@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:procecto2/bloc/get_friendsLibraryGames_bloc.dart';
 import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
@@ -11,6 +12,7 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
+import 'package:procecto2/services/switch_games.dart';
 import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
@@ -186,214 +188,269 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
     }
 
     // Ordenar los juegos por rating (en orden descendente)
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 7.0,
-          mainAxisSpacing: 7.0,
-          childAspectRatio: 0.75,
-          crossAxisCount: 3,
-        ),
-        itemCount: favoriteGamess.length,
-        itemBuilder: (BuildContext context, int index) {
-          GameModel game = favoriteGamess[index];
-          return GestureDetector(
-            onLongPress: () {
-              HapticFeedback.lightImpact();
-              showCupertinoModalPopup(
-                //barrierColor: const Color.fromARGB(96, 0, 0, 0),
-
-                context: context,
-                builder: (context) {
-                  return CupertinoActionSheet(
-                    actions: <CupertinoActionSheetAction>[
-                      CupertinoActionSheetAction(
-                        onPressed: () {
-                          HapticFeedback.lightImpact();
-                          game.favorite = false;
-                          favoriteGamesProvider.removeFavorite(game);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("${game.name} removed from library"),
-                            action: SnackBarAction(
-                              label: "Undo",
-                              onPressed: () {
-                                favoriteGamesProvider.addToFavorites(game);
-                                game.favorite = true;
-                              },
-                            ),
-                            duration: Duration(seconds: 1),
-                          ));
-                          Navigator.pop(context);
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.remove_circle_outline,
-                              color: Colors.red, // Color del icono
-                            ),
-                            SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              "Remove from library",
-                              style: TextStyle(
-                                color: Colors.red, // Color del texto
-                              ),
-                            ),
-                          ],
-                        ),
+    if (favoriteGamess.isEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Text(
+                  "No game to show",
+                  style: TextStyle(
+                      //color: Colors.black45
                       ),
-                      CupertinoActionSheetAction(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          HapticFeedback.lightImpact();
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.favorite,
-                              //color: Colors.black, // Color del icono
-                            ),
-                            SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              "Add to favorites",
-                              style: TextStyle(
-                                  //color: Colors.black,
-                                  ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      GameDetailScreen(
-                    key: const Key("game_detail_screen_key"),
-                    game: game,
-                  ),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    final begin = Offset(1.0, 0.0);
-                    final end = Offset.zero;
-                    final curve = Curves.ease;
-
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
-
-                    return SlideTransition(
-                      position: offsetAnimation,
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 300),
-                ),
-              );
-              //setState(() => fetchUserGames());
-            },
-            child: Stack(
-              children: [
-                Hero(
-                  tag: favoriteGamess[index].id,
-                  child: AspectRatio(
-                    aspectRatio: 3 / 4,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5.0)),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
-                              ),
-                              fit: BoxFit.cover)),
-                    ),
-                  ),
-                ),
-                AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.8),
-                              Colors.black.withOpacity(0.0)
-                            ],
-                            stops: const [
-                              0.0,
-                              0.5
-                            ])),
-                  ),
-                ),
-                Positioned(
-                  bottom: 20.0,
-                  left: 5.0,
-                  child: Container(
-                    width: 90.0,
-                    child: Text(
-                      game.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 5.0,
-                  left: 5.0,
-                  child: Row(
-                    children: [
-                      RatingBar.builder(
-                        itemSize: 8.0,
-                        initialRating: game.total_rating / 20,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => const Icon(
-                          EvaIcons.star,
-                          color: Colors.yellow,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                      const SizedBox(
-                        width: 3.0,
-                      ),
-                      Text(
-                        (game.total_rating / 20).toStringAsFixed(2),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                )
               ],
+            )
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: AnimationLimiter(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 7.0,
+                childAspectRatio: 0.75,
+                crossAxisCount: 3,
+              ),
+              itemCount: favoriteGamess.length,
+              itemBuilder: (BuildContext context, int index) {
+                GameModel game = favoriteGamess[index];
+                return AnimationConfiguration.staggeredGrid(
+                    columnCount: 3,
+                    position: index,
+                    duration: const Duration(milliseconds: 400),
+                    child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                            child: GestureDetector(
+                          onLongPress: () {
+                            HapticFeedback.lightImpact();
+                            showCupertinoModalPopup(
+                              //barrierColor: const Color.fromARGB(96, 0, 0, 0),
+
+                              context: context,
+                              builder: (context) {
+                                return CupertinoActionSheet(
+                                  actions: <CupertinoActionSheetAction>[
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        HapticFeedback.lightImpact();
+                                        game.favorite = false;
+                                        favoriteGamesProvider
+                                            .removeFavorite(game);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "${game.name} removed from library"),
+                                          action: SnackBarAction(
+                                            label: "Undo",
+                                            onPressed: () {
+                                              favoriteGamesProvider
+                                                  .addToFavorites(game);
+                                              game.favorite = true;
+                                            },
+                                          ),
+                                          duration: Duration(seconds: 1),
+                                        ));
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.remove_circle_outline,
+                                            color:
+                                                Colors.red, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Remove from library",
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.red, // Color del texto
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to favorites",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        GameDetailScreen(
+                                  key: const Key("game_detail_screen_key"),
+                                  game: game,
+                                ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  var offsetAnimation = animation.drive(tween);
+
+                                  return SlideTransition(
+                                    position: offsetAnimation,
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 300),
+                              ),
+                            );
+                            //setState(() => fetchUserGames());
+                          },
+                          child: Stack(
+                            children: [
+                              Hero(
+                                tag: favoriteGamess[index].id,
+                                child: AspectRatio(
+                                  aspectRatio: 3 / 4,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(5.0)),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
+                                            ),
+                                            fit: BoxFit.cover)),
+                                  ),
+                                ),
+                              ),
+                              Consumer<SwitchState>(
+                                builder: (context, switchState, child) {
+                                  if (switchState.isSwitchedOn) {
+                                    return Stack(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 3 / 4,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(5.0)),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                                colors: [
+                                                  Colors.black.withOpacity(0.8),
+                                                  Colors.black.withOpacity(0.0)
+                                                ],
+                                                stops: const [0.0, 0.5],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 20.0,
+                                          left: 5.0,
+                                          child: SizedBox(
+                                            width: 90.0,
+                                            child: Text(
+                                              game.name, // Cambia esto por el nombre del juego
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 5.0,
+                                          left: 5.0,
+                                          child: Row(
+                                            children: [
+                                              RatingBar.builder(
+                                                itemSize: 8.0,
+                                                initialRating:
+                                                    3.5, // Ajusta esto a tu calificación
+                                                minRating: 0,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  EvaIcons.star,
+                                                  color: Colors.yellow,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  //print(rating);
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                width: 3.0,
+                                              ),
+                                              Text(
+                                                (game.total_rating / 20)
+                                                    .toStringAsFixed(2),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Container(); // O cualquier otro widget
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ))));
+              },
             ),
-          );
-        },
-      ),
-    );
+          ));
+    }
   }
 }

@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-//import 'package:procecto2/bloc/get_games_bloc.dart';
 import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
-//import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/screens/game_detail_screen.dart';
-//import 'package:provider/provider.dart';
+import 'package:procecto2/services/switch_games.dart';
+import 'package:provider/provider.dart';
 
 class LibraryScreenList extends StatefulWidget {
   final String filtro;
@@ -296,39 +295,60 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                     )
                                   ],
                                 ),
-                                /*
-                                Row(
-                                  children: [
-                                    RatingBar.builder(
-                                      itemSize: 8.0,
-                                      initialRating:
-                                          games[index].total_rating / 20,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemPadding:
-                                          EdgeInsets.symmetric(horizontal: 2.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        EvaIcons.star,
-                                        color: Style.Colors.starsColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 3.0,
-                                    ),
-                                    Text(
-                                      (games[index].total_rating / 20)
-                                          .toString()
-                                          .substring(0, 3),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 12.0),
-                                    )
-                                  ],
-                                )*/
+                                Consumer<SwitchState>(
+                                  builder: (context, switchState, child) {
+                                    if (switchState.isSwitchedOn) {
+                                      return Stack(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              RatingBar.builder(
+                                                itemSize: 10.0,
+                                                initialRating:
+                                                    favoriteGamess[index]
+                                                            .total_rating /
+                                                        20,
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                //glow: true,
+
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  EvaIcons.star,
+                                                  color: Colors.yellow,
+                                                  //size: 40,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  //print(rating);
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                width: 3.0,
+                                              ),
+                                              Text(
+                                                (favoriteGamess[index]
+                                                            .total_rating /
+                                                        20)
+                                                    .toString()
+                                                    .substring(0, 3),
+                                                style: const TextStyle(
+                                                    //color: Colors.white,
+                                                    fontSize: 12.0),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    } else {
+                                      return Container(); // O cualquier otro widget
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           )

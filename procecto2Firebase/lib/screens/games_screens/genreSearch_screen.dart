@@ -10,6 +10,7 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
+import 'package:procecto2/services/switch_games.dart';
 import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 
@@ -109,7 +110,7 @@ class _GenreSearchScreenState extends State<GenreSearchScreen> {
                                           SnackBar(
                                             content: Text(
                                                 "${game.name} added to the library"),
-                                            duration: Duration(
+                                            duration: const Duration(
                                                 seconds:
                                                     1), // Duración del SnackBar
                                           ),
@@ -197,9 +198,9 @@ class _GenreSearchScreenState extends State<GenreSearchScreen> {
                               ),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
-                                final begin = Offset(1.0, 0.0);
-                                final end = Offset.zero;
-                                final curve = Curves.ease;
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.ease;
 
                                 var tween = Tween(begin: begin, end: end)
                                     .chain(CurveTween(curve: curve));
@@ -233,79 +234,93 @@ class _GenreSearchScreenState extends State<GenreSearchScreen> {
                                 ),
                               ),
                             ),
-                            /*
-                            AspectRatio(
-                              aspectRatio: 3 / 4,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(5.0)),
-                                    gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Colors.black.withOpacity(0.8),
-                                          Colors.black.withOpacity(0.0)
-                                        ],
-                                        stops: const [
-                                          0.0,
-                                          0.5
-                                        ])),
-                              ),
+                            Consumer<SwitchState>(
+                              builder: (context, switchState, child) {
+                                if (switchState.isSwitchedOn) {
+                                  return Stack(
+                                    children: [
+                                      AspectRatio(
+                                        aspectRatio: 3 / 4,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5.0)),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              colors: [
+                                                Colors.black.withOpacity(0.8),
+                                                Colors.black.withOpacity(0.0)
+                                              ],
+                                              stops: const [0.0, 0.5],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: 20.0,
+                                        left: 5.0,
+                                        child: SizedBox(
+                                          width: 90.0,
+                                          child: Text(
+                                            game.name, // Cambia esto por el nombre del juego
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: 5.0,
+                                        left: 5.0,
+                                        child: Row(
+                                          children: [
+                                            RatingBar.builder(
+                                              itemSize: 8.0,
+                                              initialRating:
+                                                  3.5, // Ajusta esto a tu calificación
+                                              minRating: 0,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2.0),
+                                              itemBuilder: (context, _) =>
+                                                  const Icon(
+                                                EvaIcons.star,
+                                                color: Colors.yellow,
+                                              ),
+                                              onRatingUpdate: (rating) {
+                                                //print(rating);
+                                              },
+                                            ),
+                                            const SizedBox(
+                                              width: 3.0,
+                                            ),
+                                            Text(
+                                              (game.total_rating / 20)
+                                                  .toStringAsFixed(2),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return Container(); // O cualquier otro widget
+                                }
+                              },
                             ),
-                            Positioned(
-                              bottom: 20.0,
-                              left: 5.0,
-                              child: Container(
-                                width: 90.0,
-                                child: Text(
-                                  games[index].name,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 5.0,
-                              left: 5.0,
-                              child: Row(
-                                children: [
-                                  RatingBar.builder(
-                                    itemSize: 8.0,
-                                    initialRating:
-                                        games[index].total_rating / 20,
-                                    minRating: 0,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 2.0),
-                                    itemBuilder: (context, _) => const Icon(
-                                      EvaIcons.star,
-                                      color: Style.Colors.starsColor,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    width: 3.0,
-                                  ),
-                                  Text(
-                                    (games[index].total_rating / 20)
-                                        .toString()
-                                        .substring(0, 3),
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10.0,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            )*/
                           ],
                         ),
                       ),
