@@ -200,57 +200,14 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
             ),
           ),
 
-          Center(
-            child: SizedBox(
-              height: 70,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (int i = 0; i < 3; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ChoiceChip(
-                        label: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            i == 0
-                                ? 'All'
-                                : i == 1
-                                    ? 'Wishlist'
-                                    : 'Favorites',
-                            style: TextStyle(
-                              fontSize: 18, // Tamaño de la fuente
-                              color: selectedIndex == i
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-
-                        selected: selectedIndex == i,
-                        selectedColor: const Color.fromRGBO(
-                            110, 182, 255, 1), // Color cuando está seleccionado
-                        onSelected: (isSelected) {
-                          setState(() {
-                            selectedIndex = isSelected ? i : -1;
-                          });
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              50), // Ajusta el radio según tus necesidades
-                        ),
-                      ),
-                    ),
-                ],
+          Expanded(
+            child: Container(
+              //color: const Color.fromARGB(255, 81, 81, 82), // Elige el color que desees
+              child: LibraryScreenWidget(
+                switchBloc,
               ),
             ),
-          ),
-
-          Expanded(
-            child: LibraryScreenWidget(
-              switchBloc,
-            ),
-          ),
+          )
 
           // Add more widgets for the rest of your content here
         ],

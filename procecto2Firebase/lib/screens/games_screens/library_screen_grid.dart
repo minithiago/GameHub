@@ -22,12 +22,14 @@ class LibraryScreenGrid extends StatefulWidget {
   final String filtro;
   final String busqueda;
   final String usuario;
+  final int lista;
 
   const LibraryScreenGrid(
       {Key? key,
       required this.filtro,
       required this.busqueda,
-      required this.usuario})
+      required this.usuario,
+      required this.lista})
       : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
   String _nameFilter = '';
   String _usuario = '';
+  int _lista = 0;
 
   Future<List<String>> getGamesForUserEmail(String userEmail) async {
     try {
@@ -81,6 +84,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     _currentFilter = widget.filtro;
     _nameFilter = widget.busqueda;
     _usuario = widget.usuario;
+    _lista = widget.lista;
 
     fetchUserGames();
   }
@@ -117,8 +121,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
       });
     }
   }
-
-  //List<GameModel> favoriteGamess = [];
 
   @override
   Widget build(BuildContext context) {

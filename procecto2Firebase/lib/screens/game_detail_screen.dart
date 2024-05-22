@@ -27,7 +27,7 @@ class GameDetailScreen extends StatefulWidget {
 
 class GameDetailScreenState extends State<GameDetailScreen>
     with SingleTickerProviderStateMixin {
-  //late YoutubePlayerController _controller;
+  late YoutubePlayerController _controller;
   //PageController pageController =PageController(viewportFraction: 1, keepPage: true);
   late TabController _tabController;
   final GameModel game;
@@ -50,7 +50,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
 
   @override
   void dispose() {
-    //_controller.dispose();
+    _controller.dispose();
     //pageController.dispose();
     _tabController.dispose();
 
@@ -95,7 +95,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
     _tabController = TabController(vsync: this, length: tabs.length);
     favoriteGameIDss = getGamesForUserEmail();
 
-    /*if (game.videos != null) {
+    if (game.videos != null) {
       _controller = YoutubePlayerController(
         initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
         flags: const YoutubePlayerFlags(
@@ -114,7 +114,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
           mute: true,
         ),
       );
-    }*/
+    }
   }
 
   @override
@@ -149,15 +149,15 @@ class GameDetailScreenState extends State<GameDetailScreen>
         ),
         Stack(
           children: <Widget>[
-            const SizedBox(
+            SizedBox(
               height: 230.0,
               //220
-              /*child: YoutubePlayer(
+              child: YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
-                progressIndicatorColor: Colors.red, //true
+                //progressIndicatorColor: Colors.red, //true
                 thumbnail: Image.asset('assets/images/videoError.jpg'),
-              ),*/
+              ),
             ),
             Positioned(
               top: 0.0,
@@ -169,7 +169,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                   ),
                   onPressed: () {
                     //_controller.pause();
-                    //_controller.dispose();
+                    _controller.dispose();
                     Navigator.pop(context);
                   }),
             ),
