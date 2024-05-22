@@ -89,6 +89,8 @@ class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                         setState(() {
                           selectedIndex = isSelected ? i : -1;
                         });
+                        //print('hola' '$selectedIndex');
+                        _updatelista;
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(

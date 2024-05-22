@@ -359,6 +359,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                     visible: !isFavorite,
                                                     child: ElevatedButton(
                                                       onPressed: () {
+                                                        print(game.favorite);
                                                         setState(() {
                                                           favoriteGameIDs.add(
                                                               widget.game.id
@@ -370,7 +371,9 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                                 "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
                                                                 game.name,
                                                                 game.total_rating,
-                                                                game.id);
+                                                                game.id,
+                                                                false,
+                                                                false);
 
                                                         ScaffoldMessenger.of(
                                                                 context)
@@ -487,7 +490,10 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                                     "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
                                                                     game.name,
                                                                     game.total_rating,
-                                                                    game.id);
+                                                                    game.id,
+                                                                    false,
+                                                                    false);
+                                                            //game.favorite ==false;
                                                             // Agregar el juego a la lista
                                                           },
                                                         ),

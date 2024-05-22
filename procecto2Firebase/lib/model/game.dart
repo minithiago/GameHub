@@ -31,7 +31,9 @@ class GameModel {
   final double total_rating;
   final String name;
   final String slug;
-  bool favorite;
+  bool favorite = false;
+  bool wishlist = false;
+  bool library = false;
 
   GameModel(
       this.id,
@@ -53,7 +55,9 @@ class GameModel {
       this.total_rating,
       this.slug,
       this.name,
-      this.favorite);
+      this.favorite,
+      this.wishlist,
+      this.library);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
@@ -65,6 +69,8 @@ class GameModel {
       'name': name,
       'slug': slug,
       'favorite': favorite,
+      'wishlist': wishlist,
+      'library': library,
       'cover': cover?.toJson(),
       'modes': modes?.map((mode) => mode.toJson()).toList(),
       'genres': genres?.map((genre) => genre.toJson()).toList(),
@@ -150,6 +156,8 @@ class GameModel {
         json["total_rating"] ?? 0.0,
         json["slug"] ?? "",
         json["name"] ?? "",
+        false,
+        false,
         false);
   }
 }

@@ -120,6 +120,12 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         print(widget.filtro);
       });
     }
+    if (oldWidget.lista != widget.lista) {
+      setState(() {
+        _lista = widget.lista;
+        print(widget.lista);
+      });
+    }
   }
 
   @override
@@ -162,7 +168,12 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
     var favoriteGamess = data.games;
 
-    List<GameModel> _filterGamesByName(List<GameModel> games) {
+    List<GameModel> sublist1 =
+        favoriteGamess.where((game) => game.wishlist == true).toList();
+    List<GameModel> sublist2 =
+        favoriteGamess.where((game) => game.favorite == true).toList();
+
+    /*List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
         return games;
       } else {
@@ -171,7 +182,35 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                 game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
             .toList();
       }
+    }*/
+    List<GameModel> gamesToShow;
+
+    // Seleccionar la lista según el índice de _lista
+    switch (_lista) {
+      case 1:
+        gamesToShow = sublist1;
+        break;
+      case 2:
+        gamesToShow = sublist2;
+        break;
+      default:
+        gamesToShow = favoriteGamess;
     }
+
+    /*switch (_lista) {
+      case 1:
+        favoriteGamess = sublist1;
+        //favoriteGamess.sort();
+
+        break;
+      case 2:
+        favoriteGamess = sublist2;
+        //favoriteGamess.sort();
+
+        break;
+      default:
+        favoriteGamess = data.games;
+    }*/
 
     switch (_currentFilter) {
       case "Name":
@@ -193,7 +232,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
     // Ordenar los juegos por rating (en orden descendente)
 
-    if (favoriteGamess.isEmpty) {
+    if (gamesToShow.isEmpty) {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Column(
@@ -224,9 +263,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                 childAspectRatio: 0.75,
                 crossAxisCount: 3,
               ),
-              itemCount: favoriteGamess.length,
+              itemCount: gamesToShow.length,
               itemBuilder: (BuildContext context, int index) {
-                GameModel game = favoriteGamess[index];
+                GameModel game = gamesToShow[index];
                 return AnimationConfiguration.staggeredGrid(
                     columnCount: 3,
                     position: index,
@@ -284,6 +323,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
+
+                                        game.favorite = true;
                                       },
                                       child: const Row(
                                         children: [
@@ -307,6 +348,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
+                                        game.wishlist = true;
                                       },
                                       child: const Row(
                                         children: [
@@ -365,7 +407,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                           child: Stack(
                             children: [
                               Hero(
-                                tag: favoriteGamess[index].id,
+                                tag: gamesToShow[index].id,
                                 child: AspectRatio(
                                   aspectRatio: 3 / 4,
                                   child: Container(
@@ -374,7 +416,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                             Radius.circular(10.0)),
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${gamesToShow[index].cover!.imageId}.jpg",
                                             ),
                                             fit: BoxFit.cover)),
                                   ),

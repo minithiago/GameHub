@@ -149,39 +149,29 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                   actions: <CupertinoActionSheetAction>[
                                     CupertinoActionSheetAction(
                                       onPressed: () {
-                                        //Navigator.pop(context);
+                                        Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        if (favoriteGameNames
-                                            .contains(game.name)) {
-                                          // El juego ya está en la lista de favoritos
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  "Game already in library"),
-                                              duration: Duration(
-                                                  seconds:
-                                                      1), // Duración del SnackBar
-                                            ),
-                                          );
-                                          Navigator.of(context).pop();
+                                        if (game.library == false) {
+                                          UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                              false,
+                                              false);
+                                          game.library = true;
                                         } else {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  "${game.name} added to the library"),
-                                              duration: const Duration(
-                                                  seconds:
-                                                      1), // Duración del SnackBar
-                                            ),
-                                          );
-                                          // El juego no está en la lista de favoritos, así que lo añadimos
-                                          //game.favorite = true;
-                                          favoriteGamesProvider
-                                              .addToFavorites(game);
-                                          Navigator.of(context).pop();
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in library"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
                                         }
+
+                                        //print(userId);
                                       },
                                       child: const Row(
                                         children: [
@@ -205,15 +195,29 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                     */
                                     CupertinoActionSheetAction(
                                       onPressed: () {
-                                        UserRepository().addGameToUser(
-                                            userId,
-                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                            game.name,
-                                            game.total_rating,
-                                            game.id);
-                                        print(userId);
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
+                                        if (game.favorite == false) {
+                                          UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                              false,
+                                              false);
+                                          game.favorite == true;
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in library"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
+                                        }
+
+                                        //print(userId);
                                       },
                                       child: const Row(
                                         children: [
@@ -237,6 +241,27 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
+                                        if (game.wishlist == false) {
+                                          UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                              false,
+                                              false);
+                                          game.wishlist = true;
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in library"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
+                                        }
+
+                                        //print(userId);
                                       },
                                       child: const Row(
                                         children: [
