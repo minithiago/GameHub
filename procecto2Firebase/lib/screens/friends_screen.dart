@@ -18,6 +18,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   //final _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   bool isShowUsers = false;
+  var userData;
 
   @override
   void dispose() {
@@ -26,7 +27,28 @@ class _FriendsScreenState extends State<FriendsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  getUserData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+          .get();
+      userData = snap.docs.first.data();
+    } catch (e) {
+      print(
+          'Error cogiendo los datos del usuario en friendScreen para no mostrar el usuario en la lista de amigos');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //Future<String?> currentUserNickname = getUserNickname();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -105,7 +127,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     .collection('Users')
                     .where('nickname',
                         isGreaterThanOrEqualTo: _searchController.text)
-                    .get(),
+                    .where(
+                      'nickname',
+                      isNotEqualTo: userData != null
+                          ? userData['nickname']
+                          : 'Loading...',
+                    )
+                    .get(), //'email', isNotEqualTo: currentUserEmail
+
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
