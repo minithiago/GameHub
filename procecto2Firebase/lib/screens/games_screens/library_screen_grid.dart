@@ -85,6 +85,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     _nameFilter = widget.busqueda;
     _usuario = widget.usuario;
     _lista = widget.lista;
+    FavoriteGamesProvider();
 
     fetchUserGames();
   }
@@ -259,6 +260,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                   actions: <CupertinoActionSheetAction>[
                                     CupertinoActionSheetAction(
                                       onPressed: () {
+                                        favoriteGamesProvider
+                                            .removeFavorite(game);
                                         HapticFeedback.lightImpact();
                                         UserRepository().removeGameFromUser(
                                             userId, game.id);
@@ -303,7 +306,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
 
-                                        game.favorite = true;
+                                        //game.favorite = true;
+                                        favoriteGamesProvider
+                                            .addToFavorites(game);
                                       },
                                       child: const Row(
                                         children: [

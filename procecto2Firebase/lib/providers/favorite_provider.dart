@@ -13,7 +13,9 @@ class FavoriteGamesProvider with ChangeNotifier {
   List<GameModel> get favoriteGames => _favoriteGames;
 
   FavoriteGamesProvider() {
-    _loadFavoriteGames();
+    _auth.authStateChanges().listen((User? user) {
+      _handleAuthStateChanged(user);
+    });
   }
 
   void addToFavorites(GameModel game) {
@@ -29,8 +31,9 @@ class FavoriteGamesProvider with ChangeNotifier {
   }
 
   void removeFavoriteByName(String gameName) {
-    GameModel? gameToRemove =
-        _favoriteGames.firstWhere((game) => game.name == gameName);
+    GameModel? gameToRemove = _favoriteGames.firstWhere(
+      (game) => game.name == gameName,
+    );
 
     if (gameToRemove != null) {
       _favoriteGames.remove(gameToRemove);
@@ -44,13 +47,16 @@ class FavoriteGamesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _loadFavoriteGames() async {
-    final User? user = _auth.currentUser;
-    if (user == null) {
-      // Usuario no autenticado, no cargar favoritos
-      return;
+  Future<void> _handleAuthStateChanged(User? user) async {
+    if (user != null) {
+      await _loadFavoriteGames(user);
+    } else {
+      _favoriteGames = [];
+      notifyListeners();
     }
+  }
 
+  Future<void> _loadFavoriteGames(User user) async {
     String userKey = '$_kFavoriteGamesKey${user.email}';
     String? favoriteGamesJson = await _storage.read(key: userKey);
     if (favoriteGamesJson != null && favoriteGamesJson.isNotEmpty) {
@@ -61,6 +67,8 @@ class FavoriteGamesProvider with ChangeNotifier {
         game.favorite = true;
         return game;
       }).toList();
+    } else {
+      _favoriteGames = [];
     }
     notifyListeners();
   }
@@ -73,7 +81,8 @@ class FavoriteGamesProvider with ChangeNotifier {
     }
 
     String userKey = '$_kFavoriteGamesKey${user.email}';
-    String favoriteGamesJson = jsonEncode(_favoriteGames);
+    String favoriteGamesJson =
+        jsonEncode(_favoriteGames.map((game) => game.toJson()).toList());
     await _storage.write(key: userKey, value: favoriteGamesJson);
   }
 }

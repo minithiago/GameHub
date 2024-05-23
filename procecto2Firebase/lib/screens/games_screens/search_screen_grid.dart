@@ -254,25 +254,6 @@ class _SearchScreenGridState extends State<SearchScreenGrid> {
                                   ),
                                 ),
                               ),
-                              AspectRatio(
-                                aspectRatio: 3 / 4,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5.0)),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.8),
-                                            Colors.black.withOpacity(0.0)
-                                          ],
-                                          stops: const [
-                                            0.0,
-                                            0.5
-                                          ])),
-                                ),
-                              ),
                               Consumer<SwitchState>(
                                 builder: (context, switchState, child) {
                                   if (switchState.isSwitchedOn) {
