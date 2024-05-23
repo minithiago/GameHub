@@ -31,9 +31,9 @@ class _UserProfilePage extends State<UserProfilePage> {
     super.initState();
     getUserData();
     getUserData2();
+    getUserContainsEmailFriend();
     getUserGamesCountByEmail();
     getUserFriendsCountByEmail();
-    getUserContainsEmailFriend();
   }
 
   getUserData() async {
@@ -54,7 +54,7 @@ class _UserProfilePage extends State<UserProfilePage> {
             .get();
         requestSent = email2Snapshot.size;
         if (requestSent >= 1) {
-          contieneAmigo == 3;
+          contieneAmigo = 3;
         }
       } else {
         print(
@@ -74,12 +74,12 @@ class _UserProfilePage extends State<UserProfilePage> {
 
   getUserData2() async {
     try {
-      var snap = await FirebaseFirestore.instance
+      var snap2 = await FirebaseFirestore.instance
           .collection('Users')
           .where('email',
               isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
           .get();
-      userData2 = snap.docs.first.data();
+      userData2 = snap2.docs.first.data();
 
       setState(() {
         isLoading = false;
@@ -112,7 +112,7 @@ class _UserProfilePage extends State<UserProfilePage> {
             'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
       }
     } catch (e) {
-      print('Error obteniendo la cantidad de juegos del usuario: $e');
+      print('Error obteniendo la cantidad de amigos del usuario: $e');
     }
   }
 
@@ -120,7 +120,8 @@ class _UserProfilePage extends State<UserProfilePage> {
     try {
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('Users')
-          .where('email', isEqualTo: userData2['email'])
+          .where('email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
@@ -144,7 +145,7 @@ class _UserProfilePage extends State<UserProfilePage> {
             'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
       }
     } catch (e) {
-      print('Error obteniendo la cantidad de juegos del usuario: $e');
+      print('Error obteniendo si el email contiene al amigo del usuario: $e');
     }
   }
 
@@ -290,6 +291,35 @@ class _UserProfilePage extends State<UserProfilePage> {
                         ],
                       ),
                       Visibility(
+                        visible: contieneAmigo == 0,
+                        child: buildFriendButton(
+                          isFriend: false,
+                          onPressed: () async {
+                            await UserRepository().sendFriendRequest(
+                              FirebaseAuth.instance.currentUser!.email
+                                  .toString(),
+                              userData2['nickname'],
+                              userData2['avatar'],
+                              userData['email'],
+                            );
+                            setState(() {
+                              contieneAmigo = 3;
+                              print(contieneAmigo);
+                              print(requestSent);
+                            });
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Friend Request sent")),
+                            );
+                          },
+                          backgroundColor:
+                              const Color.fromRGBO(110, 182, 255, 1),
+                          icon: const Icon(Icons.group_add_rounded),
+                          text: "  Add as friend",
+                        ),
+                      ),
+                      Visibility(
                         visible: contieneAmigo == 3,
                         child: buildFriendButton(
                           isFriend: true,
@@ -314,38 +344,23 @@ class _UserProfilePage extends State<UserProfilePage> {
                                   .toString(),
                               userData['email'],
                             );
+                            await UserRepository().removeFriend(
+                                userData['email'],
+                                FirebaseAuth.instance.currentUser!.email
+                                    .toString());
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("Friend removed successfully")),
                             );
+                            setState(() {
+                              contieneAmigo = 0;
+                              print(contieneAmigo);
+                              print(requestSent);
+                            });
                           },
                           backgroundColor: Colors.red,
                           icon: const Icon(Icons.group_remove_rounded),
                           text: "  Remove friend",
-                        ),
-                      ),
-                      Visibility(
-                        visible: contieneAmigo == 0,
-                        child: buildFriendButton(
-                          isFriend: false,
-                          onPressed: () async {
-                            await UserRepository().sendFriendRequest(
-                              FirebaseAuth.instance.currentUser!.email
-                                  .toString(),
-                              userData2['nickname'],
-                              userData2['avatar'],
-                              userData['email'],
-                            );
-                            contieneAmigo == 3;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Friend Request sent")),
-                            );
-                          },
-                          backgroundColor:
-                              const Color.fromRGBO(110, 182, 255, 1),
-                          icon: const Icon(Icons.group_add_rounded),
-                          text: "  Add as friend",
                         ),
                       ),
 

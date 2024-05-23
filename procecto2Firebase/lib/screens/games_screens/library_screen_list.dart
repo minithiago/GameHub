@@ -134,7 +134,9 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
             child: Center(
               child: Text(
                 "Search for games",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                    //color: Colors.white
+                    ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -280,7 +282,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                       softWrap: false,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          //color: Colors.white,
                                           fontSize: 14.0),
                                     ),
                                     const SizedBox(
@@ -290,7 +292,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                       favoriteGamess[index].summary,
                                       maxLines: 4,
                                       style: TextStyle(
-                                          color: Colors.white.withOpacity(0.2),
+                                          //color: Colors.white.withOpacity(0.2),
                                           fontSize: 12.0),
                                     )
                                   ],

@@ -18,7 +18,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   //final _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   bool isShowUsers = false;
-  var userData;
+  var userData2;
 
   @override
   void dispose() {
@@ -39,7 +39,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
           .where('email',
               isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
           .get();
-      userData = snap.docs.first.data();
+      userData2 = snap.docs.first.data();
     } catch (e) {
       print(
           'Error cogiendo los datos del usuario en friendScreen para no mostrar el usuario en la lista de amigos');
@@ -129,8 +129,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         isGreaterThanOrEqualTo: _searchController.text)
                     .where(
                       'nickname',
-                      isNotEqualTo: userData != null
-                          ? userData['nickname']
+                      isNotEqualTo: userData2 != null
+                          ? userData2[
+                              'nickname'] //PARA QUE NO SALGA YO PARA BUSCAR EN AMIGOS
                           : 'Loading...',
                     )
                     .get(), //'email', isNotEqualTo: currentUserEmail
@@ -276,12 +277,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     onPressed: () {
                                       // Lógica para aceptar la solicitud de amistad
                                       UserRepository().acceptFriendRequest(
-                                          FirebaseAuth
-                                              .instance.currentUser!.email
-                                              .toString(),
-                                          userData['nickname'],
-                                          userData['avatar'],
-                                          userData['email']);
+                                        FirebaseAuth.instance.currentUser!.email
+                                            .toString(),
+                                        userData2['nickname'],
+                                        userData2['avatar'],
+                                        userData['email'],
+                                        userData['nickname'],
+                                        userData['avatar'],
+                                      );
                                       setState(() {});
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
