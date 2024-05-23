@@ -18,22 +18,32 @@ class UserRepository extends ChangeNotifier {
   Future<bool> addUser(String uid, String nickname, String email,
       String password, String profilePic) async {
     try {
+      // Crea el documento del usuario en la colección Users
       await db.collection("Users").doc(uid).set({
         "nickname": nickname,
         "email": email,
         "password": password,
         "avatar": profilePic
       });
+
+      // Crea una subcolección Games dentro del documento del usuario
+      await db
+          .collection("Users")
+          .doc(uid)
+          .collection("Games")
+          .add({}); //NUEVO SIN PROBAR
+
+      // Inicializa el currentUser
       currentUser = UserModel(
           nickname: nickname,
           email: email,
           password: password,
           profilePicUrl: profilePic);
 
-      print("User added Successfully");
+      print("User and Games subcollection added successfully");
       return true;
     } catch (e) {
-      print("Error adding user: $e");
+      print("Error adding user and games subcollection: $e");
       return false;
     }
   }

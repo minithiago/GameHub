@@ -164,25 +164,16 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   }
 
   Widget _build(GameResponse data) {
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
     String userId = FirebaseAuth.instance.currentUser!.email.toString();
 
     var favoriteGamess = data.games;
 
-    List<GameModel> sublist1 =
-        favoriteGamess.where((game) => game.wishlist == true).toList();
+    List<GameModel> sublist1 = favoriteGamesProvider.favoriteGames;
+    //favoriteGamess.where((game) => game.wishlist == true).toList();
     List<GameModel> sublist2 =
         favoriteGamess.where((game) => game.favorite == true).toList();
 
-    /*List<GameModel> _filterGamesByName(List<GameModel> games) {
-      if (_nameFilter.isEmpty) {
-        return games;
-      } else {
-        return games
-            .where((game) =>
-                game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
-            .toList();
-      }
-    }*/
     List<GameModel> gamesToShow;
 
     // Seleccionar la lista según el índice de _lista
@@ -196,21 +187,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
       default:
         gamesToShow = favoriteGamess;
     }
-
-    /*switch (_lista) {
-      case 1:
-        favoriteGamess = sublist1;
-        //favoriteGamess.sort();
-
-        break;
-      case 2:
-        favoriteGamess = sublist2;
-        //favoriteGamess.sort();
-
-        break;
-      default:
-        favoriteGamess = data.games;
-    }*/
 
     switch (_currentFilter) {
       case "Name":
@@ -298,6 +274,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                           duration: const Duration(seconds: 1),
                                         ));
                                         Navigator.pop(context);
+                                        /*setState(() {
+                                          gamesToShow = sublist1;
+                                        });*/
                                       },
                                       child: const Row(
                                         children: [

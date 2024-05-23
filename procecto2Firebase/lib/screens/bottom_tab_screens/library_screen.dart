@@ -92,6 +92,18 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          /*const Positioned(
+              left: 60,
+              top: 50,
+              child: Visibility(
+                visible: true,
+                child: Icon(
+                  Icons.notification_important,
+                  size: 27,
+                  color: Colors.yellow,
+                ),
+              )),*/
+
           Container(
             color: Theme.of(context).colorScheme.secondary,
             padding: const EdgeInsets.all(20.0),
@@ -149,7 +161,7 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                   },
                   icon: const Icon(
                     Icons.people,
-                    size: 27,
+                    size: 30,
                     //color: Colors.white,
                   ),
                 ),
@@ -201,11 +213,8 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
           ),
 
           Expanded(
-            child: Container(
-              //color: const Color.fromARGB(255, 81, 81, 82), // Elige el color que desees
-              child: LibraryScreenWidget(
-                switchBloc,
-              ),
+            child: LibraryScreenWidget(
+              switchBloc,
             ),
           )
 

@@ -232,7 +232,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         shrinkWrap:
                             true, // Added to ensure the ListView takes only the necessary space
                         physics:
-                            NeverScrollableScrollPhysics(), // Prevent ListView from scrolling independently
+                            const NeverScrollableScrollPhysics(), // Prevent ListView from scrolling independently
                         itemCount: requests.length,
                         itemBuilder: (context, index) {
                           var userData =

@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:procecto2/model/game.dart'; // Asegúrate de importar tu modelo GameModel aquí
 
 class FavoriteGamesProvider with ChangeNotifier {
-
   List<GameModel> _favoriteGames = [];
   static const String _kFavoriteGamesKey = 'favorite_games';
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<GameModel> get favoriteGames => _favoriteGames;
 
@@ -28,11 +29,9 @@ class FavoriteGamesProvider with ChangeNotifier {
   }
 
   void removeFavoriteByName(String gameName) {
-    // Busca el juego en la lista de favoritos por su nombre
     GameModel? gameToRemove =
         _favoriteGames.firstWhere((game) => game.name == gameName);
 
-    // Si se encuentra el juego, se elimina de la lista y se guarda
     if (gameToRemove != null) {
       _favoriteGames.remove(gameToRemove);
       _saveFavoriteGames();
@@ -46,15 +45,19 @@ class FavoriteGamesProvider with ChangeNotifier {
   }
 
   Future<void> _loadFavoriteGames() async {
-    String? favoriteGamesJson = await _storage.read(key: _kFavoriteGamesKey);
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      // Usuario no autenticado, no cargar favoritos
+      return;
+    }
+
+    String userKey = '$_kFavoriteGamesKey${user.email}';
+    String? favoriteGamesJson = await _storage.read(key: userKey);
     if (favoriteGamesJson != null && favoriteGamesJson.isNotEmpty) {
-      // Convierte el JSON de la lista de juegos a una lista de objetos GameModel
       List<Map<String, dynamic>> gameListJson =
           jsonDecode(favoriteGamesJson).cast<Map<String, dynamic>>();
       _favoriteGames = gameListJson.map((json) {
-        // Convierte el JSON en un objeto GameModel
         GameModel game = GameModel.fromJson(json);
-        // Establece la propiedad favorite en true para cada juego cargado
         game.favorite = true;
         return game;
       }).toList();
@@ -63,8 +66,14 @@ class FavoriteGamesProvider with ChangeNotifier {
   }
 
   Future<void> _saveFavoriteGames() async {
-    // Convierte la lista de objetos GameModel a JSON y luego guárdala
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      // Usuario no autenticado, no guardar favoritos
+      return;
+    }
+
+    String userKey = '$_kFavoriteGamesKey${user.email}';
     String favoriteGamesJson = jsonEncode(_favoriteGames);
-    await _storage.write(key: _kFavoriteGamesKey, value: favoriteGamesJson);
+    await _storage.write(key: userKey, value: favoriteGamesJson);
   }
 }

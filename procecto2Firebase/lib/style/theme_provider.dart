@@ -23,26 +23,26 @@ class ThemeProvider with ChangeNotifier {
     final theme = await _storage.read(key: 'theme');
     if (theme == 'light') {
       themeData = ligthTheme;
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Color.fromARGB(255, 255, 255, 255),
+      ));
     } else {
       themeData = darkTheme;
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Color.fromARGB(255, 53, 56, 64),
+      ));
     }
   }
 
   void toggleTheme() {
     if (_themeData == ligthTheme) {
       themeData = darkTheme;
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Color.fromARGB(255, 53, 56, 64),
-      ));
-      print("oscuro");
+
       _saveThemePreference('dark');
       loadThemePreference(); // Guarda el tema oscuro
     } else {
       themeData = ligthTheme;
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Color.fromARGB(255, 255, 255, 255),
-      ));
-      print("claro");
+
       _saveThemePreference('light');
       loadThemePreference(); // Guarda el tema claro
     }
