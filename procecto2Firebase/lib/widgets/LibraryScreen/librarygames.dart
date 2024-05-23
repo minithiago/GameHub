@@ -71,8 +71,8 @@ class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                           i == 0
                               ? 'All'
                               : i == 1
-                                  ? 'Wishlist'
-                                  : 'Favorites',
+                                  ? 'Favorites'
+                                  : 'Wishlist',
                           style: TextStyle(
                             fontSize: 18, // Tamaño de la fuente
                             color: selectedIndex == i

@@ -172,8 +172,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
     List<GameModel> sublist1 = favoriteGamesProvider.favoriteGames;
     //favoriteGamess.where((game) => game.wishlist == true).toList();
-    List<GameModel> sublist2 =
-        favoriteGamess.where((game) => game.favorite == true).toList();
+    List<GameModel> sublist2 = favoriteGamesProvider.wishlistGames;
 
     List<GameModel> gamesToShow;
 
@@ -333,6 +332,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
                                         game.wishlist = true;
+                                        favoriteGamesProvider
+                                            .addToWishlist(game);
                                       },
                                       child: const Row(
                                         children: [
