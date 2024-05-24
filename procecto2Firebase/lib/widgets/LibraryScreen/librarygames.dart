@@ -244,6 +244,7 @@ class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                     busqueda: _nameFilter,
                     usuario:
                         FirebaseAuth.instance.currentUser!.email.toString(),
+                    lista: selectedIndex,
                   );
                 default:
                   return Container();

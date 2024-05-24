@@ -165,7 +165,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Theme.of(context).colorScheme.secondary,
-                        const Color.fromRGBO(110, 182, 255, 1)
+                        const Color.fromRGBO(110, 182, 255, 1) //color azul
                         //Color.fromARGB(255, 29, 166, 251)
                       ],
                       begin: Alignment.bottomCenter,

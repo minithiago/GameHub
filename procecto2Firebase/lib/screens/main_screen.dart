@@ -53,7 +53,6 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     _pageController.initialPage = _currentIndex;
     return Scaffold(
       backgroundColor: Theme.of(context)

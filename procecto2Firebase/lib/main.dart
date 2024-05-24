@@ -46,11 +46,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     themeProvider.loadThemePreference();
-    /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor:
-          Colors.transparent, //Theme.of(context).colorScheme.background,
-      //statusBarBrightness: Brightness.dark
-    ));*/
+
     return MaterialApp(
       title: 'GameHub',
       debugShowCheckedModeBanner: false,

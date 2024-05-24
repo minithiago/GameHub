@@ -189,6 +189,7 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                     filtro: _filter,
                     busqueda: _nameFilter,
                     usuario: widget._usuario,
+                    lista: 0,
                   );
                 default:
                   return Container();

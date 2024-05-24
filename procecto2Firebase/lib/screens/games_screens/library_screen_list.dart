@@ -1,13 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
-import 'package:procecto2/elements/error_element.dart';
-import 'package:procecto2/elements/loader_element.dart';
+
 import 'package:procecto2/model/game.dart';
-import 'package:procecto2/model/game_response.dart';
+import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/screens/game_detail_screen.dart';
 import 'package:procecto2/services/switch_games.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +14,16 @@ class LibraryScreenList extends StatefulWidget {
   final String filtro;
   final String busqueda;
   final String usuario;
+  final int lista;
 
   const LibraryScreenList(
       {Key? key,
       required this.filtro,
       required this.busqueda,
-      required this.usuario})
+      required this.usuario,
+      required this.lista})
       : super(key: key);
+
   @override
   _LibraryScreenListState createState() => _LibraryScreenListState();
 }
@@ -31,42 +32,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
   String _currentFilter = '';
   String _nameFilter = '';
   String _usuario = '';
-
-  Future<List<String>> getGamesForUserEmail(String userEmail) async {
-    try {
-      // Obtener la referencia al documento del usuario en Firestore utilizando su email
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: userEmail)
-          .get();
-
-      if (userSnapshot.docs.isNotEmpty) {
-        String userId = userSnapshot.docs.first.id;
-        // Obtener la referencia a la subcolección "Games" del usuario
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Games')
-            .get();
-
-        // Extraer los IDs de los juegos
-        List<String> gameIds = gamesSnapshot.docs.map((doc) {
-          // Obtener el campo "id" de cada documento en la subcolección "Games"
-          return doc['id']
-              .toString(); // Ajusta esto según la estructura de tus documentos
-        }).toList();
-
-        return gameIds;
-      } else {
-        print(
-            'No se encontró ningún usuario con el correo electrónico $userEmail.');
-        return [];
-      }
-    } catch (e) {
-      print('Error getting games for user: $e');
-      return [];
-    }
-  }
+  int _lista = 0;
 
   @override
   void initState() {
@@ -74,30 +40,8 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
     _currentFilter = widget.filtro;
     _nameFilter = widget.busqueda;
     _usuario = widget.usuario;
-
-    fetchUserGames();
-  }
-
-  Future<void> fetchUserGames() async {
-    //ponerlo en game-details y en añadri un setState() 'alomejor'
-    try {
-      // Obtiene la lista de juegos para el usuario
-      List<String> userGames = await getGamesForUserEmail(
-          //FirebaseAuth.instance.currentUser!.email.toString()
-          _usuario);
-
-      // Verifica si la lista de juegos para el usuario está vacía
-      if (userGames.isEmpty) {
-        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
-        getlibraryGames.getlibraryGames([]);
-      } else {
-        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
-        getlibraryGames.getlibraryGames(userGames);
-      }
-    } catch (e) {
-      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
-      print('Error fetching user games: $e');
-    }
+    _lista = widget.lista;
+    FavoriteGamesProvider();
   }
 
   @override
@@ -109,80 +53,59 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
         print(widget.filtro);
       });
     }
+    if (oldWidget.lista != widget.lista) {
+      setState(() {
+        _lista = widget.lista;
+        print(widget.lista);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<GameResponse>(
-      stream: getlibraryGames.subject.stream,
-      builder: (context, AsyncSnapshot<GameResponse> snapshot) {
-        if (snapshot.hasData) {
-          final gameResponse = snapshot.data;
-          if (gameResponse != null && gameResponse.error.isNotEmpty) {
-            return buildErrorWidget(gameResponse.error);
-          } else {
-            //favoriteGamess = gameResponse!.games;
-            return _buildGameListWidget(gameResponse!);
-          }
-        } else if (snapshot.hasError) {
-          return buildErrorWidget(snapshot.error.toString());
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return buildLoadingWidget();
-        } else {
-          // Devolvemos un widget vacío que no ocupa espacio en la pantalla
-          return const SizedBox(
-            child: Center(
-              child: Text(
-                "Search for games",
-                style: TextStyle(
-                    //color: Colors.white
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
 
-  Widget _buildGameListWidget(GameResponse data) {
-    //var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
-    //var favoriteGames = favoriteGamesProvider.favoriteGames;
-    //List<GameModel> games = favoriteGames;
+    //var favoriteGamess = data.games;
 
-    var favoriteGamess = data.games;
+    List<GameModel> favoriteGamess = favoriteGamesProvider.allGames;
 
-    List<GameModel> _filterGamesByName(List<GameModel> games) {
-      if (_nameFilter.isEmpty) {
-        return games;
-      } else {
-        return games
-            .where((game) =>
-                game.name.toLowerCase().contains(_nameFilter.toLowerCase()))
-            .toList();
-      }
+    List<GameModel> sublist1 = favoriteGamesProvider.favoriteGames;
+    //favoriteGamess.where((game) => game.wishlist == true).toList();
+    List<GameModel> sublist2 = favoriteGamesProvider.wishlistGames;
+
+    List<GameModel> gamesToShow;
+
+    // Seleccionar la lista según el índice de _lista
+    switch (_lista) {
+      case 1:
+        gamesToShow = sublist1;
+        break;
+      case 2:
+        gamesToShow = sublist2;
+        break;
+      default:
+        gamesToShow = favoriteGamess;
     }
 
     switch (_currentFilter) {
       case "Name":
-        favoriteGamess.sort((b, a) => b.name.compareTo(a.name));
+        gamesToShow.sort((b, a) => b.name.compareTo(a.name));
         break;
       case "Rating":
-        favoriteGamess.sort((a, b) => b.total_rating.compareTo(a.total_rating));
+        gamesToShow.sort((a, b) => b.total_rating.compareTo(a.total_rating));
         break;
       case "Release date":
-        favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
+        gamesToShow.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
         break;
       default:
-        favoriteGamess = data.games; //  favoriteGamesProvider.favoriteGames;
+        gamesToShow =
+            favoriteGamess; //data.games; //  favoriteGamesProvider.favoriteGames;
     }
 
     if (favoriteGamess.isEmpty) {
       favoriteGamess = [];
     }
-
-    if (favoriteGamess.isEmpty) {
+    if (gamesToShow.isEmpty) {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Column(
@@ -205,7 +128,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
     } else {
       return AnimationLimiter(
         child: ListView.builder(
-          itemCount: favoriteGamess.length,
+          itemCount: gamesToShow.length,
           itemBuilder: (BuildContext context, int index) {
             return AnimationConfiguration.staggeredList(
               position: index,
@@ -222,7 +145,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                               (context, animation, secondaryAnimation) =>
                                   GameDetailScreen(
                             key: const Key("game_detail_screen_key"),
-                            game: favoriteGamess[index],
+                            game: gamesToShow[index],
                           ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
@@ -250,7 +173,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                       child: Row(
                         children: [
                           Hero(
-                            tag: favoriteGamess[index].id,
+                            tag: gamesToShow[index].id,
                             child: AspectRatio(
                               aspectRatio: 3 / 4,
                               child: Container(
@@ -259,7 +182,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                         Radius.circular(5.0)),
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${favoriteGamess[index].cover!.imageId}.jpg",
+                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${gamesToShow[index].cover!.imageId}.jpg",
                                         ),
                                         fit: BoxFit.cover)),
                               ),
@@ -277,7 +200,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      favoriteGamess[index].name,
+                                      gamesToShow[index].name,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
                                       style: const TextStyle(
@@ -289,9 +212,9 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      favoriteGamess[index].summary,
+                                      gamesToShow[index].summary,
                                       maxLines: 4,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           //color: Colors.white.withOpacity(0.2),
                                           fontSize: 12.0),
                                     )
@@ -307,7 +230,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                               RatingBar.builder(
                                                 itemSize: 10.0,
                                                 initialRating:
-                                                    favoriteGamess[index]
+                                                    gamesToShow[index]
                                                             .total_rating /
                                                         20,
                                                 minRating: 1,
@@ -333,7 +256,7 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
                                                 width: 3.0,
                                               ),
                                               Text(
-                                                (favoriteGamess[index]
+                                                (gamesToShow[index]
                                                             .total_rating /
                                                         20)
                                                     .toString()

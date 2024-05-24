@@ -26,13 +26,6 @@ class UserRepository extends ChangeNotifier {
         "avatar": profilePic
       });
 
-      // Crea una subcolección Games dentro del documento del usuario
-      await db
-          .collection("Users")
-          .doc(uid)
-          .collection("Games")
-          .add({}); //NUEVO SIN PROBAR
-
       // Inicializa el currentUser
       currentUser = UserModel(
           nickname: nickname,
@@ -94,7 +87,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<bool> addGameToUser(String email, String coverId, String gameName,
-      double rating, int id, bool favorite, bool wishlist) async {
+      double rating, int id) async {
     try {
       // Obtén una referencia al documento del usuario en Firestore utilizando su correo electrónico
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
@@ -115,8 +108,6 @@ class UserRepository extends ChangeNotifier {
           "id": id,
           "rating": rating,
           "coverId": coverId,
-          "favorite": favorite,
-          "wishlist": wishlist,
         });
 
         print("Game added to user successfully");

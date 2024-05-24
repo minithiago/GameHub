@@ -27,44 +27,11 @@ class DiscoverScreenGrid extends StatefulWidget {
 }
 
 class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
-  late Future<List<String>> favoriteGameIDss;
   @override
   void initState() {
     getGamesBloc.getGames();
     super.initState();
-    favoriteGameIDss = getGamesForUserEmail();
-  }
-
-  Future<List<String>> getGamesForUserEmail() async {
-    try {
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email',
-              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
-          .get();
-
-      if (userSnapshot.docs.isNotEmpty) {
-        String userId = userSnapshot.docs.first.id;
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Games')
-            .get();
-
-        List<String> gameIds = gamesSnapshot.docs.map((doc) {
-          return doc['id'].toString();
-        }).toList();
-
-        return gameIds;
-      } else {
-        print(
-            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email}.');
-        return [];
-      }
-    } catch (e) {
-      print('Error getting games for user: $e');
-      return [];
-    }
+    FavoriteGamesProvider();
   }
 
   @override
@@ -93,8 +60,12 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
 
-    final List<String> favoriteGameNames =
-        favoriteGamesProvider.favoriteGames.map((game) => game.name).toList();
+    final List<int> allGameIds =
+        favoriteGamesProvider.allGames.map((game) => game.id).toList();
+    final List<int> favoriteGameIds =
+        favoriteGamesProvider.favoriteGames.map((game) => game.id).toList();
+    final List<int> wishlistGameIds =
+        favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
 
     List<GameModel> games = data.games;
     if (games.isEmpty) {
@@ -151,17 +122,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        if (game.library == false) {
-                                          UserRepository().addGameToUser(
-                                              userId,
-                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                              game.name,
-                                              game.total_rating,
-                                              game.id,
-                                              false,
-                                              false);
-                                          game.library = true;
-                                        } else {
+                                        if (allGameIds.contains(game.id)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
@@ -169,9 +130,17 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                             duration:
                                                 const Duration(seconds: 1),
                                           ));
+                                        } else {
+                                          UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
                                         }
-
-                                        //print(userId);
                                       },
                                       child: const Row(
                                         children: [
@@ -197,17 +166,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        if (game.favorite == false) {
-                                          UserRepository().addGameToUser(
-                                              userId,
-                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                              game.name,
-                                              game.total_rating,
-                                              game.id,
-                                              false,
-                                              false);
-                                          game.favorite == true;
-                                        } else {
+                                        if (allGameIds.contains(game.id)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
@@ -215,9 +174,19 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                             duration:
                                                 const Duration(seconds: 1),
                                           ));
+                                        } else {
+                                          UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
+                                          favoriteGamesProvider
+                                              .addToFavorites(game);
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
                                         }
-
-                                        //print(userId);
                                       },
                                       child: const Row(
                                         children: [
@@ -241,17 +210,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        if (game.wishlist == false) {
-                                          UserRepository().addGameToUser(
-                                              userId,
-                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                              game.name,
-                                              game.total_rating,
-                                              game.id,
-                                              false,
-                                              false);
-                                          game.wishlist = true;
-                                        } else {
+                                        if (allGameIds.contains(game.id)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
@@ -259,9 +218,19 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                             duration:
                                                 const Duration(seconds: 1),
                                           ));
+                                        } else {
+                                          UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
+                                          favoriteGamesProvider
+                                              .addToWishlist(game);
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
                                         }
-
-                                        //print(userId);
                                       },
                                       child: const Row(
                                         children: [

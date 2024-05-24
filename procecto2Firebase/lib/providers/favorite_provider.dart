@@ -5,13 +5,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:procecto2/model/game.dart'; // Asegúrate de importar tu modelo GameModel aquí
 
 class FavoriteGamesProvider with ChangeNotifier {
+  List<GameModel> _allGames = [];
   List<GameModel> _favoriteGames = [];
   List<GameModel> _wishlistGames = [];
   static const String _kFavoriteGamesKey = 'favorite_games';
   static const String _kWishlistGamesKey = 'wishlist_games';
+  static const String _kAllGamesKey = 'all_games';
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  List<GameModel> get allGames => _allGames;
   List<GameModel> get favoriteGames => _favoriteGames;
   List<GameModel> get wishlistGames => _wishlistGames;
 
@@ -21,9 +24,17 @@ class FavoriteGamesProvider with ChangeNotifier {
     });
   }
 
+  void addToAllGames(GameModel game) {
+    _allGames.add(game);
+    _saveAllGames();
+    notifyListeners();
+  }
+
   void addToFavorites(GameModel game) {
     game.favorite = true;
-    _favoriteGames.add(game);
+    if (!_favoriteGames.contains(game)) {
+      _favoriteGames.add(game);
+    }
     _saveFavoriteGames();
     notifyListeners();
   }
@@ -37,7 +48,9 @@ class FavoriteGamesProvider with ChangeNotifier {
 
   void addToWishlist(GameModel game) {
     game.wishlist = true;
-    _wishlistGames.add(game);
+    if (!_wishlistGames.contains(game)) {
+      _wishlistGames.add(game);
+    }
     _saveWishlistGames();
     notifyListeners();
   }
@@ -62,6 +75,12 @@ class FavoriteGamesProvider with ChangeNotifier {
     }
   }
 
+  void removeFromAllGames(GameModel game) {
+    _allGames.remove(game);
+    _saveAllGames();
+    notifyListeners();
+  }
+
   void removeWishlistByName(String gameName) {
     GameModel? gameToRemove = _wishlistGames.firstWhere(
       (game) => game.name == gameName,
@@ -80,6 +99,11 @@ class FavoriteGamesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void refreshAll() {
+    _saveAllGames();
+    notifyListeners();
+  }
+
   void refreshWishlist() {
     _saveWishlistGames();
     notifyListeners();
@@ -89,9 +113,11 @@ class FavoriteGamesProvider with ChangeNotifier {
     if (user != null) {
       await _loadFavoriteGames(user);
       await _loadWishlistGames(user);
+      await _loadAllGames(user);
     } else {
       _favoriteGames = [];
       _wishlistGames = [];
+      _allGames = [];
       notifyListeners();
     }
   }
@@ -107,6 +133,21 @@ class FavoriteGamesProvider with ChangeNotifier {
       }).toList();
     } else {
       _favoriteGames = [];
+    }
+    notifyListeners();
+  }
+
+  Future<void> _loadAllGames(User user) async {
+    String userKey = '$_kAllGamesKey${user.email}';
+    String? allGamesJson = await _storage.read(key: userKey);
+    if (allGamesJson != null && allGamesJson.isNotEmpty) {
+      List<Map<String, dynamic>> gameListJson =
+          jsonDecode(allGamesJson).cast<Map<String, dynamic>>();
+      _allGames = gameListJson.map((json) {
+        return GameModel.fromJson(json)..favorite = true;
+      }).toList();
+    } else {
+      _allGames = [];
     }
     notifyListeners();
   }
@@ -136,6 +177,18 @@ class FavoriteGamesProvider with ChangeNotifier {
     String favoriteGamesJson =
         jsonEncode(_favoriteGames.map((game) => game.toJson()).toList());
     await _storage.write(key: userKey, value: favoriteGamesJson);
+  }
+
+  Future<void> _saveAllGames() async {
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    String userKey = '$_kAllGamesKey${user.email}';
+    String AllGamesJson =
+        jsonEncode(_allGames.map((game) => game.toJson()).toList());
+    await _storage.write(key: userKey, value: AllGamesJson);
   }
 
   Future<void> _saveWishlistGames() async {

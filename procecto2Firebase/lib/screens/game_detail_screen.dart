@@ -28,7 +28,6 @@ class GameDetailScreen extends StatefulWidget {
 class GameDetailScreenState extends State<GameDetailScreen>
     with SingleTickerProviderStateMixin {
   late YoutubePlayerController _controller;
-  //PageController pageController =PageController(viewportFraction: 1, keepPage: true);
   late TabController _tabController;
   final GameModel game;
   final tabs = <Item>[
@@ -43,57 +42,22 @@ class GameDetailScreenState extends State<GameDetailScreen>
     hideShadow: true,
   );
 
-  late Future<List<String>> favoriteGameIDss;
-
   // Utiliza el constructor super para inicializar la clase base
   GameDetailScreenState(this.game) : super();
 
   @override
   void dispose() {
     _controller.dispose();
-    //pageController.dispose();
     _tabController.dispose();
 
     super.dispose();
-  }
-
-  Future<List<String>> getGamesForUserEmail() async {
-    try {
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email',
-              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
-          .get();
-
-      if (userSnapshot.docs.isNotEmpty) {
-        String userId = userSnapshot.docs.first.id;
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Games')
-            .get();
-
-        List<String> gameIds = gamesSnapshot.docs.map((doc) {
-          return doc['id'].toString();
-        }).toList();
-
-        return gameIds;
-      } else {
-        print(
-            'No se encontró ningún usuario con el correo electrónico ${FirebaseAuth.instance.currentUser!.email}.');
-        return [];
-      }
-    } catch (e) {
-      print('Error getting games for user: $e');
-      return [];
-    }
   }
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: tabs.length);
-    favoriteGameIDss = getGamesForUserEmail();
+    FavoriteGamesProvider();
 
     if (game.videos != null) {
       _controller = YoutubePlayerController(
@@ -122,6 +86,9 @@ class GameDetailScreenState extends State<GameDetailScreen>
     var date = DateTime.fromMillisecondsSinceEpoch(game.firstRelease * 1000);
     var formattedDate = DateFormat('dd/MM/yyyy').format(date);
     String userId = FirebaseAuth.instance.currentUser!.email.toString();
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    final List<int> allGameIds =
+        favoriteGamesProvider.allGames.map((game) => game.id).toList();
 
     return Scaffold(
         //backgroundColor: const Color(0xFF20232a),
@@ -243,7 +210,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                 ),
                                 const SizedBox(
                                     height:
-                                        8.0), // Espacio entre el título y la puntuación
+                                        5.0), // Espacio entre el título y la puntuación
                                 Row(
                                   children: [
                                     Visibility(
@@ -334,209 +301,100 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                             ],
                                           ),
                                         ),
-                                        FutureBuilder<List<String>>(
-                                            future: favoriteGameIDss,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return Container();
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                    'Error: ${snapshot.error}');
-                                              } else if (!snapshot.hasData ||
-                                                  snapshot.data!.isEmpty) {
-                                                return const Text(
-                                                    'No favorite games found.');
-                                              } else {
-                                                List<String> favoriteGameIDs =
-                                                    snapshot.data!;
-                                                bool isFavorite =
-                                                    favoriteGameIDs.contains(
-                                                        widget.game.id
-                                                            .toString());
+                                        Visibility(
+                                          visible:
+                                              !allGameIds.contains(game.id),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      110, 182, 255, 1),
+                                              shape: RoundedRectangleBorder(
+                                                // Forma del botón con bordes redondeados
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10), // Radio de los bordes
+                                              ),
+                                              minimumSize: const Size(130, 40),
+                                            ),
+                                            onPressed: () async {
+                                              UserRepository().addGameToUser(
+                                                userId,
+                                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                                game.name,
+                                                game.total_rating,
+                                                game.id,
+                                              );
+                                              allGameIds.add(game.id);
 
-                                                return Visibility(
-                                                    visible: !isFavorite,
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        print(game.favorite);
-                                                        setState(() {
-                                                          favoriteGameIDs.add(
-                                                              widget.game.id
-                                                                  .toString());
-                                                        });
-                                                        UserRepository()
-                                                            .addGameToUser(
-                                                                userId,
-                                                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                                                game.name,
-                                                                game.total_rating,
-                                                                game.id,
-                                                                false,
-                                                                false);
+                                              favoriteGamesProvider
+                                                  .addToAllGames(game);
+                                            },
+                                            child: const Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                    Icons
+                                                        .add_circle_outline_rounded,
+                                                    color: Colors
+                                                        .white), // Icono de cesto de la compra
+                                                SizedBox(
+                                                    width:
+                                                        3), // Espacio entre el icono y el texto
+                                                Text(
+                                                  "to library",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible: allGameIds.contains(game.id),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                              shape: RoundedRectangleBorder(
+                                                // Forma del botón con bordes redondeados
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10), // Radio de los bordes
+                                              ),
+                                              minimumSize: const Size(130, 40),
+                                            ),
+                                            onPressed: () async {
+                                              favoriteGamesProvider
+                                                  .removeWishlist(game);
+                                              favoriteGamesProvider
+                                                  .removeFavorite(game);
+                                              favoriteGamesProvider
+                                                  .removeFromAllGames(game);
+                                              allGameIds.remove(game.id);
 
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                                SnackBar(
-                                                          content: Text(
-                                                              "${game.name} added to library"),
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 1),
-                                                          action:
-                                                              SnackBarAction(
-                                                            label: "Undo",
-                                                            onPressed: () {
-                                                              UserRepository()
-                                                                  .removeGameFromUser(
-                                                                      userId,
-                                                                      game.id);
-                                                            },
-                                                          ),
-                                                        ));
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            const Color
-                                                                .fromRGBO(110,
-                                                                182, 255, 1),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          // Forma del botón con bordes redondeados
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  10), // Radio de los bordes
-                                                        ),
-                                                        minimumSize:
-                                                            const Size(130, 40),
-                                                      ),
-                                                      child: const Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .add_circle,
-                                                                color: Colors
-                                                                    .white), // Icono de cesto de la compra
-                                                            SizedBox(
-                                                                width:
-                                                                    3), // Espacio entre el icono y el texto
-                                                            Text(
-                                                              "to library",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                          ]),
-                                                    ));
-                                              }
-                                            }),
-
-                                        // El widget que quieres mostrar/ocultar
-
-                                        FutureBuilder<List<String>>(
-                                            future: favoriteGameIDss,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return buildLoadingWidget();
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                    'Error: ${snapshot.error}');
-                                              } else if (!snapshot.hasData ||
-                                                  snapshot.data!.isEmpty) {
-                                                return const Text(
-                                                    'No favorite games found.');
-                                              } else {
-                                                List<String> favoriteGameIDs =
-                                                    snapshot.data!;
-                                                bool isFavorite =
-                                                    favoriteGameIDs.contains(
-                                                        widget.game.id
-                                                            .toString());
-
-                                                return Visibility(
-                                                  visible: isFavorite,
-                                                  child: ElevatedButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        favoriteGameIDs.remove(
-                                                            widget.game.id
-                                                                .toString());
-                                                      });
-                                                      UserRepository()
-                                                          .removeGameFromUser(
-                                                              userId, game.id);
-
-                                                      //UserRepository().fetchUserData();
-
-                                                      // Remover el juego de la lista
-
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              SnackBar(
-                                                        content: Text(
-                                                            "${game.name} removed from library"),
-                                                        action: SnackBarAction(
-                                                          label: "Undo",
-                                                          onPressed: () {
-                                                            UserRepository()
-                                                                .addGameToUser(
-                                                                    userId,
-                                                                    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                                                    game.name,
-                                                                    game.total_rating,
-                                                                    game.id,
-                                                                    false,
-                                                                    false);
-                                                            //game.favorite ==false;
-                                                            // Agregar el juego a la lista
-                                                          },
-                                                        ),
-                                                      ));
-                                                    },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        // Forma del botón con bordes redondeados
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        // Radio de los bordes
-                                                      ),
-                                                      minimumSize:
-                                                          const Size(130, 40),
-                                                    ),
-                                                    child: const Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Icon(
-                                                            Icons.remove_circle,
-                                                            color: Colors
-                                                                .white), // Icono de cesto de la compra
-                                                        SizedBox(
-                                                            width:
-                                                                8), // Espacio entre el icono y el texto
-                                                        Text(
-                                                          "Remove",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            }),
+                                              UserRepository()
+                                                  .removeGameFromUser(
+                                                      userId, game.id);
+                                            },
+                                            child: const Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                    Icons.remove_circle_outline,
+                                                    color: Colors
+                                                        .white), // Icono de cesto de la compra
+                                                SizedBox(
+                                                    width:
+                                                        3), // Espacio entre el icono y el texto
+                                                Text(
+                                                  " Remove",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ],
