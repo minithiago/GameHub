@@ -49,7 +49,6 @@ class GameDetailScreenState extends State<GameDetailScreen>
   void dispose() {
     _controller.dispose();
     _tabController.dispose();
-
     super.dispose();
   }
 
@@ -92,7 +91,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
 
     return Scaffold(
         //backgroundColor: const Color(0xFF20232a),
-        body: Stack(children: [
+        body: SafeArea(
+            child: Stack(children: [
       Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -110,10 +110,6 @@ class GameDetailScreenState extends State<GameDetailScreen>
         ),
       ),
       Column(children: [
-        Container(
-          height: 50.0,
-          //color: Theme.of(context).colorScheme.secondary,
-        ),
         Stack(
           children: <Widget>[
             SizedBox(
@@ -173,7 +169,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
                 ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 10.0, left: 10.0),
+                      padding: const EdgeInsets.only(
+                          right: 10.0, left: 10.0, top: 10),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -948,7 +945,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
               ]),
         )
       ]),
-    ]));
+    ])));
   }
 
   //widget para los listview

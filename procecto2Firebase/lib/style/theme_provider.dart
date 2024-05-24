@@ -25,11 +25,13 @@ class ThemeProvider with ChangeNotifier {
       themeData = ligthTheme;
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         systemNavigationBarColor: Color.fromARGB(255, 255, 255, 255),
+        statusBarColor: Color.fromARGB(255, 255, 255, 255),
       ));
     } else {
       themeData = darkTheme;
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         systemNavigationBarColor: Color.fromARGB(255, 53, 56, 64),
+        statusBarColor: Color.fromARGB(255, 53, 56, 64),
       ));
     }
   }
