@@ -53,7 +53,7 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
   }
 
   Widget _buildGameGridWidget(GameResponse data) {
-    String userId = FirebaseAuth.instance.currentUser!.email.toString();
+    //String userId = FirebaseAuth.instance.currentUser!.email.toString();
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
 
@@ -82,145 +82,157 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                       child: FadeInAnimation(
                           child: GestureDetector(
                         onLongPress: () {
-                          HapticFeedback.lightImpact();
-                          showCupertinoModalPopup(
-                            context: context,
-                            builder: (context) {
-                              return CupertinoActionSheet(
-                                actions: <CupertinoActionSheetAction>[
-                                  CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      HapticFeedback.lightImpact();
-                                      if (allGameIds.contains(game.id)) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "${game.name} already in library"),
-                                          duration: const Duration(seconds: 1),
-                                        ));
-                                      } else {
-                                        UserRepository().addGameToUser(
-                                          userId,
-                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                          game.name,
-                                          game.total_rating,
-                                          game.id,
-                                        );
-                                        favoriteGamesProvider
-                                            .addToAllGames(game);
-                                      }
-                                    },
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons
-                                              .add_circle, //color: Colors.black
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                8), // Espacio entre el icono y el texto
-                                        Text(
-                                          "Add to library",
-                                          style: TextStyle(
-                                              //color: Colors.black, // Color del texto
-                                              ),
-                                        ),
-                                      ],
+                          if (FirebaseAuth.instance.currentUser?.email
+                                  .toString() !=
+                              null) {
+                            String userId = FirebaseAuth
+                                .instance.currentUser!.email
+                                .toString();
+                            HapticFeedback.lightImpact();
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoActionSheet(
+                                  actions: <CupertinoActionSheetAction>[
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        if (allGameIds.contains(game.id)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in library"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
+                                        } else {
+                                          UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
+                                        }
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .add_circle, //color: Colors.black
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to library",
+                                            style: TextStyle(
+                                                //color: Colors.black, // Color del texto
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  /*
+                                    /*
                                     */
-                                  CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      HapticFeedback.lightImpact();
-                                      if (allGameIds.contains(game.id)) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "${game.name} already in library"),
-                                          duration: const Duration(seconds: 1),
-                                        ));
-                                      } else {
-                                        UserRepository().addGameToUser(
-                                          userId,
-                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                          game.name,
-                                          game.total_rating,
-                                          game.id,
-                                        );
-                                        favoriteGamesProvider
-                                            .addToFavorites(game);
-                                        favoriteGamesProvider
-                                            .addToAllGames(game);
-                                      }
-                                    },
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.favorite_rounded,
-                                          //color: Colors.black, // Color del icono
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                8), // Espacio entre el icono y el texto
-                                        Text(
-                                          "Add to favorites",
-                                          style: TextStyle(
-                                              //color: Colors.black,
-                                              ),
-                                        )
-                                      ],
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        if (allGameIds.contains(game.id)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in library"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
+                                        } else {
+                                          UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
+                                          favoriteGamesProvider
+                                              .addToFavorites(game);
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
+                                        }
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.favorite_rounded,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to favorites",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      HapticFeedback.lightImpact();
-                                      if (allGameIds.contains(game.id)) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "${game.name} already in library"),
-                                          duration: const Duration(seconds: 1),
-                                        ));
-                                      } else {
-                                        UserRepository().addGameToUser(
-                                          userId,
-                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                          game.name,
-                                          game.total_rating,
-                                          game.id,
-                                        );
-                                        favoriteGamesProvider
-                                            .addToWishlist(game);
-                                        favoriteGamesProvider
-                                            .addToAllGames(game);
-                                      }
-                                    },
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.list_alt_rounded,
-                                          //color: Colors.black, // Color del icono
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                8), // Espacio entre el icono y el texto
-                                        Text(
-                                          "Add to Wishlist",
-                                          style: TextStyle(
-                                              //color: Colors.black,
-                                              ),
-                                        )
-                                      ],
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        if (allGameIds.contains(game.id)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in library"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
+                                        } else {
+                                          UserRepository().addGameToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
+                                          favoriteGamesProvider
+                                              .addToWishlist(game);
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
+                                        }
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.list_alt_rounded,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to Wishlist",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            return;
+                          }
                         },
                         onTap: () {
                           Navigator.push(

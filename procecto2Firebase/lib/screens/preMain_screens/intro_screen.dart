@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/preMain_screens/signup_screen.dart';
 import 'package:procecto2/style/theme_provider.dart';
@@ -38,12 +39,18 @@ class IntroScreen extends StatelessWidget {
           //color:  Theme.of(context).colorScheme.background ,//Style.Colors.introGrey, //fondo real
           child: Column(
             children: [
-              SizedBox(
-                height: 300,
-                child: Image(
-                  image: _themeData.brightness == Brightness.dark
-                      ? const AssetImage("assets/images/gamehubFondo.png")
-                      : const AssetImage("assets/images/gamehubNuevo.png"),
+              GestureDetector(
+                onTap: () {
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleTheme();
+                },
+                child: SizedBox(
+                  height: 300,
+                  child: Image(
+                    image: _themeData.brightness == Brightness.dark
+                        ? const AssetImage("assets/images/gamehubFondo.png")
+                        : const AssetImage("assets/images/gamehubNuevo.png"),
+                  ),
                 ),
               ),
               Row(
@@ -212,7 +219,7 @@ class IntroScreen extends StatelessWidget {
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  LoginScreen(),
+                                  const LoginScreen(),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             const begin = Offset(1.0, 0.0);
@@ -258,12 +265,14 @@ class IntroScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  const MainScreen(),
+                                  const MainScreen(
+                            currentIndex: 0,
+                          ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             const begin = Offset(1.0, 0.0);
@@ -282,10 +291,6 @@ class IntroScreen extends StatelessWidget {
                           transitionDuration: const Duration(milliseconds: 250),
                         ),
                       );
-                      loginProvider.signup("nickname", "Guest", "password");
-                      loginProvider.login("Guest", "password");*/
-                      Provider.of<ThemeProvider>(context, listen: false)
-                          .toggleTheme();
                     },
                     child: const Text(
                       "Continue without account",

@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/friends_screen.dart';
+import 'package:procecto2/screens/preMain_screens/intro_screen.dart';
 import 'package:procecto2/widgets/LibraryScreen/librarygames.dart';
 import 'package:procecto2/widgets/LibraryScreen/searchLibraryGame.dart';
 
@@ -60,39 +62,14 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     String _avatar =
         'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg';
-    /*
-    if (LoginProvider.currentUser.email == "Guest") {
+
+    if (FirebaseAuth.instance.currentUser?.email.toString() != null) {
       return Scaffold(
-        backgroundColor: Style.Colors.backgroundColor,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Not Available without account',
-                style: TextStyle(fontSize: 20.0, color: Colors.white),
-              ),
-              SizedBox(height: 20), // Espacio entre el texto y el botón
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => IntroScreen()),
-                  );
-                },
-                child: Text('Register'),
-              ),
-            ],
-          ),
-        ),
-      );
-    }*/
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.secondary,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /*const Positioned(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /*const Positioned(
               left: 60,
               top: 50,
               child: Visibility(
@@ -104,123 +81,157 @@ class _LibraryScreenWidgetState extends State<LibraryScreen> {
                 ),
               )),*/
 
-          Container(
-            color: Theme.of(context).colorScheme.secondary,
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: [
-                FutureBuilder<String?>(
-                  future: getUserAvatar(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      _avatar = snapshot.data ??
-                          "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
-                    }
+            Container(
+              color: Theme.of(context).colorScheme.secondary,
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: [
+                  FutureBuilder<String?>(
+                    future: getUserAvatar(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        _avatar = snapshot.data ??
+                            "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+                      }
 
-                    return CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(_avatar),
-                    );
-                  },
-                ),
-                const SizedBox(width: 20.0),
-                const Text(
-                  'Your Library',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    //color: Colors.white,
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(_avatar),
+                      );
+                    },
                   ),
-                ),
-                const Spacer(), // Agregado para ocupar el espacio restante en la fila
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const FriendsScreen(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(1.0, 0.0);
-                          const end = Offset.zero;
-                          const curve = Curves.ease;
-
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-                          var offsetAnimation = animation.drive(tween);
-
-                          return SlideTransition(
-                            position: offsetAnimation,
-                            child: child,
-                          );
-                        },
-                        transitionDuration: const Duration(milliseconds: 250),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.people,
-                    size: 30,
-                    //color: Colors.white,
+                  const SizedBox(width: 20.0),
+                  const Text(
+                    'Your Library',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      //color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
+                  const Spacer(), // Agregado para ocupar el espacio restante en la fila
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const FriendsScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 250),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.people,
+                      size: 30,
+                      //color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              controller: _searchController,
-              style: const TextStyle(
-                  //color: Colors.white
-                  ),
-              decoration: InputDecoration(
-                fillColor: Colors.grey,
-                filled: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Search your library",
-                hintStyle: const TextStyle(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextField(
+                controller: _searchController,
+                style: const TextStyle(
                     //color: Colors.white
                     ),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DiscoverScreenWidget6(
-                              SwitchBlocSearch(), _searchController.text)),
-                    );
-                  },
-                  //color: Colors.white,
+                decoration: InputDecoration(
+                  fillColor: Colors.grey,
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: "Search your library",
+                  hintStyle: const TextStyle(
+                      //color: Colors.white
+                      ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DiscoverScreenWidget6(
+                                SwitchBlocSearch(), _searchController.text)),
+                      );
+                    },
+                    //color: Colors.white,
+                  ),
                 ),
+                onSubmitted: (_) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DiscoverScreenWidget6(
+                            SwitchBlocSearch(), _searchController.text)),
+                  );
+                },
               ),
-              onSubmitted: (_) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DiscoverScreenWidget6(
-                          SwitchBlocSearch(), _searchController.text)),
-                );
-              },
             ),
+
+            Expanded(
+              child: LibraryScreenWidget(
+                switchBloc,
+              ),
+            )
+
+            // Add more widgets for the rest of your content here
+          ],
+        ),
+      );
+    } else {
+      return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Not Available without account',
+                style: TextStyle(fontSize: 20.0, color: Colors.white),
+              ),
+              const SizedBox(height: 20), // Espacio entre el texto y el botón
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(110, 182, 255, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const IntroScreen()),
+                  );
+                },
+                child: const Text('Register'),
+              ),
+            ],
           ),
-
-          Expanded(
-            child: LibraryScreenWidget(
-              switchBloc,
-            ),
-          )
-
-          // Add more widgets for the rest of your content here
-        ],
-      ),
-    );
+        ),
+      );
+    }
   }
 }

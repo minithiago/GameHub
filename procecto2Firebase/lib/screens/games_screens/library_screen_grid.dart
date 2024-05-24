@@ -97,17 +97,17 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
 
     switch (_currentFilter) {
       case "Name":
-        favoriteGamess.sort((b, a) => b.name.compareTo(a.name));
+        gamesToShow.sort((b, a) => b.name.compareTo(a.name));
         break;
       case "Rating":
-        favoriteGamess.sort((a, b) => b.total_rating.compareTo(a.total_rating));
+        gamesToShow.sort((a, b) => b.total_rating.compareTo(a.total_rating));
         break;
       case "Release date":
-        favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
+        gamesToShow.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
         break;
       default:
-        favoriteGamess = favoriteGamesProvider
-            .allGames; //data.games; //  favoriteGamesProvider.favoriteGames;
+        gamesToShow =
+            gamesToShow; //data.games; //  favoriteGamesProvider.favoriteGames;
     }
 
     if (favoriteGamess.isEmpty) {

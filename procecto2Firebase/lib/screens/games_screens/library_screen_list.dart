@@ -89,16 +89,16 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
 
     switch (_currentFilter) {
       case "Name":
-        gamesToShow.sort((b, a) => b.name.compareTo(a.name));
+        favoriteGamess.sort((b, a) => b.name.compareTo(a.name));
         break;
       case "Rating":
-        gamesToShow.sort((a, b) => b.total_rating.compareTo(a.total_rating));
+        favoriteGamess.sort((a, b) => b.total_rating.compareTo(a.total_rating));
         break;
       case "Release date":
-        gamesToShow.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
+        favoriteGamess.sort((a, b) => b.firstRelease.compareTo(a.firstRelease));
         break;
       default:
-        gamesToShow =
+        favoriteGamess =
             favoriteGamess; //data.games; //  favoriteGamesProvider.favoriteGames;
     }
 
