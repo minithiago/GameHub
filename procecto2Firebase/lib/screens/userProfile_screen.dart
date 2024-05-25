@@ -22,7 +22,7 @@ class _UserProfilePage extends State<UserProfilePage> {
   var userData2;
   int games = 0;
   int friends = 0;
-  int contieneAmigo = 0;
+  int contieneAmigo = 0; //5
   int requestSent = 0;
   bool isLoading = true;
 
@@ -185,7 +185,7 @@ class _UserProfilePage extends State<UserProfilePage> {
         backgroundColor: backgroundColor, // Color de fondo del botón
         shape: RoundedRectangleBorder(
           // Forma del botón con bordes redondeados
-          borderRadius: BorderRadius.circular(20), // Radio de los bordes
+          borderRadius: BorderRadius.circular(10), // Radio de los bordes
         ),
         minimumSize: const Size(130, 40),
       ),

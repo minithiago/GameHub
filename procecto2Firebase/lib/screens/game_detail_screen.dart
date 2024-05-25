@@ -1,15 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -36,7 +33,8 @@ class GameDetailScreenState extends State<GameDetailScreen>
   ];
   final customColors = CustomSliderColors(
     //dotColor: Colors.white.withOpacity(0.8),
-    trackColor: Style.Colors.grey,
+    trackColor: const Color.fromARGB(255, 225, 225, 225),
+
     progressBarColor:
         const Color.fromARGB(255, 79, 215, 84), //color verde interesante
     hideShadow: true,

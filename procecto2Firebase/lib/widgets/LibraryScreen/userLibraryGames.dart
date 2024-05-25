@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/games_screens/library_screen_list.dart';
-import 'package:procecto2/screens/games_screens/userLibrary_screen.dart';
+import 'package:procecto2/screens/games_screens/userLibrary_screen_grid.dart';
+import 'package:procecto2/screens/games_screens/userLibrary_screen_list.dart';
 
 class UserLibraryScreenWidget extends StatefulWidget {
   final SwitchBloc _switchBloc;
@@ -185,11 +186,10 @@ class _UserLibraryScreenWidgetState extends State<UserLibraryScreenWidget> {
                     usuario: widget._usuario,
                   );
                 case SwitchItem.GRID:
-                  return LibraryScreenList(
+                  return LibraryScreenlistUser(
                     filtro: _filter,
                     busqueda: _nameFilter,
                     usuario: widget._usuario,
-                    lista: 0,
                   );
                 default:
                   return Container();
