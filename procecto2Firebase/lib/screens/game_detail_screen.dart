@@ -1,6 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -294,7 +295,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                     // Espacio entre la puntuación y el botón
                                     Column(
                                       children: [
-                                        OutlinedButton(
+                                        ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors
                                                 .green, // Color de fondo del botón
@@ -371,6 +372,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
 
                                                 favoriteGamesProvider
                                                     .addToAllGames(game);
+                                                HapticFeedback.lightImpact();
                                               },
                                               child: const Row(
                                                 mainAxisSize: MainAxisSize.min,
@@ -430,6 +432,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                   UserRepository()
                                                       .removeGameFromUser(
                                                           userId, game.id);
+                                                  HapticFeedback.lightImpact();
                                                 },
                                                 child: const Row(
                                                   mainAxisSize:
@@ -936,26 +939,22 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                         columnCount: 3,
                                         child: ScaleAnimation(
                                           child: FadeInAnimation(
-                                            child: AspectRatio(
-                                              aspectRatio: 4 / 3,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                5.0)),
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(
-                                                          "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.artworks![index].imageId}.jpg",
-                                                        ),
-                                                        fit: BoxFit.cover)),
-                                                child: FadeInImage.assetNetwork(
-                                                  placeholder:
-                                                      'assets/images/loading_image.gif', // Ruta de la imagen de placeholder
-                                                  image:
-                                                      "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.artworks![index].imageId}.jpg",
-                                                  fit: BoxFit.cover,
-                                                ),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5.0)),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.artworks![index].imageId}.jpg",
+                                                      ),
+                                                      fit: BoxFit.cover)),
+                                              child: FadeInImage.assetNetwork(
+                                                placeholder:
+                                                    'assets/images/loading_image.gif', // Ruta de la imagen de placeholder
+                                                image:
+                                                    "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.artworks![index].imageId}.jpg",
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
                                           ),

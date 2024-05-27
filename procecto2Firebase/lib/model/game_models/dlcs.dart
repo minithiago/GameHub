@@ -1,4 +1,3 @@
-
 class dlcModel {
   final int id;
   final List<CoverModel3>? cover;
@@ -10,19 +9,18 @@ class dlcModel {
     this.name,
   );
 
-  dlcModel.fromJson(Map<String, dynamic> json) : id = json["id"],
-  cover = json["cover"] == null
+  dlcModel.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        cover = json["cover"] == null
             ? null
             : json["cover"] is List
                 ? (json["cover"] as List?)
-                    ?.map((dlcJson) =>
-                        CoverModel3.fromJson(dlcJson))
+                    ?.map((dlcJson) => CoverModel3.fromJson(dlcJson))
                     .toList()
                 : [
                     CoverModel3.fromJson(json["cover"]),
                   ],
-       name =
-      json["name"] ?? "";
+        name = json["name"] ?? "";
 
   Map<String, dynamic> toJson() {
     return {
@@ -36,29 +34,17 @@ class dlcModel {
     };
   }
 }
-class CoverModel3 {
-  final int id;
-  final int height;
-  final int width;
-  final String imageId;
-  final String url;
 
-  CoverModel3(this.id, this.height, this.width, this.imageId, this.url);
+class CoverModel3 {
+  final String imageId;
+
+  CoverModel3(this.imageId);
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'height': height,
-      'width': width,
       'image_id': imageId,
-      'url': url,
     };
   }
 
-  CoverModel3.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        height = json["height"],
-        width = json["width"],
-        imageId = json["image_id"],
-        url = json["url"];
+  CoverModel3.fromJson(Map<String, dynamic> json) : imageId = json["image_id"];
 }

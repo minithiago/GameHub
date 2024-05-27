@@ -29,7 +29,7 @@ class GameModel {
   final List<dlcModel>? dlc;
   final List<LanguageModel>? languages;
   final String summary;
-  final List<VideoModel>? videos;
+  //final List<VideoModel>? videos;
   final double total_rating;
   final String name;
   final String slug;
@@ -54,7 +54,7 @@ class GameModel {
       this.dlc,
       this.languages,
       this.summary,
-      this.videos,
+      //this.videos,
       this.total_rating,
       this.slug,
       this.name,
@@ -89,7 +89,7 @@ class GameModel {
       'dlcs': dlc?.map((dlc) => dlc.toJson()).toList(),
       'language_supports':
           languages?.map((language) => language.toJson()).toList(),
-      'videos': videos?.map((video) => video.toJson()).toList(),
+      //'videos': videos?.map((video) => video.toJson()).toList(),
     };
     return data;
   }
@@ -157,11 +157,12 @@ class GameModel {
                 .toList(),
         json["summary"] ??
             "No summary available", // Cambiar en juegos poco conocidos
+        /*
         json["videos"] == null
             ? null
             : (json["videos"] as List?)
                 ?.map((i) => VideoModel.fromJson(i))
-                .toList(),
+                .toList(),*/
         json["total_rating"] ?? 0.0,
         json["slug"] ?? "",
         json["name"] ?? "",
