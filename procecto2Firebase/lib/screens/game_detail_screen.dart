@@ -918,15 +918,15 @@ class GameDetailScreenState extends State<GameDetailScreen>
                         child: Padding(
                           padding: const EdgeInsets.only(
                               top: 10.0, left: 10.0, right: 10.0),
-                          child: game.screenshots != null &&
-                                  game.screenshots!.isNotEmpty
+                          child: game.artworks != null &&
+                                  game.artworks!.isNotEmpty
                               ? GridView.count(
                                   crossAxisSpacing: 10.0,
                                   mainAxisSpacing: 10.0,
                                   childAspectRatio: 1.33,
                                   crossAxisCount: 1,
                                   children: List.generate(
-                                    game.screenshots!.length,
+                                    game.artworks!.length,
                                     (int index) {
                                       return AnimationConfiguration
                                           .staggeredGrid(
@@ -946,14 +946,14 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                                 5.0)),
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                          "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+                                                          "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.artworks![index].imageId}.jpg",
                                                         ),
                                                         fit: BoxFit.cover)),
                                                 child: FadeInImage.assetNetwork(
                                                   placeholder:
                                                       'assets/images/loading_image.gif', // Ruta de la imagen de placeholder
                                                   image:
-                                                      "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+                                                      "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.artworks![index].imageId}.jpg",
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -966,7 +966,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                 )
                               : const Center(
                                   child: Text(
-                                    "Screenshots not available",
+                                    "Artworks not available",
                                     style: TextStyle(
                                       //color: Colors.white,
                                       fontSize: 16.0,

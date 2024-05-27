@@ -1,3 +1,4 @@
+import 'package:procecto2/model/game_models/artwork.dart';
 import 'package:procecto2/model/game_models/company.dart';
 import 'package:procecto2/model/game_models/dlcs.dart';
 import 'package:procecto2/model/game_models/genre.dart';
@@ -22,6 +23,7 @@ class GameModel {
   final List<PlatformModel>? platforms;
   //final List<PlayerPerspectiveModel>? perspectives;
   final List<ScreenshotModel>? screenshots;
+  final List<ArtworkModel>? artworks;
   final List<CompanyModel>? companies;
   final List<SimilarModel>? similar;
   final List<dlcModel>? dlc;
@@ -46,6 +48,7 @@ class GameModel {
       this.platforms,
       //this.perspectives,
       this.screenshots,
+      this.artworks,
       this.companies,
       this.similar,
       this.dlc,
@@ -79,6 +82,7 @@ class GameModel {
       //'perspectives': this.perspectives?.map((perspective) => perspective.toJson()).toList(),
       'screenshots':
           screenshots?.map((screenshot) => screenshot.toJson()).toList(),
+      'artworks': artworks?.map((artwork) => artwork.toJson()).toList(),
       'involved_companies':
           companies?.map((company) => company.toJson()).toList(),
       'similar_games': similar?.map((game) => game.toJson()).toList(),
@@ -125,6 +129,11 @@ class GameModel {
             ? null
             : (json["screenshots"] as List?)
                 ?.map((i) => ScreenshotModel.fromJson(i))
+                .toList(),
+        json["artworks"] == null
+            ? null
+            : (json["artworks"] as List?)
+                ?.map((i) => ArtworkModel.fromJson(i))
                 .toList(),
         json["involved_companies"] == null
             ? null
