@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:page_indicator/page_indicator.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
@@ -24,12 +25,12 @@ class GameDetailScreen extends StatefulWidget {
 
 class GameDetailScreenState extends State<GameDetailScreen>
     with SingleTickerProviderStateMixin {
-  late YoutubePlayerController _controller;
+  //late YoutubePlayerController _controller;
   late TabController _tabController;
   final GameModel game;
   final tabs = <Item>[
     Item(id: 0, name: "OVERVIEW"),
-    Item(id: 1, name: "IMAGES")
+    Item(id: 1, name: "ARTWORKS")
   ];
   final customColors = CustomSliderColors(
     //dotColor: Colors.white.withOpacity(0.8),
@@ -39,13 +40,16 @@ class GameDetailScreenState extends State<GameDetailScreen>
         const Color.fromARGB(255, 79, 215, 84), //color verde interesante
     hideShadow: true,
   );
+  PageController pageController =
+      PageController(viewportFraction: 1, keepPage: true);
+  int currentPage = 0;
 
   // Utiliza el constructor super para inicializar la clase base
   GameDetailScreenState(this.game) : super();
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -56,6 +60,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
     _tabController = TabController(vsync: this, length: tabs.length);
     FavoriteGamesProvider();
 
+    /*
     if (game.videos != null) {
       _controller = YoutubePlayerController(
         initialVideoId: game.videos!.isNotEmpty ? game.videos![0].videoId : '',
@@ -75,7 +80,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
           mute: true,
         ),
       );
-    }
+    }*/
   }
 
   @override
@@ -111,15 +116,47 @@ class GameDetailScreenState extends State<GameDetailScreen>
         Stack(
           children: <Widget>[
             SizedBox(
-              height: 230.0,
-              //220
-              child: YoutubePlayer(
+                height: 230.0,
+                //220
+                /*YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
                 //progressIndicatorColor: Colors.red, //true
                 thumbnail: Image.asset('assets/images/videoError.jpg'),
-              ),
-            ),
+              ), */
+                child: PageIndicatorContainer(
+                    align: IndicatorAlign.bottom,
+                    length: game.screenshots!.length,
+                    indicatorSpace: 8.0,
+                    padding: const EdgeInsets.all(10.0),
+                    indicatorColor: Colors.white,
+                    indicatorSelectorColor:
+                        const Color.fromRGBO(110, 182, 255, 1),
+                    shape: IndicatorShape.circle(size: 5.5),
+                    child: PageView.builder(
+                      itemCount:
+                          game.screenshots!.length, // Número total de imágenes
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 0.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/images/loading_image.gif',
+                            image:
+                                "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    ))),
             Positioned(
               top: 0.0,
               left: 0.0,
@@ -130,12 +167,13 @@ class GameDetailScreenState extends State<GameDetailScreen>
                   ),
                   onPressed: () {
                     //_controller.pause();
-                    _controller.dispose();
+                    //_controller.dispose();
                     Navigator.pop(context);
                   }),
             ),
           ],
         ),
+
         Container(
           color: Theme.of(context)
               .colorScheme
@@ -256,7 +294,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                     // Espacio entre la puntuación y el botón
                                     Column(
                                       children: [
-                                        ElevatedButton(
+                                        OutlinedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors
                                                 .green, // Color de fondo del botón
@@ -582,7 +620,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                           },
                         ),
                       ),
-                    /*
+
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
@@ -801,7 +839,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                           ),
                         )
                       ],
-                    ),*/
+                    ),
 
                     Padding(
                       padding: const EdgeInsets.only(

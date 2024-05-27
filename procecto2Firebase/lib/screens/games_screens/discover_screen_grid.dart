@@ -261,7 +261,6 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                             }
                           },
                           onTap: () {
-                            /*
                             Navigator.push(
                               context,
                               PageRouteBuilder(
@@ -289,7 +288,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                 transitionDuration:
                                     const Duration(milliseconds: 300),
                               ),
-                            );*/
+                            ); /*
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -298,7 +297,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                   game: game,
                                 ),
                               ),
-                            );
+                            );*/
                           },
                           child: Stack(
                             children: [
