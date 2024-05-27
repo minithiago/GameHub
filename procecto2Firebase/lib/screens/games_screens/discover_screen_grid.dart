@@ -62,10 +62,6 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
 
     final List<int> allGameIds =
         favoriteGamesProvider.allGames.map((game) => game.id).toList();
-    final List<int> favoriteGameIds =
-        favoriteGamesProvider.favoriteGames.map((game) => game.id).toList();
-    final List<int> wishlistGameIds =
-        favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
 
     List<GameModel> games = data.games;
     if (games.isEmpty) {
@@ -265,6 +261,7 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                             }
                           },
                           onTap: () {
+                            /*
                             Navigator.push(
                               context,
                               PageRouteBuilder(
@@ -291,6 +288,15 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
                                 },
                                 transitionDuration:
                                     const Duration(milliseconds: 300),
+                              ),
+                            );*/
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GameDetailScreen(
+                                  key: const Key("game_detail_screen_key"),
+                                  game: game,
+                                ),
                               ),
                             );
                           },

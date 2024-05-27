@@ -582,7 +582,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                           },
                         ),
                       ),
-
+                    /*
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10.0, bottom: 10.0, top: 15.0),
@@ -801,7 +801,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                           ),
                         )
                       ],
-                    ),
+                    ),*/
 
                     Padding(
                       padding: const EdgeInsets.only(
@@ -872,6 +872,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                     const SizedBox(height: 10.0)
                   ],
                 ),
+                //IMAGENES
                 Column(
                   children: [
                     Expanded(
