@@ -21,7 +21,7 @@ import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
 class DiscoverScreenGrid2 extends StatefulWidget {
-  DiscoverScreenGrid2({super.key});
+  const DiscoverScreenGrid2({super.key});
 
   @override
   _DiscoverScreenGridState2 createState() => _DiscoverScreenGridState2();
@@ -29,7 +29,7 @@ class DiscoverScreenGrid2 extends StatefulWidget {
 
 class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
   late ScrollController _scrollController;
-  ScrollPhysics _scrollPhysics = AlwaysScrollableScrollPhysics();
+  ScrollPhysics _scrollPhysics = const AlwaysScrollableScrollPhysics();
   @override
   void initState() {
     super.initState();
@@ -43,12 +43,17 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
     if (_scrollController.position.pixels ==
         _scrollController.position.minScrollExtent) {
       setState(() {
-        _scrollPhysics = NeverScrollableScrollPhysics();
+        _scrollPhysics = const NeverScrollableScrollPhysics();
       });
-      print('minimo'); // Método para solicitar más juegos
+      print('minimo');
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          _scrollPhysics = const BouncingScrollPhysics();
+        });
+      }); // Método para solicitar más juegos
     } else {
       setState(() {
-        _scrollPhysics = AlwaysScrollableScrollPhysics();
+        _scrollPhysics = const AlwaysScrollableScrollPhysics();
       });
     }
   }
@@ -141,7 +146,7 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
                               child: CircularProgressIndicator(),
                             );
                           } else {
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
                         },
                       );

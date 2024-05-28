@@ -116,7 +116,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
         Stack(
           children: <Widget>[
             SizedBox(
-                height: 230.0,
+                height: 250.0,
                 //220
                 /*YoutubePlayer(
                 controller: _controller,
@@ -694,8 +694,16 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                       ],
                                     ),
                                   )
-                                : const SizedBox
-                                    .shrink(); // No muestra el DLC si no tiene portada
+                                : Container(
+                                    width: 140,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          "https://upload.wikimedia.org/wikipedia/commons/b/b9/No_Cover.jpg",
+                                        ),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )); // No muestra el DLC si no tiene portada
                           },
                         ),
                       )

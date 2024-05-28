@@ -113,7 +113,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                             SizedBox(height: 10),
                           ],
                         ),
-                        HomeSlider2(),
+                        const HomeSlider2(),
                         const SizedBox(height: 10),
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
