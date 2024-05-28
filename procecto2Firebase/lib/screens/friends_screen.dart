@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
-import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/screens/userProfile_screen.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({super.key});

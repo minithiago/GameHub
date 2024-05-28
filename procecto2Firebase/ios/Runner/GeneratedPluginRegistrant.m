@@ -30,12 +30,6 @@
 @import firebase_storage;
 #endif
 
-#if __has_include(<flutter_inappwebview_ios/InAppWebViewFlutterPlugin.h>)
-#import <flutter_inappwebview_ios/InAppWebViewFlutterPlugin.h>
-#else
-@import flutter_inappwebview_ios;
-#endif
-
 #if __has_include(<flutter_native_splash/FlutterNativeSplashPlugin.h>)
 #import <flutter_native_splash/FlutterNativeSplashPlugin.h>
 #else
@@ -85,7 +79,6 @@
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
-  [InAppWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"InAppWebViewFlutterPlugin"]];
   [FlutterNativeSplashPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNativeSplashPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];

@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/games_screens/librarySearch_screen.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class DiscoverScreenWidget6 extends StatelessWidget {
   final SwitchBlocSearch _switchBlocSearch;
   final String query;
 
-  DiscoverScreenWidget6(this._switchBlocSearch, this.query);
-
-  void _showGrid() {
-    print("Single Clicked");
-    _switchBlocSearch.showGridSearch();
-  }
+  const DiscoverScreenWidget6(this._switchBlocSearch, this.query, {super.key});
 
   @override
   Widget build(BuildContext context) {

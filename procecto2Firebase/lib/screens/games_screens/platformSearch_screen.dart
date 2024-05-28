@@ -13,7 +13,7 @@ import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/services/switch_games.dart';
-import 'package:procecto2/style/theme.dart' as Style;
+
 import 'package:provider/provider.dart';
 
 import '../game_detail_screen.dart';

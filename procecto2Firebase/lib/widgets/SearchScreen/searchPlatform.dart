@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/games_screens/platformSearch_screen.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class DiscoverScreenWidget3 extends StatelessWidget {
   final SwitchBlocSearch _switchBlocSearch;

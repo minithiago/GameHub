@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:procecto2/bloc/get_friendsLibraryGames_bloc.dart';
-import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/get_slider_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
@@ -11,6 +9,8 @@ import 'package:procecto2/style/theme.dart' as Style;
 import 'package:page_indicator/page_indicator.dart';
 
 class HomeSlider extends StatefulWidget {
+  const HomeSlider({super.key});
+
   @override
   _HomeSliderState createState() => _HomeSliderState();
 }
@@ -46,7 +46,7 @@ class _HomeSliderState extends State<HomeSlider> {
           String errorMessage = snapshot.error?.toString() ?? "Unknown error";
           return buildErrorWidget(errorMessage);
         } else {
-          return Container(
+          return SizedBox(
             height: 250,
             child: buildLoadingWidget(),
           );
@@ -147,9 +147,9 @@ class _HomeSliderState extends State<HomeSlider> {
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        stops: [0.0, 0.4],
+                        stops: const [0.0, 0.4],
                         colors: [
-                          Color(0xff20232a).withOpacity(1.0),
+                          const Color(0xff20232a).withOpacity(1.0),
                           Style.Colors.backgroundColor.withOpacity(0.0),
                         ],
                       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
 import 'package:procecto2/screens/games_screens/gamesSearch_screen.dart';
-import 'package:procecto2/screens/games_screens/search_screen_grid.dart';
 
 class DiscoverScreenWidget5 extends StatelessWidget {
   final SwitchBloc _switchBloc;
@@ -16,8 +15,9 @@ class DiscoverScreenWidget5 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Theme.of(context).colorScheme.secondary, // Cambia el color de fondo del body
+      backgroundColor: Theme.of(context)
+          .colorScheme
+          .secondary, // Cambia el color de fondo del body
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

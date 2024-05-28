@@ -6,7 +6,6 @@ import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/main_screen.dart';
 import 'package:procecto2/services/upload_image.dart';
-import 'package:procecto2/style/theme.dart' as Style;
 
 class editAccountScreen extends StatefulWidget {
   final image;
@@ -70,10 +69,10 @@ class _editAccountScreenState extends State<editAccountScreen> {
     if (user != null) {
       // El usuario está autenticado, puedes obtener su ID
       userEmail = user.email!;
-      print('email: $userEmail');
+      //print('email: $userEmail');
     } else {
       // No hay usuario autenticado
-      print('No user logged in');
+      //print('No user logged in');
     }
 
     Future<XFile?> getImage() async {
@@ -156,7 +155,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                               fillColor: Theme.of(context)
                                   .colorScheme
                                   .tertiary, //Color.fromARGB(128, 255, 255, 255),
-                              prefixIcon: Icon(Icons.person),
+                              prefixIcon: const Icon(Icons.person),
                               //prefixIconColor: Colors.white,
                               hintText: "Enter a new nickname",
                               border: OutlineInputBorder(
@@ -178,7 +177,7 @@ class _editAccountScreenState extends State<editAccountScreen> {
                     height: 50, // Establece la altura deseada del botón
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(110, 182, 255, 1),
+                        backgroundColor: const Color.fromRGBO(110, 182, 255, 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

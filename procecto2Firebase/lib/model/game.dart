@@ -9,7 +9,6 @@ import 'package:procecto2/model/game_models/platform.dart';
 //import 'package:procecto2/model/game_models/player_perspective.dart';
 import 'package:procecto2/model/game_models/screenshot.dart';
 import 'package:procecto2/model/game_models/similar.dart';
-import 'package:procecto2/model/game_models/video.dart';
 import 'game_models/cover.dart';
 
 class GameModel {

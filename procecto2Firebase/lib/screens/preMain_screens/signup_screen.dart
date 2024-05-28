@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:procecto2/elements/loader_element.dart';
-import 'package:procecto2/model/userModel.dart';
-//import 'package:procecto2/providers/login_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/screens/preMain_screens/login_screen.dart';
 import 'package:procecto2/screens/main_screen.dart';
@@ -112,7 +110,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         imagen_to_upload = File(imagen!.path);
                       });
-                      final uploaded = await uploadImage(imagen_to_upload!);
+                      //final uploaded = await uploadImage(imagen_to_upload!);
                     },
                     //selectImage,
                     icon: const Icon(Icons.add_a_photo),
@@ -288,24 +286,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                       },
                                     );
                                     try {
-                                      UserModel user = UserModel(
-                                          nickname: nickname,
-                                          email: email,
-                                          password: password,
-                                          profilePicUrl: profilePic!);
-
                                       User? newUser = await UserRepository()
                                           .registerUser(email, password);
 
                                       if (newUser != null) {
                                         bool success = await UserRepository()
                                             .addUser(newUser.uid, nickname,
-                                                email, password, profilePic);
+                                                email, password, profilePic!);
                                         if (success) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                                   content: Text(
-                                                      "User register completed.")));
+                                                      "Welcome to Gamehub")));
                                           Navigator.push(
                                             context,
                                             PageRouteBuilder(

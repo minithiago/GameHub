@@ -1,9 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/screens/game_detail_screen.dart';
@@ -30,16 +28,12 @@ class LibraryScreenList extends StatefulWidget {
 
 class _LibraryScreenListState extends State<LibraryScreenList> {
   String _currentFilter = '';
-  String _nameFilter = '';
-  String _usuario = '';
   int _lista = 0;
 
   @override
   void initState() {
     super.initState();
     _currentFilter = widget.filtro;
-    _nameFilter = widget.busqueda;
-    _usuario = widget.usuario;
     _lista = widget.lista;
     FavoriteGamesProvider();
   }

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:procecto2/firebase_options.dart';
 import 'package:procecto2/screens/auth_screens/check_auth_screen.dart';
 import 'package:procecto2/services/switch_games.dart';

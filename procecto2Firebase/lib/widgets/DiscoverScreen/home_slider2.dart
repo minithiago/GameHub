@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/get_slider2_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
@@ -11,6 +9,8 @@ import 'package:procecto2/style/theme.dart' as Style;
 import 'package:page_indicator/page_indicator.dart';
 
 class HomeSlider2 extends StatefulWidget {
+  const HomeSlider2({super.key});
+
   @override
   _HomeSliderState2 createState() => _HomeSliderState2();
 }
@@ -42,7 +42,7 @@ class _HomeSliderState2 extends State<HomeSlider2> {
           String errorMessage = snapshot.error?.toString() ?? "Unknown error";
           return buildErrorWidget(errorMessage);
         } else {
-          return Container(
+          return SizedBox(
             height: 250,
             child: buildLoadingWidget(),
           );
@@ -57,8 +57,6 @@ class _HomeSliderState2 extends State<HomeSlider2> {
       viewportFraction: 1,
       keepPage: true,
     );
-
-    int currentPage = 0; // Asegúrate de inicializar currentPage fuera del Timer
 
     return Container(
       decoration: BoxDecoration(
@@ -93,9 +91,9 @@ class _HomeSliderState2 extends State<HomeSlider2> {
                     ),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
-                      final begin = Offset(1.0, 0.0);
-                      final end = Offset.zero;
-                      final curve = Curves.ease;
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
 
                       var tween = Tween(begin: begin, end: end)
                           .chain(CurveTween(curve: curve));
@@ -137,9 +135,9 @@ class _HomeSliderState2 extends State<HomeSlider2> {
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        stops: [0.0, 0.4],
+                        stops: const [0.0, 0.4],
                         colors: [
-                          Color(0xff20232a).withOpacity(1.0),
+                          const Color(0xff20232a).withOpacity(1.0),
                           Style.Colors.backgroundColor.withOpacity(0.0),
                         ],
                       ),

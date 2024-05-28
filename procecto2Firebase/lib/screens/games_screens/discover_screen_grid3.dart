@@ -1,9 +1,7 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:procecto2/bloc/get_games_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
@@ -19,7 +17,7 @@ import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
 
 class DiscoverScreenGrid3 extends StatefulWidget {
-  DiscoverScreenGrid3({super.key});
+  const DiscoverScreenGrid3({super.key});
 
   @override
   _DiscoverScreenGridState3 createState() => _DiscoverScreenGridState3();
@@ -255,7 +253,7 @@ class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
                                 },
                               );
                             } else {
-                              return null;
+                              return;
                             }
                           },
                           onTap: () {
@@ -333,7 +331,7 @@ class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
                                         Positioned(
                                           bottom: 10.0,
                                           left: 5.0,
-                                          child: Container(
+                                          child: SizedBox(
                                             width: 90.0,
                                             child: Text(
                                               game.name, // Cambia esto por el nombre del juego

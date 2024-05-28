@@ -2,7 +2,7 @@ name: procecto2
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.4 <4.0.0'
+  sdk: ">=3.1.4 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,7 +50,6 @@ dependencies:
   flutter_native_splash: ^2.3.7
   page_indicator: ^0.4.1
   sleek_circular_slider: ^2.0.1
-  youtube_player_flutter: ^9.0.0
   intl: ^0.17.0
   cloud_firestore: ^4.8.4
   firebase_auth: ^4.7.2
@@ -64,8 +62,6 @@ dev_dependencies:
     sdk: flutter
 
   flutter_launcher_icons: ^0.13.1
-
-
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -84,7 +80,7 @@ flutter_native_splash:
   color: "#FFFFFF"
   color_dark: "#000000"
   image: "assets/images/play_store_512.png"
-  
+
   android_12:
     color: "#FFFFFF"
     color_dark: "#000000"
@@ -94,14 +90,12 @@ flutter_native_splash:
 flutter_launcher_icons:
   android: true
   #ios: true
-  image_path: "assets/images/play_store_512.png"   #"assets/images/icon.png"
+  image_path: "assets/images/play_store_512.png" #"assets/images/icon.png"
   adaptive_icon_foreground: "assets/images/play_store_512.png"
   adaptive_icon_background: "#6EB6FF"
   remove_alpha_ios: true
 
-
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -109,7 +103,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/default_avatar.jpg 
+    - assets/images/default_avatar.jpg
     - assets/images/play_store_512.png
     - assets/images/G_logo.png
     - assets/images/gamehubFondo.png
@@ -163,9 +157,6 @@ flutter:
     - assets/images/franchise_images/monster.jpg
     - assets/images/franchise_images/tomb.avif
     - assets/images/franchise_images/nba.jpg
-
-
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

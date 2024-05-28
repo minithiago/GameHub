@@ -363,6 +363,7 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
                                                 direction: Axis.horizontal,
                                                 allowHalfRating: true,
                                                 itemCount: 5,
+
                                                 itemPadding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 2.0),

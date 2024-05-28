@@ -11,7 +11,6 @@ import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/providers.dart';
 import 'dart:ui' as ui;

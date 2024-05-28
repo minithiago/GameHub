@@ -32,16 +32,12 @@ class LibraryScreenGrid extends StatefulWidget {
 
 class _LibraryScreenGridState extends State<LibraryScreenGrid> {
   String _currentFilter = '';
-  String _nameFilter = '';
-  String _usuario = '';
   int _lista = 0;
 
   @override
   void initState() {
     super.initState();
     _currentFilter = widget.filtro;
-    _nameFilter = widget.busqueda;
-    _usuario = widget.usuario;
     _lista = widget.lista;
     FavoriteGamesProvider();
   }
