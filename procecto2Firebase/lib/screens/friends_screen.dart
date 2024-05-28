@@ -60,30 +60,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
             color: Theme.of(context).colorScheme.primary,
             onPressed: () {
               Navigator.of(context).pop();
-              /*Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  const LibraryScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(1.0, 0.0);
-                            const end = Offset.zero;
-                            const curve = Curves.ease;
-
-                            var tween = Tween(begin: begin, end: end)
-                                .chain(CurveTween(curve: curve));
-                            var offsetAnimation = animation.drive(tween);
-
-                            return SlideTransition(
-                              position: offsetAnimation,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 250),
-                        ),
-                      );*/
             },
           ),
           title: TextFormField(
@@ -151,11 +127,30 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           // Navegar a la página del perfil del usuario
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => UserProfilePage(
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      UserProfilePage(
                                 uid: userData[
                                     'email'], // Ajusta la clave del usuario en tu base de datos
                               ),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 250),
                             ),
                           );
                         },
@@ -243,11 +238,31 @@ class _FriendsScreenState extends State<FriendsScreen> {
                               // Navegar a la página del perfil del usuario
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => UserProfilePage(
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      UserProfilePage(
                                     uid: userData[
                                         'email'], // Ajusta la clave del usuario en tu base de datos
                                   ),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    const begin = Offset(1.0, 0.0);
+                                    const end = Offset.zero;
+                                    const curve = Curves.ease;
+
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    var offsetAnimation =
+                                        animation.drive(tween);
+
+                                    return SlideTransition(
+                                      position: offsetAnimation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      const Duration(milliseconds: 250),
                                 ),
                               );
                             },
@@ -376,11 +391,31 @@ class _FriendsScreenState extends State<FriendsScreen> {
                               // Navegar a la página del perfil del usuario
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => UserProfilePage(
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      UserProfilePage(
                                     uid: userData[
                                         'email'], // Ajusta la clave del usuario en tu base de datos
                                   ),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    const begin = Offset(1.0, 0.0);
+                                    const end = Offset.zero;
+                                    const curve = Curves.ease;
+
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    var offsetAnimation =
+                                        animation.drive(tween);
+
+                                    return SlideTransition(
+                                      position: offsetAnimation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      const Duration(milliseconds: 250),
                                 ),
                               );
                             },

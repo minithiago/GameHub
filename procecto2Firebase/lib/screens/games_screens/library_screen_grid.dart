@@ -395,8 +395,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                             children: [
                                               RatingBar.builder(
                                                 itemSize: 8.0,
-                                                initialRating:
-                                                    3.5, // Ajusta esto a tu calificación
+                                                initialRating: game
+                                                        .total_rating /
+                                                    20, // Ajusta esto a tu calificación
                                                 minRating: 0,
                                                 direction: Axis.horizontal,
                                                 allowHalfRating: true,
@@ -446,3 +447,109 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
     }
   }
 }
+/*
+Future<List<String>> getGamesForUserEmail(String userEmail) async {
+    try {
+      // Obtener la referencia al documento del usuario en Firestore utilizando su email
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: userEmail)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        String userId = userSnapshot.docs.first.id;
+        // Obtener la referencia a la subcolección "Games" del usuario
+        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userId)
+            .collection('Games')
+            .get();
+
+        // Extraer los IDs de los juegos
+        List<String> gameIds = gamesSnapshot.docs.map((doc) {
+          // Obtener el campo "id" de cada documento en la subcolección "Games"
+          return doc['id']
+              .toString(); // Ajusta esto según la estructura de tus documentos
+        }).toList();
+
+        return gameIds;
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico $userEmail.');
+        return [];
+      }
+    } catch (e) {
+      print('Error getting games for user: $e');
+      return [];
+    }
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+
+    fetchUserGames();
+  }
+
+  Future<void> fetchUserGames() async {
+    //ponerlo en game-details y en añadri un setState() 'alomejor'
+    try {
+      // Obtiene la lista de juegos para el usuario
+      List<String> userGames = await getGamesForUserEmail(
+          //FirebaseAuth.instance.currentUser!.email.toString()
+          _usuario);
+
+      // Verifica si la lista de juegos para el usuario está vacía
+      if (userGames.isEmpty) {
+        // Si está vacía, pasa una lista vacía al método getlibraryGames.getlibraryGames
+        getlibraryGames.getlibraryGames([]);
+      } else {
+        // Si no está vacía, pasa la lista de juegos al método getlibraryGames.getlibraryGames
+        getlibraryGames.getlibraryGames(userGames);
+      }
+    } catch (e) {
+      // Maneja cualquier error que ocurra durante la obtención de los juegos del usuario
+      print('Error fetching user games: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<GameResponse>(
+      stream: getlibraryGames.subject.stream,
+      builder: (context, AsyncSnapshot<GameResponse> snapshot) {
+        if (snapshot.hasData) {
+          final gameResponse = snapshot.data;
+          if (gameResponse != null && gameResponse.error.isNotEmpty) {
+            return buildErrorWidget(gameResponse.error);
+          } else {
+            //favoriteGamess = gameResponse!.games;
+            return _build(gameResponse!);
+          }
+        } else if (snapshot.hasError) {
+          return buildErrorWidget(snapshot.error.toString());
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return buildLoadingWidget();
+        } else {
+          // Devolvemos un widget vacío que no ocupa espacio en la pantalla
+          return const SizedBox(
+            child: Center(
+              child: Text(
+                "Search for games",
+                style: TextStyle(
+                    //color: Colors.white
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+
+   Widget _build(GameResponse data) {
+
+    var favoriteGamess = data.games;
+*/

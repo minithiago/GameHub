@@ -18,8 +18,8 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePage extends State<UserProfilePage> {
-  var userData;
-  var userData2;
+  var userData; //perfil que visito
+  var userData2; //usuario logueado
   int games = 0;
   int friends = 0;
   int contieneAmigo = 0; //5
@@ -29,29 +29,30 @@ class _UserProfilePage extends State<UserProfilePage> {
   @override
   void initState() {
     super.initState();
-    getUserData();
-    getUserData2();
-    getUserContainsEmailFriend();
-    getUserGamesCountByEmail();
-    getUserFriendsCountByEmail();
+    loadUserData();
   }
 
-  getUserData() async {
-    try {
-      var snap = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: widget.uid)
-          .get();
-      userData = snap.docs.first.data();
+  Future<void> loadUserData() async {
+    await fetchCurrentUserData();
+    await fetchUserData();
+    await Future.wait([
+      fetchUserFriendsCount(),
+      fetchUserGamesCount(),
+      fetchContainsEmailFriend()
+    ]);
 
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      var snap = await getUserByEmail(widget.uid);
       if (snap.docs.isNotEmpty) {
+        userData = snap.docs.first.data();
         String userId2 = snap.docs.first.id;
-        QuerySnapshot email2Snapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId2)
-            .collection('Requests')
-            .where('email', isEqualTo: userData2['email'])
-            .get();
+        var email2Snapshot = await getUserRequests(userId2, userData2['email']);
         requestSent = email2Snapshot.size;
         if (requestSent >= 1) {
           contieneAmigo = 3;
@@ -60,52 +61,32 @@ class _UserProfilePage extends State<UserProfilePage> {
         print(
             'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
       }
-
-      setState(() {
-        isLoading = false;
-      });
     } catch (e) {
-      print(e);
-      setState(() {
-        isLoading = false;
-      });
+      print('Error obteniendo datos del usuario: $e');
     }
   }
 
-  getUserData2() async {
+  Future<void> fetchCurrentUserData() async {
     try {
-      var snap2 = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email',
-              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
-          .get();
-      userData2 = snap2.docs.first.data();
-
-      setState(() {
-        isLoading = false;
-      });
+      var snap2 = await getUserByEmail(
+          FirebaseAuth.instance.currentUser!.email.toString());
+      if (snap2.docs.isNotEmpty) {
+        userData2 = snap2.docs.first.data();
+      } else {
+        print(
+            'No se encontró ningún usuario con el correo electrónico actual.');
+      }
     } catch (e) {
-      print(e);
-      setState(() {
-        isLoading = false;
-      });
+      print('Error obteniendo datos del usuario actual: $e');
     }
   }
 
-  getUserFriendsCountByEmail() async {
+  Future<void> fetchUserFriendsCount() async {
     try {
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: widget.uid)
-          .get();
-
+      var userSnapshot = await getUserByEmail(widget.uid);
       if (userSnapshot.docs.isNotEmpty) {
         String userId = userSnapshot.docs.first.id;
-        QuerySnapshot friendsSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Friends')
-            .get();
+        var friendsSnapshot = await getUserCollectionSize(userId, 'Friends');
         friends = friendsSnapshot.size;
       } else {
         print(
@@ -116,53 +97,12 @@ class _UserProfilePage extends State<UserProfilePage> {
     }
   }
 
-  getUserContainsEmailFriend() async {
+  Future<void> fetchUserGamesCount() async {
     try {
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email',
-              isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
-          .get();
-
+      var userSnapshot = await getUserByEmail(widget.uid);
       if (userSnapshot.docs.isNotEmpty) {
         String userId = userSnapshot.docs.first.id;
-        QuerySnapshot emailSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Friends')
-            .where('email', isEqualTo: userData['email'])
-            .get();
-
-        contieneAmigo = emailSnapshot.size;
-
-        if (requestSent >= 1) {
-          contieneAmigo = 3;
-        } else {
-          contieneAmigo = contieneAmigo;
-        }
-      } else {
-        print(
-            'No se encontró ningún usuario con el correo electrónico ${widget.uid}.');
-      }
-    } catch (e) {
-      print('Error obteniendo si el email contiene al amigo del usuario: $e');
-    }
-  }
-
-  getUserGamesCountByEmail() async {
-    try {
-      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: widget.uid)
-          .get();
-
-      if (userSnapshot.docs.isNotEmpty) {
-        String userId = userSnapshot.docs.first.id;
-        QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Games')
-            .get();
+        var gamesSnapshot = await getUserCollectionSize(userId, 'Games');
         games = gamesSnapshot.size;
       } else {
         print(
@@ -173,35 +113,172 @@ class _UserProfilePage extends State<UserProfilePage> {
     }
   }
 
-  Widget buildFriendButton({
-    required bool isFriend,
-    required VoidCallback onPressed,
-    required Color backgroundColor,
-    required Icon icon,
-    required String text,
-  }) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor, // Color de fondo del botón
-        shape: RoundedRectangleBorder(
-          // Forma del botón con bordes redondeados
-          borderRadius: BorderRadius.circular(10), // Radio de los bordes
-        ),
-        minimumSize: const Size(130, 40),
-      ),
-      onPressed: onPressed,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon, // Icono
-          const SizedBox(width: 3), // Espacio entre el icono y el texto
-          Text(
-            text,
-            style: const TextStyle(),
+  Future<void> fetchContainsEmailFriend() async {
+    try {
+      String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
+      if (currentUserEmail == null) {
+        print('No se encontró ningún correo electrónico de usuario actual.');
+        return;
+      }
+
+      var userSnapshot = await getUserByEmail(currentUserEmail);
+      if (userSnapshot.docs.isEmpty) {
+        print(
+            'No se encontró ningún usuario con el correo electrónico actual.');
+        return;
+      }
+
+      String userId = userSnapshot.docs.first.id;
+
+      // Asegurarse de que userData no sea nulo
+      if (userData == null) {
+        print('userData no está inicializado .');
+        return;
+      }
+      if (!userData.containsKey('email')) {
+        print('userData no contiene la clave "email".');
+        return;
+      }
+
+      var emailSnapshot = await getUserCollectionWhere(
+          userId, 'Friends', 'email', userData['email']);
+      print('Tamaño de emailSnapshot: ${emailSnapshot.size}');
+
+      setState(() {
+        contieneAmigo = (requestSent >= 1) ? 3 : emailSnapshot.size;
+      });
+    } catch (e) {
+      print('Error obteniendo si el email contiene al amigo del usuario: $e');
+    }
+  }
+
+  Future<QuerySnapshot> getUserByEmail(String email) {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .get();
+  }
+
+  Future<QuerySnapshot> getUserRequests(String userId, String email) {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Requests')
+        .where('email', isEqualTo: email)
+        .get();
+  }
+
+  Future<QuerySnapshot> getUserCollectionSize(
+      String userId, String collection) {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection(collection)
+        .get();
+  }
+
+  Future<QuerySnapshot> getUserCollectionWhere(
+      String userId, String collection, String field, String value) {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection(collection)
+        .where(field, isEqualTo: value)
+        .get();
+  }
+
+  Widget buildActionButton() {
+    if (contieneAmigo == 3) {
+      return ElevatedButton(
+        onPressed: () async {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Request already sent")),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.orange, // Color de fondo del botón
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Radio de los bordes
           ),
-        ],
-      ),
-    );
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.schedule_send), // El icono del botón
+            SizedBox(width: 8), // Espacio entre el icono y el texto
+            Text('  Request sent'),
+          ],
+        ),
+      );
+    } else if (contieneAmigo > 0) {
+      return ElevatedButton(
+        onPressed: () async {
+          await UserRepository().removeFriend(
+            FirebaseAuth.instance.currentUser!.email.toString(),
+            userData['email'],
+          );
+          await UserRepository().removeFriend(userData['email'],
+              FirebaseAuth.instance.currentUser!.email.toString());
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Friend removed successfully")),
+          );
+          setState(() {
+            contieneAmigo = 0;
+            print(contieneAmigo);
+            print(requestSent);
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red, // Color de fondo del botón
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Radio de los bordes
+          ),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.group_remove_rounded), // El icono del botón
+            SizedBox(width: 8), // Espacio entre el icono y el texto
+            Text('  Remove friend'),
+          ],
+        ),
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: () async {
+          await UserRepository().sendFriendRequest(
+            FirebaseAuth.instance.currentUser!.email.toString(),
+            userData2['nickname'],
+            userData2['avatar'],
+            userData['email'],
+          );
+          setState(() {
+            contieneAmigo = 3;
+            print(contieneAmigo);
+            print(requestSent);
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Friend Request sent")),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromRGBO(
+              110, 182, 255, 1), // Color de fondo del botón
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Radio de los bordes
+          ),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.group_add_rounded), // El icono del botón
+            SizedBox(width: 8), // Espacio entre el icono y el texto
+            Text('  Add as friend'),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -290,79 +367,7 @@ class _UserProfilePage extends State<UserProfilePage> {
                           ),
                         ],
                       ),
-                      Visibility(
-                        visible: contieneAmigo == 0,
-                        child: buildFriendButton(
-                          isFriend: false,
-                          onPressed: () async {
-                            await UserRepository().sendFriendRequest(
-                              FirebaseAuth.instance.currentUser!.email
-                                  .toString(),
-                              userData2['nickname'],
-                              userData2['avatar'],
-                              userData['email'],
-                            );
-                            setState(() {
-                              contieneAmigo = 3;
-                              print(contieneAmigo);
-                              print(requestSent);
-                            });
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Friend Request sent")),
-                            );
-                          },
-                          backgroundColor:
-                              const Color.fromRGBO(110, 182, 255, 1),
-                          icon: const Icon(Icons.group_add_rounded),
-                          text: "  Add as friend",
-                        ),
-                      ),
-                      Visibility(
-                        visible: contieneAmigo == 3,
-                        child: buildFriendButton(
-                          isFriend: true,
-                          onPressed: () async {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Request already sent")),
-                            );
-                          },
-                          backgroundColor: Colors.orange,
-                          icon: const Icon(Icons.schedule_send_rounded),
-                          text: "  Request sent",
-                        ),
-                      ),
-                      Visibility(
-                        visible: contieneAmigo == 1,
-                        child: buildFriendButton(
-                          isFriend: true,
-                          onPressed: () async {
-                            await UserRepository().removeFriend(
-                              FirebaseAuth.instance.currentUser!.email
-                                  .toString(),
-                              userData['email'],
-                            );
-                            await UserRepository().removeFriend(
-                                userData['email'],
-                                FirebaseAuth.instance.currentUser!.email
-                                    .toString());
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Friend removed successfully")),
-                            );
-                            setState(() {
-                              contieneAmigo = 0;
-                              print(contieneAmigo);
-                              print(requestSent);
-                            });
-                          },
-                          backgroundColor: Colors.red,
-                          icon: const Icon(Icons.group_remove_rounded),
-                          text: "  Remove friend",
-                        ),
-                      ),
+                      buildActionButton(),
 
                       Expanded(
                         child: SizedBox(

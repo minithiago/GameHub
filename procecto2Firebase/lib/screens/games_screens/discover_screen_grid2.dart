@@ -356,8 +356,9 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
                                             children: [
                                               RatingBar.builder(
                                                 itemSize: 8.0,
-                                                initialRating:
-                                                    3.5, // Ajusta esto a tu calificación
+                                                initialRating: games[index]
+                                                        .total_rating /
+                                                    20, // Ajusta esto a tu calificación
                                                 minRating: 0,
                                                 direction: Axis.horizontal,
                                                 allowHalfRating: true,
