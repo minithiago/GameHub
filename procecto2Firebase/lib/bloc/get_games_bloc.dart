@@ -1,12 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/repository/repository.dart';
 import 'package:rxdart/subjects.dart';
 
 class GetGamesBloc {
-  final GameRepository _repository = GameRepository();
   final BehaviorSubject<GameResponse> _subject =
       BehaviorSubject<GameResponse>();
+  final BehaviorSubject<bool> _loadingSubject = BehaviorSubject<bool>();
+  int _offset = 0;
+  List<GameModel> _allGames = [];
+  final GameRepository _repository = GameRepository();
 
+  bool _isLoading = false;
+
+  Stream<GameResponse> get subject => _subject.stream;
+  Stream<bool> get loadingStream => _loadingSubject.stream;
+
+  void getGames() async {
+    _offset = 0;
+    _setLoading(true);
+    GameResponse response = await _repository.getGamesDiscover(offset: _offset);
+    _allGames = response.games;
+    _subject.sink.add(GameResponse(_allGames, ''));
+    _setLoading(false);
+  }
+
+  void getMoreGames() async {
+    if (_isLoading) return;
+    _setLoading(true);
+    _offset += 12; // Incrementa el offset para la siguiente carga
+    GameResponse response = await _repository.getGamesDiscover(offset: _offset);
+    if (response.games.isNotEmpty) {
+      _allGames.addAll(response.games);
+      _subject.sink.add(GameResponse(_allGames, ''));
+    }
+    _setLoading(false);
+    print('pidiendo');
+  }
+
+  void _setLoading(bool isLoading) {
+    _isLoading = isLoading;
+    _loadingSubject.sink.add(isLoading);
+  }
+
+  void dispose() {
+    _subject.close();
+    _loadingSubject.close();
+  }
+
+  /*
   getGames() async {
     GameResponse response = await _repository.getGamesDiscover();
     _subject.sink.add(response);
@@ -16,7 +59,7 @@ class GetGamesBloc {
     GameResponse response = await _repository.getGamesDiscover2();
     _subject.sink.add(response);
   }
-
+*/
   getGames3() async {
     GameResponse response = await _repository.getGamesDiscover3();
     _subject.sink.add(response);
@@ -49,32 +92,55 @@ class GetGamesBloc {
     _subject.sink.add(response);
   }
   */
-
-  dispose() {
-    _subject.close();
-  }
-
-  BehaviorSubject<GameResponse> get subject => _subject;
 }
 
 final getGamesBloc = GetGamesBloc();
 
 class GetGamesBloc2 {
-  final GameRepository _repository = GameRepository();
   final BehaviorSubject<GameResponse> _subject =
       BehaviorSubject<GameResponse>();
+  final BehaviorSubject<bool> _loadingSubject = BehaviorSubject<bool>();
+  int _offset = 0;
+  List<GameModel> _allGames = [];
+  final GameRepository _repository = GameRepository();
 
-  getGames2() async {
-    GameResponse response = await _repository.getGamesDiscover2();
-    _subject.sink.add(response);
+  bool _isLoading = false;
+
+  Stream<GameResponse> get subject => _subject.stream;
+  Stream<bool> get loadingStream => _loadingSubject.stream;
+
+  void getGames2() async {
+    _offset = 0;
+    _setLoading(true);
+    GameResponse response =
+        await _repository.getGamesDiscover2(offset: _offset);
+    _allGames = response.games;
+    _subject.sink.add(GameResponse(_allGames, ''));
+    _setLoading(false);
   }
-  
 
-  dispose() {
+  void getMoreGames2() async {
+    if (_isLoading) return;
+    _setLoading(true);
+    _offset += 24; // Incrementa el offset para la siguiente carga
+    GameResponse response =
+        await _repository.getGamesDiscover2(offset: _offset);
+    if (response.games.isNotEmpty) {
+      _allGames.addAll(response.games);
+      _subject.sink.add(GameResponse(_allGames, ''));
+    }
+    _setLoading(false);
+  }
+
+  void _setLoading(bool isLoading) {
+    _isLoading = isLoading;
+    _loadingSubject.sink.add(isLoading);
+  }
+
+  void dispose() {
     _subject.close();
+    _loadingSubject.close();
   }
-
-  BehaviorSubject<GameResponse> get subject => _subject;
 }
 
 final getGamesBloc2 = GetGamesBloc2();

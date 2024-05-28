@@ -10,7 +10,7 @@ class GameRepository {
 
   final String apiKey = "7ke8gbpbre42gkjtpp5anax289bh6b";
 
-  Future<GameResponse> getGamesDiscover() async {
+  Future<GameResponse> getGamesDiscover({int offset = 0}) async {
     //new releases
     //juegos con rating > 60 ;sort date desc;
 
@@ -22,7 +22,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id != 192153 & cover.image_id != null & total_rating >= 50 ;sort first_release_date desc; limit 98;");
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id != 192153 & cover.image_id != null & total_rating >= 50 ;sort first_release_date desc; limit 12;offset $offset;"); //98
       print("Juegos New releases: ${response.statusCode}");
       //print(response.body);
 
@@ -38,22 +38,25 @@ class GameRepository {
     }
   }
 
-  Future<GameResponse> getGamesDiscover2() async {
-    //Released this year
-
+  Future<GameResponse> getGamesDiscover2({int offset = 0}) async {
     var nowDate = 1704118499;
 
     try {
-      final response = await http.post(Uri.parse(mainUrl),
-          headers: {
-            'Authorization': 'Bearer $apiKey',
-            'Client-ID':
-                'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
-          },
-          body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id != 192153 & cover.image_id != null & total_rating >= 55 & first_release_date >= $nowDate;sort first_release_date asc ; limit 198;");
+      final response = await http.post(
+        Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;"
+            "where id != 192153 & cover.image_id != null & total_rating >= 55 & first_release_date >= $nowDate;"
+            "sort first_release_date asc;"
+            "limit 24;"
+            "offset $offset;",
+      );
       print("Juegos released this year: ${response.statusCode}");
-      //print(response.body);
 
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);

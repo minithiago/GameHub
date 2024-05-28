@@ -26,17 +26,34 @@ class DiscoverScreenGrid extends StatefulWidget {
 }
 
 class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
+  late ScrollController _scrollController;
   @override
   void initState() {
     getGamesBloc.getGames();
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
     FavoriteGamesProvider();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      getGamesBloc2.getMoreGames2();
+      print('tope'); // Método para solicitar más juegos
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc.subject.stream,
+      stream: getGamesBloc.subject,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data!;
@@ -97,6 +114,22 @@ class DiscoverScreenGridState extends State<DiscoverScreenGrid> {
               ),
               itemCount: games.length,
               itemBuilder: (BuildContext context, int index) {
+                if (index == games.length - 1) {
+                  getGamesBloc.getMoreGames();
+                  return StreamBuilder<bool>(
+                    stream: getGamesBloc.loadingStream,
+                    builder: (context, AsyncSnapshot<bool> loadingSnapshot) {
+                      if (loadingSnapshot.hasData && loadingSnapshot.data!) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
+                  );
+                  // Solicitar más juegos cuando se alcanza el último
+                }
                 GameModel game = games[index];
                 return AnimationConfiguration.staggeredList(
                     //columnCount: 2,

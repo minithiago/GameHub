@@ -68,7 +68,7 @@ class DiscoverScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 360, //300
             child:
                 DiscoverScreenGrid3(), // Muestra por defecto DiscoverScreenGrid

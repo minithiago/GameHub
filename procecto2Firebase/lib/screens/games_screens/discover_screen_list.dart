@@ -26,7 +26,7 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc2.subject.stream,
+      stream: getGamesBloc2.subject,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data;
