@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+import 'package:procecto2/screens/games_screens/gamesSearch_screen.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider2.dart';
 import 'package:procecto2/widgets/DiscoverScreen/home_slider3.dart';
 import 'package:procecto2/widgets/SearchScreen/searchGame.dart';
-import 'package:procecto2/widgets/SearchScreen/searchGamesGrid.dart';
+//import 'package:procecto2/widgets/SearchScreen/searchGamesGrid.dart';
 import 'package:procecto2/widgets/SearchScreen/search_slider.dart';
 import 'package:procecto2/widgets/SearchScreen/search_slider2.dart';
 import 'package:procecto2/widgets/SearchScreen/search_slider3.dart';
+import 'package:procecto2/widgets/SearchScreen/search_sliderCompanies.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -44,7 +46,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none,
                 ),
-                hintText: "eg: Elden Ring",
+                hintText: "Search games", //"eg: Elden Ring",
                 hintStyle: const TextStyle(
                     //color: Colors.white
                     ),
@@ -83,6 +85,21 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                         const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     child: Column(
                       children: [
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Popular developers",
+                              style: TextStyle(
+                                //color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                        SearchSliderCompanies(),
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -160,7 +177,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                             SizedBox(height: 10),
                           ],
                         ),
-                        HomeSlider3(),
+                        const HomeSlider3(),
                         const SizedBox(height: 10),
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -195,7 +212,8 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                         const SizedBox(height: 10),
                         SizedBox(
                           height: 600, //600
-                          child: DiscoverScreenWidget5(SwitchBloc()),
+                          //child: DiscoverScreenWidget5(SwitchBloc()),
+                          child: SearchScreenScroll(),
                         )
                         //DiscoverScreenWidget2(SwitchBlocSearch(), "fifa")
                       ],

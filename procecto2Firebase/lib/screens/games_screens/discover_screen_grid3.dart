@@ -26,15 +26,16 @@ class DiscoverScreenGrid3 extends StatefulWidget {
 class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
   @override
   void initState() {
-    getGamesBloc3.getGames3();
     super.initState();
+    getGamesBloc3.getGames3();
+
     FavoriteGamesProvider();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc3.subject.stream,
+      stream: getGamesBloc3.subject,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data!;
@@ -94,6 +95,22 @@ class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
               ),
               itemCount: games.length,
               itemBuilder: (BuildContext context, int index) {
+                if (index == games.length - 1) {
+                  getGamesBloc3.getMoreGames3();
+                  return StreamBuilder<bool>(
+                    stream: getGamesBloc3.loadingStream,
+                    builder: (context, AsyncSnapshot<bool> loadingSnapshot) {
+                      if (loadingSnapshot.hasData && loadingSnapshot.data!) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  );
+                  // Solicitar más juegos cuando se alcanza el último
+                }
                 GameModel game = games[index];
                 return AnimationConfiguration.staggeredList(
                     //columnCount: 2,

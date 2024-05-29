@@ -70,7 +70,7 @@ class GameRepository {
     }
   }
 
-  Future<GameResponse> getGamesDiscover3() async {
+  Future<GameResponse> getGamesDiscover3({int offset = 0}) async {
     //Incoming Games
     final now = DateTime.parse(DateTime.now().toString());
     var nowDate = now.millisecondsSinceEpoch;
@@ -84,7 +84,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name,screenshots.image_id, artworks.image_id;where cover.image_id != null & screenshots != null & first_release_date >= ${nowDate2} ; sort first_release_date asc; limit 98;");
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name,screenshots.image_id, artworks.image_id;where cover.image_id != null & screenshots != null & first_release_date >= ${nowDate2} ; sort first_release_date asc; limit 24;offset $offset;");
       print("Juegos incoming Games: ${response.statusCode}");
       //print(response.body);
 
@@ -100,7 +100,7 @@ class GameRepository {
     }
   }
 
-  Future<GameResponse> getBestGames() async {
+  Future<GameResponse> getBestGames({int offset = 0}) async {
     //Top Rated Games
     //sort follows desc depcreated
     try {
@@ -111,7 +111,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating >= 89 ; limit 198; sort total_rating_count desc;");
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating >= 89 ; sort total_rating_count desc;limit 24;offset $offset;"); //198
       print("Juegos2: ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -248,16 +248,24 @@ class GameRepository {
   }
 
   Future<GameResponse> searchCompany(String query) async {
-    var response = await http.post(Uri.parse(mainUrl),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Client-ID':
-              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
-        },
-        body:
-            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id ;where cover.image_id != null & involved_companies.company.name = $query & rating > 20; limit 99;");
-    print("${response.statusCode}");
-    return GameResponse.fromJson(jsonDecode(response.body));
+    //query = "Ubisoft"; //45
+    print(query);
+    try {
+      var response = await http.post(Uri.parse(mainUrl),
+          headers: {
+            'Authorization': 'Bearer $apiKey',
+            'Client-ID':
+                'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+          },
+          body:
+              "fields *, cover.image_id, involved_companies.company.name, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id; where cover.image_id != null & total_rating > 20 & involved_companies.company.name = (\"$query\");limit 99;");
+      print("${response.statusCode}");
+      //print(response.body);
+      return GameResponse.fromJson(jsonDecode(response.body));
+    } catch (error) {
+      print("Exception occurred: $error");
+      return GameResponse.withError("$error");
+    }
   }
 
   Future<GameResponse> searchGenreGame(String query) async {

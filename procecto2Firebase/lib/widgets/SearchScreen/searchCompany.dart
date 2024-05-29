@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:procecto2/bloc/switch_bloc.dart';
+import 'package:procecto2/screens/games_screens/companySearch_screen.dart';
 import 'package:procecto2/screens/games_screens/platformSearch_screen.dart';
 
-class DiscoverScreenWidget3 extends StatelessWidget {
+class DiscoverScreenWidget7 extends StatelessWidget {
   final SwitchBlocSearch _switchBlocSearch;
   final String query;
 
-  DiscoverScreenWidget3(this._switchBlocSearch, this.query);
+  DiscoverScreenWidget7(this._switchBlocSearch, this.query);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Exclusives',
+          'Developers',
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -46,7 +47,7 @@ class DiscoverScreenWidget3 extends StatelessWidget {
                   (BuildContext context, AsyncSnapshot<SwitchItem> snapshot) {
                 switch (snapshot.data) {
                   case SwitchItem.LIST:
-                    return PlatformSearchScreen(query);
+                    return CompanySearchScreen(query);
                   default:
                     return Container();
                 }

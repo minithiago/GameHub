@@ -100,7 +100,7 @@ class GetGamesBloc2 {
   final BehaviorSubject<GameResponse> _subject =
       BehaviorSubject<GameResponse>();
   final BehaviorSubject<bool> _loadingSubject = BehaviorSubject<bool>();
-  int _offset = 0;
+  int _offset2 = 0;
   List<GameModel> _allGames = [];
   final GameRepository _repository = GameRepository();
 
@@ -110,10 +110,10 @@ class GetGamesBloc2 {
   Stream<bool> get loadingStream => _loadingSubject.stream;
 
   void getGames2() async {
-    _offset = 0;
+    _offset2 = 0;
     _setLoading(true);
     GameResponse response =
-        await _repository.getGamesDiscover2(offset: _offset);
+        await _repository.getGamesDiscover2(offset: _offset2);
     _allGames = response.games;
     _subject.sink.add(GameResponse(_allGames, ''));
     _setLoading(false);
@@ -122,9 +122,9 @@ class GetGamesBloc2 {
   void getMoreGames2() async {
     if (_isLoading) return;
     _setLoading(true);
-    _offset += 24; // Incrementa el offset para la siguiente carga
+    _offset2 += 24; // Incrementa el offset para la siguiente carga
     GameResponse response =
-        await _repository.getGamesDiscover2(offset: _offset);
+        await _repository.getGamesDiscover2(offset: _offset2);
     if (response.games.isNotEmpty) {
       _allGames.addAll(response.games);
       _subject.sink.add(GameResponse(_allGames, ''));
@@ -145,7 +145,7 @@ class GetGamesBloc2 {
 
 final getGamesBloc2 = GetGamesBloc2();
 
-class GetGamesBloc3 {
+/*class GetGamesBloc3 {
   final GameRepository _repository = GameRepository();
   final BehaviorSubject<GameResponse> _subject =
       BehaviorSubject<GameResponse>();
@@ -160,6 +160,55 @@ class GetGamesBloc3 {
   }
 
   BehaviorSubject<GameResponse> get subject => _subject;
+}
+
+final getGamesBloc3 = GetGamesBloc3();*/
+
+class GetGamesBloc3 {
+  final BehaviorSubject<GameResponse> _subject =
+      BehaviorSubject<GameResponse>();
+  final BehaviorSubject<bool> _loadingSubject = BehaviorSubject<bool>();
+  int _offset4 = 0;
+  List<GameModel> _allGames = [];
+  final GameRepository _repository3 = GameRepository();
+
+  bool _isLoading = false;
+
+  Stream<GameResponse> get subject => _subject.stream;
+  Stream<bool> get loadingStream => _loadingSubject.stream;
+
+  void getGames3() async {
+    _offset4 = 0;
+    _setLoading(true);
+    GameResponse response =
+        await _repository3.getGamesDiscover3(offset: _offset4);
+    _allGames = response.games;
+    _subject.sink.add(GameResponse(_allGames, ''));
+    _setLoading(false);
+  }
+
+  void getMoreGames3() async {
+    if (_isLoading) return;
+    _setLoading(true);
+    _offset4 += 24; // Incrementa el offset para la siguiente carga
+    GameResponse response =
+        await _repository3.getGamesDiscover3(offset: _offset4);
+    if (response.games.isNotEmpty) {
+      _allGames.addAll(response.games);
+      _subject.sink.add(GameResponse(_allGames, ''));
+    }
+    _setLoading(false);
+  }
+
+  void _setLoading(bool isLoading) {
+    _isLoading = isLoading;
+    _loadingSubject.sink.add(isLoading);
+  }
+
+  void dispose3() {
+    _subject.close();
+    _loadingSubject.close();
+  }
 }
 
 final getGamesBloc3 = GetGamesBloc3();

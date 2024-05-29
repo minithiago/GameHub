@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:procecto2/bloc/get_games2_bloc.dart';
+import 'package:procecto2/bloc/get_gamesCompany.dart';
+import 'package:procecto2/bloc/get_gamesPltfrm_bloc.dart';
 import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
@@ -13,65 +14,39 @@ import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/services/switch_games.dart';
+
 import 'package:provider/provider.dart';
 
 import '../game_detail_screen.dart';
 
-class SearchScreenScroll extends StatefulWidget {
-  SearchScreenScroll({super.key});
+class CompanySearchScreen extends StatefulWidget {
+  String query = "";
+
+  CompanySearchScreen(this.query);
 
   @override
-  _SearchScreenScroll createState() => _SearchScreenScroll();
+  _CompanySearchScreenState createState() => _CompanySearchScreenState();
 }
 
-class _SearchScreenScroll extends State<SearchScreenScroll> {
-  late ScrollController _scrollController;
-  ScrollPhysics _scrollPhysics = const AlwaysScrollableScrollPhysics();
+class _CompanySearchScreenState extends State<CompanySearchScreen> {
   @override
   void initState() {
+    getGamesBlocCompany.getCompanySearchedGames(widget.query);
     super.initState();
-    getGamesBloc2.getBestGames2();
-
     FavoriteGamesProvider();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.minScrollExtent) {
-      setState(() {
-        _scrollPhysics = const NeverScrollableScrollPhysics();
-      });
-      print('minimo');
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          _scrollPhysics = const BouncingScrollPhysics();
-        });
-      }); // Método para solicitar más juegos
-    } else {
-      setState(() {
-        _scrollPhysics = const AlwaysScrollableScrollPhysics();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBloc2.subject,
+      stream: getGamesBlocCompany.subject.stream,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
-          final gameResponse = snapshot.data!;
-          if (gameResponse.error.isNotEmpty) {
+          final gameResponse = snapshot.data;
+          if (gameResponse != null && gameResponse.error.isNotEmpty) {
             return buildErrorWidget(gameResponse.error);
           } else {
-            return _buildGameGridWidget(gameResponse);
+            return _buildGameGridWidget(gameResponse!);
           }
         } else if (snapshot.hasError) {
           return buildErrorWidget(snapshot.error.toString());
@@ -83,52 +58,34 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
   }
 
   Widget _buildGameGridWidget(GameResponse data) {
+    List<GameModel> games = data.games;
     //String userId = FirebaseAuth.instance.currentUser!.email.toString();
 
     var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
 
     final List<int> allGameIds =
         favoriteGamesProvider.allGames.map((game) => game.id).toList();
-    List<GameModel> games = data.games;
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: AnimationLimiter(
-          child: GridView.builder(
-            controller: _scrollController,
-            physics: _scrollPhysics,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 7.0,
-              mainAxisSpacing: 7.0,
-              childAspectRatio: 0.75,
-              crossAxisCount: 3,
-            ),
-            itemCount: games.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == games.length - 1) {
-                getGamesBloc2.getMoreBestGames2();
-                return StreamBuilder<bool>(
-                  stream: getGamesBloc2.loadingStream,
-                  builder: (context, AsyncSnapshot<bool> loadingSnapshot) {
-                    if (loadingSnapshot.hasData && loadingSnapshot.data!) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                );
-                // Solicitar más juegos cuando se alcanza el último
-              }
-              GameModel game = games[index];
-              return AnimationConfiguration.staggeredGrid(
-                  columnCount: 3,
+
+    return AnimationLimiter(
+      child: AnimationLimiter(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          child: GridView.count(
+            crossAxisSpacing: 7.0,
+            mainAxisSpacing: 7.0,
+            childAspectRatio: 0.75,
+            crossAxisCount: 3, //columnas
+            children: List.generate(
+              games.length,
+              (int index) {
+                GameModel game = games[index];
+                return AnimationConfiguration.staggeredGrid(
                   position: index,
-                  duration: const Duration(milliseconds: 400),
-                  child: SlideAnimation(
-                      verticalOffset: 50.0,
-                      child: FadeInAnimation(
-                          child: GestureDetector(
+                  duration: const Duration(milliseconds: 375),
+                  columnCount: 3,
+                  child: ScaleAnimation(
+                    child: FadeInAnimation(
+                      child: GestureDetector(
                         onLongPress: () {
                           if (FirebaseAuth.instance.currentUser?.email
                                   .toString() !=
@@ -420,9 +377,15 @@ class _SearchScreenScroll extends State<SearchScreenScroll> {
                             ),
                           ],
                         ),
-                      ))));
-            },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

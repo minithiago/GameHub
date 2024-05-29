@@ -116,47 +116,53 @@ class GameDetailScreenState extends State<GameDetailScreen>
         Stack(
           children: <Widget>[
             SizedBox(
-                height: 250.0,
-                //220
-                /*YoutubePlayer(
+              height: 250.0,
+              //220
+              /*YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
                 //progressIndicatorColor: Colors.red, //true
                 thumbnail: Image.asset('assets/images/videoError.jpg'),
               ), */
-                child: PageIndicatorContainer(
-                    align: IndicatorAlign.bottom,
-                    length: game.screenshots!.length,
-                    indicatorSpace: 8.0,
-                    padding: const EdgeInsets.all(10.0),
-                    indicatorColor: Colors.white,
-                    indicatorSelectorColor:
-                        const Color.fromRGBO(110, 182, 255, 1),
-                    shape: IndicatorShape.circle(size: 5.5),
-                    child: PageView.builder(
-                      itemCount:
-                          game.screenshots!.length, // Número total de imágenes
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 0.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+              child: game.screenshots == null || game.screenshots!.isEmpty
+                  ? Image.network(
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/No_Screenshot.svg/1024px-No_Screenshot.svg.png',
+                      fit: BoxFit.cover,
+                    )
+                  : PageIndicatorContainer(
+                      align: IndicatorAlign.bottom,
+                      length: game.screenshots!.length,
+                      indicatorSpace: 8.0,
+                      padding: const EdgeInsets.all(10.0),
+                      indicatorColor: Colors.white,
+                      indicatorSelectorColor:
+                          const Color.fromRGBO(110, 182, 255, 1),
+                      shape: IndicatorShape.circle(size: 5.5),
+                      child: PageView.builder(
+                        itemCount: game.screenshots!.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 0.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
+                                ),
+                                fit: BoxFit.cover,
                               ),
+                            ),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: 'assets/images/loading_image.gif',
+                              image:
+                                  "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
                               fit: BoxFit.cover,
                             ),
-                          ),
-                          child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/images/loading_image.gif',
-                            image:
-                                "https://images.igdb.com/igdb/image/upload/t_screenshot_big/${game.screenshots![index].imageId}.jpg",
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    ))),
+                          );
+                        },
+                      ),
+                    ),
+            ),
             Positioned(
               top: 0.0,
               left: 0.0,
@@ -537,6 +543,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                     )),
                                 child: Text(
                                   game.companies![index].company![0].name,
+                                  // game.companies![index].company![0].id.toString(),
                                   maxLines: 2,
                                   style: const TextStyle(
                                       height: 1.4,
