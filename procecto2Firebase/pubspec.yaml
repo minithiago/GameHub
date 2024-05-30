@@ -105,7 +105,6 @@ flutter:
   assets:
     - assets/images/default_avatar.jpg
     - assets/images/play_store_512.png
-    - assets/images/G_logo.png
     - assets/images/gamehubFondo.png
     - assets/images/gamehubNuevo.png
     - assets/images/videoError.jpg

@@ -14,7 +14,7 @@ class DiscoverScreenWidget7 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Developers',
+          'Popular developers',
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
           ),

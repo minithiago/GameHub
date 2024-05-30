@@ -12,7 +12,10 @@ class GameRepository {
 
   Future<GameResponse> getGamesDiscover({int offset = 0}) async {
     //new releases
-    //juegos con rating > 60 ;sort date desc;
+
+    final now = DateTime.parse(DateTime.now().toString());
+    var nowDate = now.millisecondsSinceEpoch;
+    var nowDate2 = nowDate ~/ 1000;
 
     try {
       final response = await http.post(Uri.parse(mainUrl),
@@ -21,8 +24,8 @@ class GameRepository {
             'Client-ID':
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
-          body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id != 192153 & cover.image_id != null & total_rating >= 50 ;sort first_release_date desc; limit 12;offset $offset;"); //98
+          body:
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating > 0 & first_release_date <= ${nowDate2};sort first_release_date desc; limit 12;offset $offset;"); //98
       print("Juegos New releases: ${response.statusCode}");
       //print(response.body);
 
@@ -51,7 +54,7 @@ class GameRepository {
         },
         body:
             "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;"
-            "where id != 192153 & cover.image_id != null & total_rating >= 55 & first_release_date >= $nowDate;"
+            "where id != 192153 & cover.image_id != null & total_rating >= 10 & first_release_date >= $nowDate;"
             "sort first_release_date asc;"
             "limit 24;"
             "offset $offset;",
@@ -84,7 +87,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body: //"fields cover.*,similar_games.*,similar_games.cover.*;where cover.image_id != null & similar_games != null & total_rating >= 80 ; limit 33;"
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name,screenshots.image_id, artworks.image_id;where cover.image_id != null & screenshots != null & first_release_date >= ${nowDate2} ; sort first_release_date asc; limit 24;offset $offset;");
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name,screenshots.image_id, artworks.image_id;where cover.image_id != null & first_release_date >= ${nowDate2} ; sort first_release_date asc; limit 24;offset $offset;");
       print("Juegos incoming Games: ${response.statusCode}");
       //print(response.body);
 
@@ -127,30 +130,33 @@ class GameRepository {
   }
 
   Future<GameResponse> getSliderRandomDelTO() async {
-    //Discover slider games
+    // Generar 10 números aleatorios únicos entre 1 y 300,000
+    var random = Random();
+    Set<int> randomIds = {};
+    while (randomIds.length < 100) {
+      randomIds.add(random.nextInt(300000) + 1);
+    }
+    //print(randomIds);
+
+    // Crear la consulta a la API usando los IDs generados
     var response = await http.post(Uri.parse(mainUrl), headers: {
       'Authorization': 'Bearer $apiKey',
       'Client-ID':
           'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
     }, body: '''
-        fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;
-        where cover.image_id != null & total_rating >= 60 ;
-        limit 15 ;
-      ''');
+    fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;
+    where id = (${randomIds.join(', ')}) & cover.image_id != null & screenshots != null & total_rating > 10;
+    limit 10;
+  ''');
+
     print("Discover SliderRandom: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      //List<dynamic> data = json.decode(response.body);
       List<dynamic> games = jsonDecode(response.body);
-      var random = Random();
-      List<dynamic> randomGames =
-          (games.toList()..shuffle(random)).take(10).toList();
-      return GameResponse.fromJson(randomGames);
+      return GameResponse.fromJson(games);
     } else {
       throw Exception('Error al obtener datos de la API');
     }
-
-    //return GameResponse.fromJson(jsonDecode(response.body));
   }
 
   Future<GameResponse> getSlider() async {
@@ -234,7 +240,7 @@ class GameRepository {
     }
   }*/
 
-  Future<GameResponse> searchGame(String query) async {
+  Future<GameResponse> searchGame(String query, {int offset = 0}) async {
     var response = await http.post(Uri.parse(mainUrl),
         headers: {
           'Authorization': 'Bearer $apiKey',
@@ -242,12 +248,25 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & rating > 20; limit 99; search \"$query\";");
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null ; limit 17; search \"$query\";offset $offset;");
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
 
-  Future<GameResponse> searchCompany(String query) async {
+  Future<GameResponse> searchGameById(int id) async {
+    var response = await http.post(Uri.parse(mainUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id = $id & cover.image_id != null ;");
+    print("${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
+  }
+
+  Future<GameResponse> searchCompany(String query, {int offset = 0}) async {
     //query = "Ubisoft"; //45
     print(query);
     try {
@@ -258,7 +277,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *, cover.image_id, involved_companies.company.name, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id; where cover.image_id != null & total_rating > 20 & involved_companies.company.name = (\"$query\");limit 99;");
+              "fields *, cover.image_id, involved_companies.company.name, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id; where cover.image_id != null & involved_companies.company.name = (\"$query\");limit 17;offset $offset;");
       print("${response.statusCode}");
       //print(response.body);
       return GameResponse.fromJson(jsonDecode(response.body));
@@ -268,7 +287,7 @@ class GameRepository {
     }
   }
 
-  Future<GameResponse> searchGenreGame(String query) async {
+  Future<GameResponse> searchGenreGame(String query, {int offset = 0}) async {
     var response = await http.post(Uri.parse(mainUrl),
         headers: {
           'Authorization': 'Bearer $apiKey',
@@ -276,12 +295,13 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & rating > 20 & genres = $query ; limit 99;");
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & rating > 20 & genres = $query ; limit 17;offset $offset;");
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
 
-  Future<GameResponse> searchPlatformGame(String query) async {
+  Future<GameResponse> searchPlatformGame(String query,
+      {int offset = 0}) async {
     //release_dates.platform o platforms
     var response = await http.post(Uri.parse(mainUrl),
         headers: {
@@ -290,7 +310,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating > 20 & platforms = $query ; limit 99;");
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating > 20 & platforms = $query ; limit 17;offset $offset;");
     print("${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }

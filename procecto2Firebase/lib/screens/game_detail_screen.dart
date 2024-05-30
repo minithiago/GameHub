@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +8,18 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:page_indicator/page_indicator.dart';
+import 'package:procecto2/bloc/get_games_bloc.dart';
+import 'package:procecto2/elements/error_element.dart';
+import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
+import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/providers.dart';
+import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
 
 class GameDetailScreen extends StatefulWidget {
@@ -879,32 +886,96 @@ class GameDetailScreenState extends State<GameDetailScreen>
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.only(right: 20.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: Image.network(
-                                  "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId}.jpg",
-                                  fit: BoxFit.fill,
-                                  width: 140.0,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        value: loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                (loadingProgress
-                                                        .expectedTotalBytes ??
-                                                    1)
-                                            : null,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  // Obtener el GameResponse de manera asíncrona
+                                  GameResponse response = await searchGameById(
+                                      game.similar![index].id);
+
+                                  // Verificar si hay algún error en el GameResponse
+                                  if (response.error.isNotEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Error al cargar el juego: ${response.error}')),
+                                    );
+                                    return;
+                                  }
+
+                                  // Obtener el juego específico desde el GameResponse
+                                  GameModel? juego = response.games.isNotEmpty
+                                      ? response.games.first
+                                      : null;
+
+                                  if (juego != null) {
+                                    // Navegar a la nueva pantalla una vez que se haya completado la solicitud
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            GameDetailScreen(
+                                          key: const Key(
+                                              "game_detail_screen_key"),
+                                          game: juego,
+                                        ),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          const begin = Offset(1.0, 0.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
+
+                                          var tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+                                          var offsetAnimation =
+                                              animation.drive(tween);
+
+                                          return SlideTransition(
+                                            position: offsetAnimation,
+                                            child: child,
+                                          );
+                                        },
+                                        transitionDuration:
+                                            const Duration(milliseconds: 300),
                                       ),
                                     );
-                                  },
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.error),
+                                  } else {
+                                    // Maneja el caso en que no se pudo obtener el juego
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'No se pudo cargar el juego. Inténtalo de nuevo.')),
+                                    );
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.network(
+                                    "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.similar![index].cover![0].imageId}.jpg",
+                                    fit: BoxFit.fill,
+                                    width: 140.0,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  (loadingProgress
+                                                          .expectedTotalBytes ??
+                                                      1)
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error),
+                                  ),
                                 ),
                               ),
                             );
@@ -1067,5 +1138,18 @@ class GameDetailScreenState extends State<GameDetailScreen>
         ),
       ],
     );
+  }
+
+  Future<GameResponse> searchGameById(int id) async {
+    var response = await http.post(Uri.parse('https://api.igdb.com/v4/games'),
+        headers: {
+          'Authorization': 'Bearer 7ke8gbpbre42gkjtpp5anax289bh6b',
+          'Client-ID':
+              'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+        },
+        body:
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id = $id & cover.image_id != null ;");
+    print("${response.statusCode}");
+    return GameResponse.fromJson(jsonDecode(response.body));
   }
 }

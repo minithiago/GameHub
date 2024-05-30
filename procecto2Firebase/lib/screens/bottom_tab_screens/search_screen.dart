@@ -53,7 +53,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {
-                    print(_searchController.text);
+                    // print(_searchController.text);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -99,7 +99,7 @@ class _SearchScreenWidgetState extends State<SearchScreen> {
                             SizedBox(height: 8),
                           ],
                         ),
-                        SearchSliderCompanies(),
+                        const SearchSliderCompanies(),
                         const Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

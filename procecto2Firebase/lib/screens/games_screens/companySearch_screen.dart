@@ -31,7 +31,7 @@ class CompanySearchScreen extends StatefulWidget {
 class _CompanySearchScreenState extends State<CompanySearchScreen> {
   @override
   void initState() {
-    getGamesBlocCompany.getCompanySearchedGames(widget.query);
+    getGamesBlocCompany.getGamesCompany(widget.query);
     super.initState();
     FavoriteGamesProvider();
   }
@@ -39,7 +39,7 @@ class _CompanySearchScreenState extends State<CompanySearchScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<GameResponse>(
-      stream: getGamesBlocCompany.subject.stream,
+      stream: getGamesBlocCompany.subject,
       builder: (context, AsyncSnapshot<GameResponse> snapshot) {
         if (snapshot.hasData) {
           final gameResponse = snapshot.data;
@@ -70,14 +70,32 @@ class _CompanySearchScreenState extends State<CompanySearchScreen> {
       child: AnimationLimiter(
         child: Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-          child: GridView.count(
-            crossAxisSpacing: 7.0,
-            mainAxisSpacing: 7.0,
-            childAspectRatio: 0.75,
-            crossAxisCount: 3, //columnas
-            children: List.generate(
-              games.length,
-              (int index) {
+          child: GridView.builder(
+              scrollDirection: Axis.vertical,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 7.0,
+                childAspectRatio: 0.75,
+                crossAxisCount: 3,
+              ),
+              itemCount: games.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == games.length - 1) {
+                  getGamesBlocCompany.getMoreGamesCompany(widget.query);
+                  return StreamBuilder<bool>(
+                    stream: getGamesBlocCompany.loadingStream,
+                    builder: (context, AsyncSnapshot<bool> loadingSnapshot) {
+                      if (loadingSnapshot.hasData && loadingSnapshot.data!) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
+                  );
+                  // Solicitar más juegos cuando se alcanza el último
+                }
                 GameModel game = games[index];
                 return AnimationConfiguration.staggeredGrid(
                   position: index,
@@ -381,9 +399,7 @@ class _CompanySearchScreenState extends State<CompanySearchScreen> {
                     ),
                   ),
                 );
-              },
-            ),
-          ),
+              }),
         ),
       ),
     );

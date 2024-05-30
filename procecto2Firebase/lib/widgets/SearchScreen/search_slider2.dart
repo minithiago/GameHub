@@ -256,7 +256,7 @@ class _SearchSliderState2 extends State<SearchSlider2> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ),
