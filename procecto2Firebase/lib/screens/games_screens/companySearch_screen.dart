@@ -216,6 +216,13 @@ class _CompanySearchScreenState extends State<CompanySearchScreen> {
                                         } else {
                                           favoriteGamesProvider
                                               .addToFavorites(game);
+                                          UserRepository().addGamePlayingToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
                                           if (!allGameIds.contains(game.id)) {
                                             favoriteGamesProvider
                                                 .addToAllGames(game);
@@ -262,6 +269,13 @@ class _CompanySearchScreenState extends State<CompanySearchScreen> {
                                         } else {
                                           favoriteGamesProvider
                                               .addToBeaten(game);
+                                          UserRepository().addGameBeatenToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
                                           if (!allGameIds.contains(game.id)) {
                                             favoriteGamesProvider
                                                 .addToAllGames(game);
@@ -308,6 +322,13 @@ class _CompanySearchScreenState extends State<CompanySearchScreen> {
                                         } else {
                                           favoriteGamesProvider
                                               .addToWishlist(game);
+                                          UserRepository().addGameWantToUser(
+                                            userId,
+                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                            game.name,
+                                            game.total_rating,
+                                            game.id,
+                                          );
                                           if (!allGameIds.contains(game.id)) {
                                             favoriteGamesProvider
                                                 .addToAllGames(game);

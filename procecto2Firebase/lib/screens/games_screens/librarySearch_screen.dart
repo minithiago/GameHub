@@ -282,6 +282,13 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                       } else {
                                         favoriteGamesProvider
                                             .addToFavorites(game);
+                                        UserRepository().addGamePlayingToUser(
+                                          userId,
+                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                          game.name,
+                                          game.total_rating,
+                                          game.id,
+                                        );
                                       }
                                     },
                                     child: const Row(
@@ -315,6 +322,13 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                         ));
                                       } else {
                                         favoriteGamesProvider.addToBeaten(game);
+                                        UserRepository().addGameBeatenToUser(
+                                          userId,
+                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                          game.name,
+                                          game.total_rating,
+                                          game.id,
+                                        );
                                       }
                                     },
                                     child: const Row(
@@ -349,6 +363,13 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                       } else {
                                         favoriteGamesProvider
                                             .addToWishlist(game);
+                                        UserRepository().addGameWantToUser(
+                                          userId,
+                                          "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                          game.name,
+                                          game.total_rating,
+                                          game.id,
+                                        );
                                       }
                                     },
                                     child: const Row(
@@ -422,6 +443,7 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                 ),
                               ),
                             ),
+                            /*
                             AspectRatio(
                               aspectRatio: 3 / 4,
                               child: Container(
@@ -455,7 +477,7 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ),
+                            ),*/
                             Consumer<SwitchState>(
                               builder: (context, switchState, child) {
                                 if (switchState.isSwitchedOn) {
