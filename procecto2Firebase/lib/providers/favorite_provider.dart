@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:procecto2/model/game.dart'; // Asegúrate de importar tu modelo GameModel aquí
+import 'package:procecto2/model/game.dart';
+import 'package:procecto2/model/game_response.dart';
+import 'package:http/http.dart' as http;
 
 class FavoriteGamesProvider with ChangeNotifier {
   List<GameModel> _allGames = [];
@@ -18,16 +21,43 @@ class FavoriteGamesProvider with ChangeNotifier {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  List<GameModel> get allGames => _allGames;
-  List<GameModel> get favoriteGames => _favoriteGames;
-  List<GameModel> get wishlistGames => _wishlistGames;
-  List<GameModel> get beatenGames => _beatenGames;
-
   FavoriteGamesProvider() {
     _auth.authStateChanges().listen((User? user) {
       _handleAuthStateChanged(user);
     });
+    _init();
   }
+
+  Future<void> _init() async {
+    if (_auth.currentUser != null) {
+      List<String> userGames =
+          await getGamesForUserEmail(_auth.currentUser!.email.toString());
+      GameResponse response = await libraryGames(userGames);
+      _allGames = response.games;
+
+      List<String> userGames2 = await getPlayingGamesForUserEmail(
+          _auth.currentUser!.email.toString());
+      GameResponse response2 = await libraryGames(userGames2);
+      _favoriteGames = response2.games;
+
+      List<String> userGames3 =
+          await getWantGamesForUserEmail(_auth.currentUser!.email.toString());
+      GameResponse response3 = await libraryGames(userGames3);
+      _wishlistGames = response3.games;
+
+      List<String> userGames4 =
+          await getBeatenGamesForUserEmail(_auth.currentUser!.email.toString());
+      GameResponse response4 = await libraryGames(userGames4);
+      _beatenGames = response4.games;
+
+      notifyListeners();
+    }
+  }
+
+  List<GameModel> get allGames => _allGames;
+  List<GameModel> get favoriteGames => _favoriteGames;
+  List<GameModel> get wishlistGames => _wishlistGames;
+  List<GameModel> get beatenGames => _beatenGames;
 
   void addToAllGames(GameModel game) {
     _allGames.add(game);
@@ -141,6 +171,7 @@ class FavoriteGamesProvider with ChangeNotifier {
 
   Future<void> _handleAuthStateChanged(User? user) async {
     if (user != null) {
+      _init();
       await _loadFavoriteGames(user);
       await _loadWishlistGames(user);
       await _loadBeatenGames(user);
@@ -261,4 +292,171 @@ class FavoriteGamesProvider with ChangeNotifier {
         jsonEncode(_wishlistGames.map((game) => game.toJson()).toList());
     await _storage.write(key: userKey, value: wishlistGamesJson);
   }
+}
+
+Future<List<String>> getGamesForUserEmail(String userEmail) async {
+  try {
+    // Obtener la referencia al documento del usuario en Firestore utilizando su email
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      String userId = userSnapshot.docs.first.id;
+      // Obtener la referencia a la subcolección "Games" del usuario
+      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Games')
+          .get();
+
+      // Extraer los IDs de los juegos
+      List<String> gameIds = gamesSnapshot.docs.map((doc) {
+        // Obtener el campo "id" de cada documento en la subcolección "Games"
+        return doc['id']
+            .toString(); // Ajusta esto según la estructura de tus documentos
+      }).toList();
+
+      return gameIds;
+    } else {
+      print(
+          'No se encontró ningún usuario con el correo electrónico $userEmail.');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting games for user: $e');
+    return [];
+  }
+}
+
+Future<List<String>> getPlayingGamesForUserEmail(String userEmail) async {
+  try {
+    // Obtener la referencia al documento del usuario en Firestore utilizando su email
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      String userId = userSnapshot.docs.first.id;
+      // Obtener la referencia a la subcolección "playing" dentro de "Games" del usuario
+      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Games')
+          .doc('playing')
+          .collection('GamesList')
+          .get();
+
+      // Extraer los IDs de los juegos
+      List<String> gameIds = gamesSnapshot.docs.map((doc) {
+        // Obtener el campo "id" de cada documento en la subcolección "playing"
+        return doc['id']
+            .toString(); // Ajusta esto según la estructura de tus documentos
+      }).toList();
+
+      return gameIds;
+    } else {
+      print(
+          'No se encontró ningún usuario con el correo electrónico $userEmail.');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting games for user: $e');
+    return [];
+  }
+}
+
+Future<List<String>> getWantGamesForUserEmail(String userEmail) async {
+  try {
+    // Obtener la referencia al documento del usuario en Firestore utilizando su email
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      String userId = userSnapshot.docs.first.id;
+      // Obtener la referencia a la subcolección "playing" dentro de "Games" del usuario
+      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Games')
+          .doc('want')
+          .collection('GamesList')
+          .get();
+
+      // Extraer los IDs de los juegos
+      List<String> gameIds = gamesSnapshot.docs.map((doc) {
+        // Obtener el campo "id" de cada documento en la subcolección "playing"
+        return doc['id']
+            .toString(); // Ajusta esto según la estructura de tus documentos
+      }).toList();
+
+      return gameIds;
+    } else {
+      print(
+          'No se encontró ningún usuario con el correo electrónico $userEmail.');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting games for user: $e');
+    return [];
+  }
+}
+
+Future<List<String>> getBeatenGamesForUserEmail(String userEmail) async {
+  try {
+    // Obtener la referencia al documento del usuario en Firestore utilizando su email
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      String userId = userSnapshot.docs.first.id;
+      // Obtener la referencia a la subcolección "playing" dentro de "Games" del usuario
+      QuerySnapshot gamesSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Games')
+          .doc('beaten')
+          .collection('GamesList')
+          .get();
+
+      // Extraer los IDs de los juegos
+      List<String> gameIds = gamesSnapshot.docs.map((doc) {
+        // Obtener el campo "id" de cada documento en la subcolección "playing"
+        return doc['id']
+            .toString(); // Ajusta esto según la estructura de tus documentos
+      }).toList();
+
+      return gameIds;
+    } else {
+      print(
+          'No se encontró ningún usuario con el correo electrónico $userEmail.');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting games for user: $e');
+    return [];
+  }
+}
+
+Future<GameResponse> libraryGames(List<String> gameIds) async {
+  // Construye la consulta para seleccionar los juegos que estén dentro de la lista de gameIds
+  String query = gameIds.join(',');
+
+  // Realiza la solicitud HTTP con la consulta construida
+  var response = await http.post(Uri.parse("https://api.igdb.com/v4/games"),
+      headers: {
+        'Authorization': 'Bearer 7ke8gbpbre42gkjtpp5anax289bh6b',
+        'Client-ID':
+            'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
+      },
+      body:
+          "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id = ($query) ; limit 99;");
+  // Devuelve la respuesta del servidor en forma de GameResponse
+  return GameResponse.fromJson(jsonDecode(response.body));
 }

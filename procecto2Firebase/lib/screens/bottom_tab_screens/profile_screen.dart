@@ -172,7 +172,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        stops: [0.10, 0.8],
+                        stops: const [0.10, 0.8],
                       ),
                     ),
                   ),
