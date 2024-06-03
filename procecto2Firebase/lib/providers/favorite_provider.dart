@@ -8,15 +8,20 @@ class FavoriteGamesProvider with ChangeNotifier {
   List<GameModel> _allGames = [];
   List<GameModel> _favoriteGames = [];
   List<GameModel> _wishlistGames = [];
+  List<GameModel> _beatenGames = [];
+
   static const String _kFavoriteGamesKey = 'favorite_games';
   static const String _kWishlistGamesKey = 'wishlist_games';
+  static const String _kBeatenGamesKey = 'beaten_games';
   static const String _kAllGamesKey = 'all_games';
+
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<GameModel> get allGames => _allGames;
   List<GameModel> get favoriteGames => _favoriteGames;
   List<GameModel> get wishlistGames => _wishlistGames;
+  List<GameModel> get beatenGames => _beatenGames;
 
   FavoriteGamesProvider() {
     _auth.authStateChanges().listen((User? user) {
@@ -43,6 +48,20 @@ class FavoriteGamesProvider with ChangeNotifier {
     game.favorite = false;
     _favoriteGames.remove(game);
     _saveFavoriteGames();
+    notifyListeners();
+  }
+
+  void addToBeaten(GameModel game) {
+    if (!_beatenGames.contains(game)) {
+      _beatenGames.add(game);
+    }
+    _saveBeatenGames();
+    notifyListeners();
+  }
+
+  void removeBeaten(GameModel game) {
+    _beatenGames.remove(game);
+    _saveBeatenGames();
     notifyListeners();
   }
 
@@ -80,8 +99,10 @@ class FavoriteGamesProvider with ChangeNotifier {
     _saveAllGames();
     _saveFavoriteGames();
     _saveWishlistGames();
+    _saveBeatenGames();
     _favoriteGames.remove(game);
     _wishlistGames.remove(game);
+    _beatenGames.remove(game);
     notifyListeners();
   }
 
@@ -103,6 +124,11 @@ class FavoriteGamesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void refreshBeaten() {
+    _saveBeatenGames();
+    notifyListeners();
+  }
+
   void refreshAll() {
     _saveAllGames();
     notifyListeners();
@@ -117,10 +143,12 @@ class FavoriteGamesProvider with ChangeNotifier {
     if (user != null) {
       await _loadFavoriteGames(user);
       await _loadWishlistGames(user);
+      await _loadBeatenGames(user);
       await _loadAllGames(user);
     } else {
       _favoriteGames = [];
       _wishlistGames = [];
+      _beatenGames = [];
       _allGames = [];
       notifyListeners();
     }
@@ -137,6 +165,21 @@ class FavoriteGamesProvider with ChangeNotifier {
       }).toList();
     } else {
       _favoriteGames = [];
+    }
+    notifyListeners();
+  }
+
+  Future<void> _loadBeatenGames(User user) async {
+    String userKey = '$_kBeatenGamesKey${user.email}';
+    String? beatenGamesJson = await _storage.read(key: userKey);
+    if (beatenGamesJson != null && beatenGamesJson.isNotEmpty) {
+      List<Map<String, dynamic>> gameListJson =
+          jsonDecode(beatenGamesJson).cast<Map<String, dynamic>>();
+      _beatenGames = gameListJson.map((json) {
+        return GameModel.fromJson(json)..favorite = true;
+      }).toList();
+    } else {
+      _beatenGames = [];
     }
     notifyListeners();
   }
@@ -181,6 +224,18 @@ class FavoriteGamesProvider with ChangeNotifier {
     String favoriteGamesJson =
         jsonEncode(_favoriteGames.map((game) => game.toJson()).toList());
     await _storage.write(key: userKey, value: favoriteGamesJson);
+  }
+
+  Future<void> _saveBeatenGames() async {
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    String userKey = '$_kBeatenGamesKey${user.email}';
+    String beatenGamesJson =
+        jsonEncode(_beatenGames.map((game) => game.toJson()).toList());
+    await _storage.write(key: userKey, value: beatenGamesJson);
   }
 
   Future<void> _saveAllGames() async {

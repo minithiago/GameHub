@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:page_indicator/page_indicator.dart';
-import 'package:procecto2/bloc/get_games_bloc.dart';
-import 'package:procecto2/elements/error_element.dart';
-import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/model/item.dart';
@@ -133,7 +129,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
               ), */
               child: game.screenshots == null || game.screenshots!.isEmpty
                   ? Image.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/No_Screenshot.svg/1024px-No_Screenshot.svg.png',
+                      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Fdefault-image-icon-vector-missing-picture-page-for-website-design-or-vector-id1357365823%3Fk%3D20%26m%3D1357365823%26s%3D612x612%26w%3D0%26h%3DZH0MQpeUoSHM3G2AWzc8KkGYRg4uP_kuu0Za8GFxdFc%3D&f=1&nofb=1&ipt=d76ac58579e397135cac3373c05ff42399dd8258e7bb4317f19391eacf1a32e6&ipo=images',
                       fit: BoxFit.cover,
                     )
                   : PageIndicatorContainer(
@@ -800,10 +796,16 @@ class GameDetailScreenState extends State<GameDetailScreen>
                               String url =
                                   "https://www.twitch.tv/directory/category/${game.slug}";
 
-                              if (await canLaunchUrl(Uri.parse(url))) {
-                                await launchUrl(Uri.parse(url));
-                              } else {
-                                throw 'Could not launch $url';
+                              Uri uri = Uri.parse(url);
+
+                              try {
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri);
+                                } else {
+                                  throw 'Could not launch $url';
+                                }
+                              } catch (e) {
+                                print('Exception: $e');
                               }
                             },
                             child: Row(

@@ -67,6 +67,8 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
     //favoriteGamess.where((game) => game.wishlist == true).toList();
     List<GameModel> sublist2 = favoriteGamesProvider.wishlistGames;
 
+    List<GameModel> sublist3 = favoriteGamesProvider.beatenGames;
+
     List<GameModel> gamesToShow;
 
     // Seleccionar la lista según el índice de _lista
@@ -75,6 +77,9 @@ class _LibraryScreenListState extends State<LibraryScreenList> {
         gamesToShow = sublist1;
         break;
       case 2:
+        gamesToShow = sublist3;
+        break;
+      case 3:
         gamesToShow = sublist2;
         break;
       default:

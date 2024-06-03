@@ -25,7 +25,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating > 0 & first_release_date <= ${nowDate2};sort first_release_date desc; limit 12;offset $offset;"); //98
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating > 0 & first_release_date <= ${nowDate2};sort first_release_date desc; limit 12;offset $offset;"); //98 & total_rating > 0
       print("Juegos New releases: ${response.statusCode}");
       //print(response.body);
 
@@ -198,7 +198,8 @@ class GameRepository {
   Future<GameResponse> getSlider3() async {
     final now = DateTime.parse(DateTime.now().toString());
     var nowDate = now.millisecondsSinceEpoch;
-    print(nowDate);
+    var nowDate2 = nowDate ~/ 1000;
+
     //Search slider
     //Incoming espansions category = 2
     var response = await http.post(Uri.parse(mainUrl),
@@ -208,7 +209,7 @@ class GameRepository {
               'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
         },
         body:
-            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & screenshots != null & first_release_date >= $nowDate & category = 2; limit 10; sort first_release_date desc; ");
+            "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & screenshots != null & category = (1,2) & first_release_date >= $nowDate2 ; sort first_release_date asc;limit 10;"); //2
     print("Slider3: ${response.statusCode}");
     return GameResponse.fromJson(jsonDecode(response.body));
   }
@@ -277,7 +278,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *, cover.image_id, involved_companies.company.name, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id; where cover.image_id != null & involved_companies.company.name = (\"$query\");limit 17;offset $offset;");
+              'fields *, cover.image_id, involved_companies.company.name, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id; where cover.image_id != null & involved_companies.company.name = (\"$query\") ;limit 17;offset $offset;'); //*"$query"*
       print("${response.statusCode}");
       //print(response.body);
       return GameResponse.fromJson(jsonDecode(response.body));

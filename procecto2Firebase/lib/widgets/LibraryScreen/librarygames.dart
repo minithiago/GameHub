@@ -61,7 +61,7 @@ class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 4; i++)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ChoiceChip(
@@ -71,8 +71,10 @@ class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                           i == 0
                               ? 'All'
                               : i == 1
-                                  ? 'Favorites'
-                                  : 'Wishlist',
+                                  ? 'Playing'
+                                  : i == 2
+                                      ? 'Beaten'
+                                      : 'Want',
                           style: TextStyle(
                             fontSize: 18, // Tamaño de la fuente
                             color: selectedIndex == i
@@ -81,7 +83,6 @@ class LibraryScreenWidgetState extends State<LibraryScreenWidget> {
                           ),
                         ),
                       ),
-
                       selected: selectedIndex == i,
                       selectedColor: const Color.fromRGBO(
                           110, 182, 255, 1), // Color cuando está seleccionado

@@ -68,14 +68,18 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         favoriteGamesProvider.favoriteGames.map((game) => game.id).toList();
     final List<int> wishlistGameIds =
         favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
+    final List<int> beatenGameIds =
+        favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
 
     //var favoriteGamess = data.games;
 
     List<GameModel> favoriteGamess = favoriteGamesProvider.allGames;
 
-    List<GameModel> sublist1 = favoriteGamesProvider.favoriteGames;
-    //favoriteGamess.where((game) => game.wishlist == true).toList();
-    List<GameModel> sublist2 = favoriteGamesProvider.wishlistGames;
+    List<GameModel> sublist1 = favoriteGamesProvider.favoriteGames; // Playing
+
+    List<GameModel> sublist2 = favoriteGamesProvider.wishlistGames; // Want
+
+    List<GameModel> sublist3 = favoriteGamesProvider.beatenGames; // Beaten
 
     List<GameModel> gamesToShow;
 
@@ -85,6 +89,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
         gamesToShow = sublist1;
         break;
       case 2:
+        gamesToShow = sublist3;
+        break;
+      case 3:
         gamesToShow = sublist2;
         break;
       default:
@@ -166,6 +173,8 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                         favoriteGamesProvider
                                             .removeWishlist(game);
                                         favoriteGamesProvider
+                                            .removeBeaten(game);
+                                        favoriteGamesProvider
                                             .removeFavorite(game);
                                         favoriteGamesProvider
                                             .removeFromAllGames(game);
@@ -183,10 +192,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                             onPressed: () {
                                               favoriteGamesProvider
                                                   .addToAllGames(game);
-                                              favoriteGamesProvider
-                                                  .addToFavorites(game);
-                                              favoriteGamesProvider
-                                                  .addToWishlist(game);
+
                                               UserRepository().addGameToUser(
                                                 userId,
                                                 "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
@@ -247,7 +253,42 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                               width:
                                                   8), // Espacio entre el icono y el texto
                                           Text(
-                                            "Add to favorites",
+                                            "Add to Playing",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        if (beatenGameIds.contains(game.id)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in beaten"),
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ));
+                                        } else {
+                                          favoriteGamesProvider
+                                              .addToBeaten(game);
+                                        }
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle_outline_rounded,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to Beaten",
                                             style: TextStyle(
                                                 //color: Colors.black,
                                                 ),
@@ -282,7 +323,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                               width:
                                                   8), // Espacio entre el icono y el texto
                                           Text(
-                                            "Add to Wishlist",
+                                            "Add to Want",
                                             style: TextStyle(
                                                 //color: Colors.black,
                                                 ),
