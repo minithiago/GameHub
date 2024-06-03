@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
@@ -13,7 +14,6 @@ import 'package:procecto2/model/item.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../providers/providers.dart';
 import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
@@ -319,7 +319,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                             String url =
                                                 "https://www.amazon.es/s?k=${game.name}&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3AS6SWL65PXHE&sprefix=stellar+blade%2Caps%2C155&ref=nb_sb_noss_1";
 
-                                            if (await canLaunchUrl(
+                                            if (await launchUrl(
                                                 Uri.parse(url))) {
                                               await launchUrl(Uri.parse(url));
                                             } else {
@@ -432,15 +432,16 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                   favoriteGamesProvider
                                                       .removeWishlist(game);
                                                   favoriteGamesProvider
+                                                      .removeBeaten(game);
+                                                  favoriteGamesProvider
                                                       .removeFavorite(game);
                                                   favoriteGamesProvider
                                                       .removeFromAllGames(game);
-                                                  allGameIds.remove(game.id);
 
+                                                  HapticFeedback.lightImpact();
                                                   UserRepository()
                                                       .removeGameFromUser(
                                                           userId, game.id);
-                                                  HapticFeedback.lightImpact();
                                                 },
                                                 child: const Row(
                                                   mainAxisSize:
@@ -760,7 +761,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                               String url =
                                   "https://www.igdb.com/games/${game.slug}";
 
-                              if (await canLaunchUrl(Uri.parse(url))) {
+                              if (await launchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
                                 throw 'Could not launch $url';
@@ -799,7 +800,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                               Uri uri = Uri.parse(url);
 
                               try {
-                                if (await canLaunchUrl(uri)) {
+                                if (await launchUrl(uri)) {
                                   await launchUrl(uri);
                                 } else {
                                   throw 'Could not launch $url';
@@ -845,7 +846,7 @@ class GameDetailScreenState extends State<GameDetailScreen>
                               String url =
                                   "https://www.youtube.com/results?search_query=${game.name}";
 
-                              if (await canLaunchUrl(Uri.parse(url))) {
+                              if (await launchUrl(Uri.parse(url))) {
                                 await launchUrl(Uri.parse(url));
                               } else {
                                 throw 'Could not launch $url';

@@ -12,6 +12,8 @@ import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
+import 'package:procecto2/providers/favorite_provider.dart';
+import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/services/switch_games.dart';
 import 'package:provider/provider.dart';
 import '../game_detail_screen.dart';
@@ -130,6 +132,16 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
   Widget _buildGameGridWidget(GameResponse data) {
     var favoriteGames = data.games;
 
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    String userId = FirebaseAuth.instance.currentUser!.email.toString();
+
+    final List<int> favoriteGameIds =
+        favoriteGamesProvider.favoriteGames.map((game) => game.id).toList();
+    final List<int> wishlistGameIds =
+        favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
+    final List<int> beatenGameIds =
+        favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
+
     List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
         return games;
@@ -167,11 +179,52 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                             context: context,
                             builder: (context) {
                               return CupertinoActionSheet(
+                                title: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Image.network(
+                                          'https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg',
+                                          height:
+                                              100.0, // Ajusta el tamaño de la imagen según sea necesario
+                                          width: 100.0,
+                                        ),
+                                        const SizedBox(
+                                            width:
+                                                10), // Espacio entre la imagen y el texto
+                                        Expanded(
+                                          child: Text(
+                                            game.name,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              // Ajusta el tamaño del texto según sea necesario
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                        height:
+                                            10), // Espacio entre el Row y el CupertinoActionSheet
+                                  ],
+                                ),
                                 actions: <CupertinoActionSheetAction>[
                                   CupertinoActionSheetAction(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      favoriteGamesProvider
+                                          .removeWishlist(game);
+                                      favoriteGamesProvider.removeBeaten(game);
+                                      favoriteGamesProvider
+                                          .removeFavorite(game);
+                                      favoriteGamesProvider
+                                          .removeFromAllGames(game);
+
                                       HapticFeedback.lightImpact();
+                                      UserRepository()
+                                          .removeGameFromUser(userId, game.id);
 
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
@@ -179,16 +232,28 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                             "${game.name} removed from library"),
                                         action: SnackBarAction(
                                           label: "Undo",
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            favoriteGamesProvider
+                                                .addToAllGames(game);
+
+                                            UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                            );
+                                          },
                                         ),
+                                        duration: const Duration(seconds: 1),
                                       ));
+                                      Navigator.pop(context);
                                     },
                                     child: const Row(
                                       children: [
                                         Icon(
                                           Icons.remove_circle_outline,
-                                          color:
-                                              Colors.black, // Color del icono
+                                          color: Colors.red, // Color del icono
                                         ),
                                         SizedBox(
                                             width:
@@ -197,7 +262,7 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                           "Remove from library",
                                           style: TextStyle(
                                             color:
-                                                Colors.black, // Color del texto
+                                                Colors.red, // Color del texto
                                           ),
                                         ),
                                       ],
@@ -205,33 +270,101 @@ class _LibrarySearchScreenGridState extends State<LibrarySearchScreenGrid> {
                                   ),
                                   CupertinoActionSheetAction(
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "${game.name} added to library"),
-                                        action: SnackBarAction(
-                                          label: "Undo",
-                                          onPressed: () {},
-                                        ),
-                                      ));
                                       Navigator.pop(context);
                                       HapticFeedback.lightImpact();
+                                      if (favoriteGameIds.contains(game.id)) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "${game.name} already in favorites"),
+                                          duration: const Duration(seconds: 1),
+                                        ));
+                                      } else {
+                                        favoriteGamesProvider
+                                            .addToFavorites(game);
+                                      }
                                     },
                                     child: const Row(
                                       children: [
                                         Icon(
-                                          Icons.star,
-                                          color:
-                                              Colors.black, // Color del icono
+                                          Icons.gamepad_rounded,
+                                          //color: Colors.black, // Color del icono
                                         ),
                                         SizedBox(
                                             width:
                                                 8), // Espacio entre el icono y el texto
                                         Text(
-                                          "Add to favorites",
+                                          "Add to Playing",
                                           style: TextStyle(
-                                            color: Colors.black,
-                                          ),
+                                              //color: Colors.black,
+                                              ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      HapticFeedback.lightImpact();
+                                      if (beatenGameIds.contains(game.id)) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "${game.name} already in beaten"),
+                                          duration: const Duration(seconds: 1),
+                                        ));
+                                      } else {
+                                        favoriteGamesProvider.addToBeaten(game);
+                                      }
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.task_alt,
+                                          //color: Colors.black, // Color del icono
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                8), // Espacio entre el icono y el texto
+                                        Text(
+                                          "Add to Beaten",
+                                          style: TextStyle(
+                                              //color: Colors.black,
+                                              ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      HapticFeedback.lightImpact();
+                                      if (wishlistGameIds.contains(game.id)) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "${game.name} already in wishlist"),
+                                          duration: const Duration(seconds: 1),
+                                        ));
+                                      } else {
+                                        favoriteGamesProvider
+                                            .addToWishlist(game);
+                                      }
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.list_alt_rounded,
+                                          //color: Colors.black, // Color del icono
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                8), // Espacio entre el icono y el texto
+                                        Text(
+                                          "Add to Want",
+                                          style: TextStyle(
+                                              //color: Colors.black,
+                                              ),
                                         )
                                       ],
                                     ),

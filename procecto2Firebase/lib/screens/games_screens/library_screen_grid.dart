@@ -167,6 +167,38 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                               context: context,
                               builder: (context) {
                                 return CupertinoActionSheet(
+                                  title: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Image.network(
+                                            'https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg',
+                                            height:
+                                                100.0, // Ajusta el tamaño de la imagen según sea necesario
+                                            width: 100.0,
+                                          ),
+                                          const SizedBox(
+                                              width:
+                                                  10), // Espacio entre la imagen y el texto
+                                          Expanded(
+                                            child: Text(
+                                              game.name,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                // Ajusta el tamaño del texto según sea necesario
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                          height:
+                                              10), // Espacio entre el Row y el CupertinoActionSheet
+                                    ],
+                                  ),
                                   actions: <CupertinoActionSheetAction>[
                                     CupertinoActionSheetAction(
                                       onPressed: () {
@@ -246,7 +278,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                       child: const Row(
                                         children: [
                                           Icon(
-                                            Icons.favorite_rounded,
+                                            Icons.gamepad_rounded,
                                             //color: Colors.black, // Color del icono
                                           ),
                                           SizedBox(
@@ -281,7 +313,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                       child: const Row(
                                         children: [
                                           Icon(
-                                            Icons.check_circle_outline_rounded,
+                                            Icons.task_alt,
                                             //color: Colors.black, // Color del icono
                                           ),
                                           SizedBox(

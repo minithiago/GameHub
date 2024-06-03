@@ -161,6 +161,14 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
 
     final List<int> allGameIds =
         favoriteGamesProvider.allGames.map((game) => game.id).toList();
+    final List<int> playingGameIds =
+        favoriteGamesProvider.favoriteGames.map((game) => game.id).toList();
+
+    final List<int> wantGameIds =
+        favoriteGamesProvider.wishlistGames.map((game) => game.id).toList();
+
+    final List<int> beatenGameIds =
+        favoriteGamesProvider.beatenGames.map((game) => game.id).toList();
 
     var favoriteGamess = data.games;
 
@@ -239,11 +247,41 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
                           onLongPress: () {
                             HapticFeedback.lightImpact();
                             showCupertinoModalPopup(
-                              //barrierColor: const Color.fromARGB(96, 0, 0, 0),
-
                               context: context,
                               builder: (context) {
                                 return CupertinoActionSheet(
+                                  title: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Image.network(
+                                            'https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg',
+                                            height:
+                                                100.0, // Ajusta el tamaño de la imagen según sea necesario
+                                            width: 100.0,
+                                          ),
+                                          const SizedBox(
+                                              width:
+                                                  10), // Espacio entre la imagen y el texto
+                                          Expanded(
+                                            child: Text(
+                                              game.name,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                // Ajusta el tamaño del texto según sea necesario
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                          height:
+                                              10), // Espacio entre el Row y el CupertinoActionSheet
+                                    ],
+                                  ),
                                   actions: <CupertinoActionSheetAction>[
                                     CupertinoActionSheetAction(
                                       onPressed: () {
@@ -255,9 +293,11 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
                                             content: Text(
                                                 "${game.name} already in library"),
                                             duration:
-                                                const Duration(seconds: 1),
+                                                const Duration(seconds: 2),
                                           ));
                                         } else {
+                                          favoriteGamesProvider
+                                              .addToAllGames(game);
                                           UserRepository().addGameToUser(
                                             userId,
                                             "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
@@ -265,15 +305,13 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
                                             game.total_rating,
                                             game.id,
                                           );
-                                          favoriteGamesProvider
-                                              .addToAllGames(game);
                                         }
                                       },
                                       child: const Row(
                                         children: [
                                           Icon(
                                             Icons
-                                                .add_circle, //color: Colors.black
+                                                .add_circle_outline_rounded, //color: Colors.black
                                           ),
                                           SizedBox(
                                               width:
@@ -293,39 +331,41 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        if (allGameIds.contains(game.id)) {
+                                        if (playingGameIds.contains(game.id)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
-                                                "${game.name} already in library"),
+                                                "${game.name} already in playing list"),
                                             duration:
-                                                const Duration(seconds: 1),
+                                                const Duration(seconds: 2),
                                           ));
                                         } else {
-                                          UserRepository().addGameToUser(
-                                            userId,
-                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                            game.name,
-                                            game.total_rating,
-                                            game.id,
-                                          );
                                           favoriteGamesProvider
                                               .addToFavorites(game);
-                                          favoriteGamesProvider
-                                              .addToAllGames(game);
+                                          if (!allGameIds.contains(game.id)) {
+                                            favoriteGamesProvider
+                                                .addToAllGames(game);
+                                            UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                            );
+                                          }
                                         }
                                       },
                                       child: const Row(
                                         children: [
                                           Icon(
-                                            Icons.favorite_rounded,
+                                            Icons.gamepad_rounded,
                                             //color: Colors.black, // Color del icono
                                           ),
                                           SizedBox(
                                               width:
                                                   8), // Espacio entre el icono y el texto
                                           Text(
-                                            "Add to favorites",
+                                            "Add to playing",
                                             style: TextStyle(
                                                 //color: Colors.black,
                                                 ),
@@ -337,26 +377,74 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
-                                        if (allGameIds.contains(game.id)) {
+                                        if (beatenGameIds.contains(game.id)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
-                                                "${game.name} already in library"),
+                                                "${game.name} already in beaten list"),
                                             duration:
-                                                const Duration(seconds: 1),
+                                                const Duration(seconds: 2),
                                           ));
                                         } else {
-                                          UserRepository().addGameToUser(
-                                            userId,
-                                            "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
-                                            game.name,
-                                            game.total_rating,
-                                            game.id,
-                                          );
+                                          favoriteGamesProvider
+                                              .addToBeaten(game);
+                                          if (!allGameIds.contains(game.id)) {
+                                            favoriteGamesProvider
+                                                .addToAllGames(game);
+                                            UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                            );
+                                          }
+                                        }
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            Icons.task_alt,
+                                            //color: Colors.black, // Color del icono
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Espacio entre el icono y el texto
+                                          Text(
+                                            "Add to beaten",
+                                            style: TextStyle(
+                                                //color: Colors.black,
+                                                ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        HapticFeedback.lightImpact();
+                                        if (wantGameIds.contains(game.id)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${game.name} already in want list"),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                          ));
+                                        } else {
                                           favoriteGamesProvider
                                               .addToWishlist(game);
-                                          favoriteGamesProvider
-                                              .addToAllGames(game);
+                                          if (!allGameIds.contains(game.id)) {
+                                            favoriteGamesProvider
+                                                .addToAllGames(game);
+                                            UserRepository().addGameToUser(
+                                              userId,
+                                              "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                              game.name,
+                                              game.total_rating,
+                                              game.id,
+                                            );
+                                          }
                                         }
                                       },
                                       child: const Row(
@@ -369,7 +457,7 @@ class _LibraryScreenGridState2 extends State<LibraryScreenGridUser> {
                                               width:
                                                   8), // Espacio entre el icono y el texto
                                           Text(
-                                            "Add to Wishlist",
+                                            "Add to Want",
                                             style: TextStyle(
                                                 //color: Colors.black,
                                                 ),

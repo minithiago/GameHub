@@ -95,11 +95,11 @@ class FavoriteGamesProvider with ChangeNotifier {
   }
 
   void removeFromAllGames(GameModel game) {
-    _allGames.remove(game);
     _saveAllGames();
     _saveFavoriteGames();
     _saveWishlistGames();
     _saveBeatenGames();
+    _allGames.remove(game);
     _favoriteGames.remove(game);
     _wishlistGames.remove(game);
     _beatenGames.remove(game);
