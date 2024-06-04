@@ -7,6 +7,7 @@ import 'package:procecto2/elements/error_element.dart';
 import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
 import 'package:procecto2/model/game_response.dart';
+import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/screens/game_detail_screen.dart';
 import 'package:procecto2/services/switch_games.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,10 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
   }
 
   Widget _buildGameListWidget(GameResponse data) {
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    final List<int> allGameIds =
+        favoriteGamesProvider.allGames.map((game) => game.id).toList();
+
     List<GameModel> games = data.games;
     if (games.isEmpty) {
       return SizedBox(
@@ -211,6 +216,18 @@ class _DiscoverScreenListState extends State<DiscoverScreenList> {
                                       return Container(); // O cualquier otro widget
                                     }
                                   },
+                                ),
+                                Positioned(
+                                  top: 3,
+                                  left: 0,
+                                  child: Visibility(
+                                    visible:
+                                        allGameIds.contains(games[index].id),
+                                    child: const Icon(
+                                      Icons.check_circle,
+                                      color: Color.fromRGBO(110, 182, 255, 1),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

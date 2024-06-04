@@ -97,7 +97,6 @@ class GameModel {
     return GameModel(
         json["id"],
         json["cover"] == null ? null : CoverModel.fromJson(json["cover"]),
-        //json["created_at"] ??    0, // Ajusta el valor predeterminado según tus necesidades
         json["first_release_date"] ?? 0,
         json["game_modes"] == null
             ? null
@@ -109,21 +108,11 @@ class GameModel {
             : (json["genres"] as List?)
                 ?.map((i) => GenreModel.fromJson(i))
                 .toList(),
-        //json["keywords"] == null
-        //    ? null
-        //    : (json["keywords"] as List?)
-        //        ?.map((i) => KeywordModel.fromJson(i))
-        //        .toList(),
         json["platforms"] == null
             ? null
             : (json["platforms"] as List?)
                 ?.map((i) => PlatformModel.fromJson(i))
                 .toList(),
-        //json["player_perspectives"] == null
-        //    ? null
-        //    : (json["player_perspectives"] as List?)
-        //        ?.map((i) => PlayerPerspectiveModel.fromJson(i))
-        //        .toList(),
         json["screenshots"] == null
             ? null
             : (json["screenshots"] as List?)

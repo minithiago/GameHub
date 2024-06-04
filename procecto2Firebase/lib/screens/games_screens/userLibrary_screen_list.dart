@@ -153,6 +153,9 @@ class _LibraryScreenlistState2 extends State<LibraryScreenlistUser> {
   //@override
   Widget _build(GameResponse data) {
     var favoriteGamess = data.games;
+    var favoriteGamesProvider = Provider.of<FavoriteGamesProvider>(context);
+    final List<int> allGameIds =
+        favoriteGamesProvider.allGames.map((game) => game.id).toList();
 
     List<GameModel> _filterGamesByName(List<GameModel> games) {
       if (_nameFilter.isEmpty) {
@@ -352,6 +355,18 @@ class _LibraryScreenlistState2 extends State<LibraryScreenlistUser> {
                                       return Container(); // O cualquier otro widget
                                     }
                                   },
+                                ),
+                                Positioned(
+                                  top: 3,
+                                  right: 5,
+                                  child: Visibility(
+                                    visible: allGameIds
+                                        .contains(favoriteGamess[index].id),
+                                    child: const Icon(
+                                      Icons.check_circle,
+                                      color: Color.fromRGBO(110, 182, 255, 1),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

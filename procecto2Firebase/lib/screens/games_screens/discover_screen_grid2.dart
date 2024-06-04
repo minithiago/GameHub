@@ -435,7 +435,7 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
                                     },
                                   );
                                 } else {
-                                  return null;
+                                  return;
                                 }
                               },
                               onTap: () {
@@ -485,6 +485,17 @@ class _DiscoverScreenGridState2 extends State<DiscoverScreenGrid2> {
                                                   "https://images.igdb.com/igdb/image/upload/t_cover_big/${games[index].cover!.imageId}.jpg",
                                                 ),
                                                 fit: BoxFit.cover)),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 3,
+                                    right: 5,
+                                    child: Visibility(
+                                      visible: allGameIds.contains(game.id),
+                                      child: const Icon(
+                                        Icons.check_circle,
+                                        color: Color.fromRGBO(110, 182, 255, 1),
                                       ),
                                     ),
                                   ),

@@ -435,6 +435,17 @@ class _DiscoverScreenGridState3 extends State<DiscoverScreenGrid3> {
                                   ),
                                 ),
                               ),
+                              Positioned(
+                                top: 3,
+                                right: 5,
+                                child: Visibility(
+                                  visible: allGameIds.contains(game.id),
+                                  child: const Icon(
+                                    Icons.check_circle,
+                                    color: Color.fromRGBO(110, 182, 255, 1),
+                                  ),
+                                ),
+                              ),
                               Consumer<SwitchState>(
                                 builder: (context, switchState, child) {
                                   if (switchState.isSwitchedOn) {
