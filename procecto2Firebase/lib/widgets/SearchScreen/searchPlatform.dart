@@ -15,8 +15,8 @@ class DiscoverScreenWidget3 extends StatelessWidget {
         title: Text(
           'Exclusives',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(

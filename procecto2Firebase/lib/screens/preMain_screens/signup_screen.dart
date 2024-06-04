@@ -60,31 +60,14 @@ class _SignupScreenState extends State<SignupScreen> {
               gradient: LinearGradient(
                   colors: [
                     Theme.of(context).colorScheme.secondary,
-                    Color.fromRGBO(110, 182, 255, 1),
+                    const Color.fromRGBO(110, 182, 255, 1),
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.35, 1])),
+                  stops: const [0.35, 1])),
           child: Center(
             child: Stack(
               children: [
-                /*
-              const Positioned(
-                top: 30,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Text(
-                    "Create your account",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              */
                 Positioned(
                   top: 30, // Margen arriba
                   left: MediaQuery.of(context).size.width /
@@ -246,8 +229,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: Color.fromARGB(128, 255, 255, 255),
-                              prefixIcon: Icon(Icons.lock_outline),
+                              fillColor:
+                                  const Color.fromARGB(128, 255, 255, 255),
+                              prefixIcon: const Icon(Icons.lock_outline),
                               //prefixIconColor: Colors.white,
                               labelText: "Confirm Password",
                               border: OutlineInputBorder(

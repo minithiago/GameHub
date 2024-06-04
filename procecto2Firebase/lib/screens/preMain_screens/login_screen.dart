@@ -206,26 +206,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           const SizedBox(height: 30),
-                          /*
-                          Container(
-                            height: 90,
-                            width: 90,
-                            //padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
-                                image: const DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/G_logo.png'),
-                                    fit: BoxFit.cover)),
-                            child: GestureDetector(
-                              onTap: () {
-                                //POR HACER
-                              },
-                            ),
-                          )
-                          */
                         ],
                       ),
                     ),
