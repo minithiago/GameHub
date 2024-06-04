@@ -32,6 +32,7 @@ class GameModel {
   final double total_rating;
   final String name;
   final String slug;
+  final int total_rating_count;
   bool favorite = false;
   bool wishlist = false;
   bool library = false;
@@ -56,6 +57,7 @@ class GameModel {
       //this.videos,
       this.total_rating,
       this.slug,
+      this.total_rating_count,
       this.name,
       this.favorite,
       this.wishlist,
@@ -70,6 +72,7 @@ class GameModel {
       'total_rating': total_rating,
       'name': name,
       'slug': slug,
+      'total_rating_count': total_rating_count,
       'favorite': favorite,
       'wishlist': wishlist,
       'library': library,
@@ -153,6 +156,7 @@ class GameModel {
                 .toList(),*/
         json["total_rating"] ?? 0.0,
         json["slug"] ?? "",
+        json["total_rating_count"] ?? 0,
         json["name"] ?? "",
         false,
         false,

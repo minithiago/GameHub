@@ -211,12 +211,7 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                         setState(() {
                                           // Cambia el estado del modo cada vez que se pulsa
                                         });
-                                        favoriteGamesProvider
-                                            .removeWishlist(game);
-                                        favoriteGamesProvider
-                                            .removeBeaten(game);
-                                        favoriteGamesProvider
-                                            .removeFavorite(game);
+
                                         favoriteGamesProvider
                                             .removeFromAllGames(game);
 

@@ -256,48 +256,64 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                 Row(
                                   children: [
                                     Visibility(
-                                      visible: game.total_rating != null,
-                                      child: Container(
-                                        height: 85,
-                                        width: 85,
-                                        alignment: Alignment.centerLeft,
-                                        child: SleekCircularSlider(
-                                          appearance: CircularSliderAppearance(
-                                            angleRange: 360,
-                                            customColors: customColors,
-                                            customWidths: CustomSliderWidths(
-                                              progressBarWidth: 7,
-                                              trackWidth: 4,
-                                            ),
-                                          ),
-                                          min: 0,
-                                          max: 100,
-                                          initialValue: game.total_rating,
-                                          innerWidget: (double value) {
-                                            return Column(
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      (game.total_rating)
-                                                          .toString()
-                                                          .substring(0, 2),
-                                                      style: const TextStyle(
-                                                        //color: Colors.white,
-                                                        fontSize: 35,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
+                                        visible: game.total_rating != null,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 85,
+                                              width: 85,
+                                              alignment: Alignment.centerLeft,
+                                              child: SleekCircularSlider(
+                                                appearance:
+                                                    CircularSliderAppearance(
+                                                  angleRange: 360,
+                                                  customColors: customColors,
+                                                  customWidths:
+                                                      CustomSliderWidths(
+                                                    progressBarWidth: 7,
+                                                    trackWidth: 4,
                                                   ),
                                                 ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                                min: 0,
+                                                max: 100,
+                                                initialValue: game.total_rating,
+                                                innerWidget: (double value) {
+                                                  return Column(
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                            (game.total_rating)
+                                                                .toString()
+                                                                .substring(
+                                                                    0, 2),
+                                                            style:
+                                                                const TextStyle(
+                                                              //color: Colors.white,
+                                                              fontSize: 35,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible:
+                                                  game.total_rating_count !=
+                                                      null,
+                                              child: Text(
+                                                  '${game.total_rating_count} ratings'),
+                                            )
+                                          ],
+                                        )),
 
                                     const SizedBox(width: 10.0),
                                     // Espacio entre la puntuación y el botón
