@@ -718,8 +718,9 @@ class GameDetailScreenState extends State<GameDetailScreen>
                                                     Widget child,
                                                     ImageChunkEvent?
                                                         loadingProgress) {
-                                              if (loadingProgress == null)
+                                              if (loadingProgress == null) {
                                                 return child;
+                                              }
                                               return Center(
                                                 child:
                                                     CircularProgressIndicator(

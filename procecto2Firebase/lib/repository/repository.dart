@@ -6,7 +6,7 @@ import 'package:procecto2/model/game_response.dart';
 
 class GameRepository {
   static String mainUrl = "https://api.igdb.com/v4/games";
-  static String releaseUrl = "https://api.igdb.com/v4/release_dates";
+  //static String releaseUrl = "https://api.igdb.com/v4/release_dates";
 
   final String apiKey = "7ke8gbpbre42gkjtpp5anax289bh6b";
 

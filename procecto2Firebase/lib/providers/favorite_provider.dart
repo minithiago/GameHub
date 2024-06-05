@@ -456,7 +456,7 @@ Future<GameResponse> libraryGames(List<String> gameIds) async {
             'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
       },
       body:
-          "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id = ($query) ; limit 99;");
+          "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where id = ($query) ; limit 300;");
   // Devuelve la respuesta del servidor en forma de GameResponse
   return GameResponse.fromJson(jsonDecode(response.body));
 }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,11 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:procecto2/bloc/get_libraryGames_bloc.dart';
-import 'package:procecto2/elements/error_element.dart';
-import 'package:procecto2/elements/loader_element.dart';
 import 'package:procecto2/model/game.dart';
-import 'package:procecto2/model/game_response.dart';
 import 'package:procecto2/providers/favorite_provider.dart';
 import 'package:procecto2/repository/user_repository.dart';
 import 'package:procecto2/services/switch_games.dart';
@@ -431,7 +426,6 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                     const Duration(milliseconds: 300),
                               ),
                             );
-                            //setState(() => fetchUserGames());
                           },
                           child: Stack(
                             children: [
