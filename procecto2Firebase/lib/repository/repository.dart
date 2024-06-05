@@ -25,7 +25,7 @@ class GameRepository {
                 'fpzb1wvydvjsy2hgz4i30gjvrblgra', // Reemplaza con tu ID de cliente
           },
           body:
-              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & total_rating > 0 & first_release_date <= ${nowDate2};sort first_release_date desc; limit 12;offset $offset;"); //98 & total_rating > 0
+              "fields *, cover.image_id, dlcs.name, dlcs.cover.image_id, similar_games.cover.image_id, involved_companies.company.name, language_supports.language.name, game_modes.name, genres.name, platforms.name, screenshots.image_id, artworks.image_id;where cover.image_id != null & first_release_date <= ${nowDate2};sort first_release_date desc; limit 12;offset $offset;"); //98 & total_rating > 0
       print("Juegos New releases: ${response.statusCode}");
       //print(response.body);
 
@@ -133,7 +133,7 @@ class GameRepository {
     // Generar 10 números aleatorios únicos entre 1 y 300,000
     var random = Random();
     Set<int> randomIds = {};
-    while (randomIds.length < 100) {
+    while (randomIds.length < 150) {
       randomIds.add(random.nextInt(300000) + 1);
     }
     //print(randomIds);

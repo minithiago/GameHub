@@ -264,6 +264,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                     ),
                                     CupertinoActionSheetAction(
                                       onPressed: () {
+                                        setState(() {
+                                          // Cambia el estado del modo cada vez que se pulsa
+                                        });
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
                                         if (favoriteGameIds.contains(game.id)) {
@@ -306,6 +309,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                     ),
                                     CupertinoActionSheetAction(
                                       onPressed: () {
+                                        setState(() {
+                                          // Cambia el estado del modo cada vez que se pulsa
+                                        });
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
                                         if (beatenGameIds.contains(game.id)) {
@@ -348,6 +354,9 @@ class _LibraryScreenGridState extends State<LibraryScreenGrid> {
                                     ),
                                     CupertinoActionSheetAction(
                                       onPressed: () {
+                                        setState(() {
+                                          // Cambia el estado del modo cada vez que se pulsa
+                                        });
                                         Navigator.pop(context);
                                         HapticFeedback.lightImpact();
                                         if (wishlistGameIds.contains(game.id)) {

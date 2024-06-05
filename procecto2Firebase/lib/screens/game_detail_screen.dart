@@ -221,12 +221,42 @@ class GameDetailScreenState extends State<GameDetailScreen>
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        child: Image.network(
+                                          "https://images.igdb.com/igdb/image/upload/t_720p/${game.cover!.imageId}.jpg",
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Image.network(
+                                "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
+                                fit: BoxFit.cover,
+                                width: 130.0,
+                              ),
+                            ),
+                          ),
+
+                          /*ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
                             child: Image.network(
                               "https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover!.imageId}.jpg",
                               fit: BoxFit.cover,
                               width: 130.0,
                             ),
-                          ),
+                          ),*/
                           const SizedBox(
                               width:
                                   16.0), // Espacio entre la imagen y el texto

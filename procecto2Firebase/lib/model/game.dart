@@ -98,7 +98,7 @@ class GameModel {
 
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
-        json["id"],
+        json["id"] ?? 0,
         json["cover"] == null ? null : CoverModel.fromJson(json["cover"]),
         json["first_release_date"] ?? 0,
         json["game_modes"] == null
