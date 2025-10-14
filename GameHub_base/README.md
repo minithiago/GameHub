@@ -1,16 +1,14 @@
-# procecto2
+# GameHub Project
 
-A new Flutter project.
+A Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is an app for gamers, i'ts designed to be a social media / news app where u will be able to see the newest games, upcoming titles, navegate throw more than +10000 games and save games to your library.
 
-A few resources to get you started if this is your first Flutter project:
+A few resources that i used:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+-  IGDB api
+-  Firebase storage
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Enjoy and have fun. 
