@@ -56,15 +56,10 @@ Aunque aún existen aspectos por pulir, la versión 1.0 es estable, fluida y fun
 
 - Recursos gráficos y logos obtenidos de Google Imágenes
 
-## 📸 Preview
+## 📸 Preview:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/505ffa7d-4606-4a6a-8f0f-82fb9491eb1f" width="22%" />
   <img src="https://github.com/user-attachments/assets/80b8dab3-dba8-4be0-aff8-ddf20fbe2e3a" width="22%" />
   <img src="https://github.com/user-attachments/assets/f20e51b2-09b2-4989-8e51-ca8babecaae8" width="22%" />
   <img src="https://github.com/user-attachments/assets/90967275-93fe-4bb9-ad3b-6699deb84029" width="22%" />
 </p>
-
-
-
-Ivan Naranjo
-IES Marcos Zaragoza (2024)
