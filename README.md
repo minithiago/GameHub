@@ -1,8 +1,11 @@
-🎮 GameHub
+<img width="812" height="535" alt="NuevoLogo" src="https://github.com/user-attachments/assets/b82f6d0a-79ad-4e46-bd92-84b042a81af2" />
+
+
+## 🎮 GameHub
 
 GameHub es una aplicación móvil desarrollada con Flutter que permite a los jugadores organizar su biblioteca de videojuegos, descubrir nuevos títulos y conectar con amigos que compartan su misma pasión. La app se apoya en Firebase para el manejo de usuarios y almacenamiento de datos, y utiliza la API de IGDB para obtener información actualizada sobre videojuegos.
 
-📱 Características principales:
+## 📱 Características principales:
 
 - 📚 Biblioteca personal: organiza los juegos que has jugado o planeas jugar.
 
@@ -17,7 +20,7 @@ GameHub es una aplicación móvil desarrollada con Flutter que permite a los jug
 - 🌐 Modo invitado: permite explorar la app sin necesidad de crear una cuenta.
 
 
-🧩 Tecnologías utilizadas:
+## 🧩 Tecnologías utilizadas:
 
 | Tecnología   | Uso                                                      |
 | ------------ | -------------------------------------------------------- |
@@ -27,7 +30,7 @@ GameHub es una aplicación móvil desarrollada con Flutter que permite a los jug
 | **Dart**     | Lenguaje principal del proyecto                          |
 
 
-🧠 Proceso de desarrollo:
+## 🧠 Proceso de desarrollo:
 
 - Análisis y diseño inicial: investigación de mercado, definición de objetivos y funcionalidades.
 
@@ -43,7 +46,7 @@ GameHub es una aplicación móvil desarrollada con Flutter que permite a los jug
 GameHub es el resultado de muchas horas de trabajo y aprendizaje. Su desarrollo ha permitido mejorar en el uso de Flutter, Firebase y diseño de interfaces modernas.
 Aunque aún existen aspectos por pulir, la versión 1.0 es estable, fluida y funcional, representando una base sólida para futuras mejoras.
 
-📚 Recursos:
+## 📚 Recursos:
 
 - IGDB API
 
@@ -52,6 +55,13 @@ Aunque aún existen aspectos por pulir, la versión 1.0 es estable, fluida y fun
 - Icono de GameHub
 
 - Recursos gráficos y logos obtenidos de Google Imágenes
+
+## 📸 Preview
+
+<img width="996" height="2048" alt="image" src="https://github.com/user-attachments/assets/505ffa7d-4606-4a6a-8f0f-82fb9491eb1f" />
+<img width="996" height="2048" alt="image" src="https://github.com/user-attachments/assets/80b8dab3-dba8-4be0-aff8-ddf20fbe2e3a" />
+<img width="996" height="2048" alt="image" src="https://github.com/user-attachments/assets/f20e51b2-09b2-4989-8e51-ca8babecaae8" />
+<img width="996" height="2048" alt="image" src="https://github.com/user-attachments/assets/90967275-93fe-4bb9-ad3b-6699deb84029" />
 
 
 
