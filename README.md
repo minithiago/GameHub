@@ -58,8 +58,9 @@ Aunque aún existen aspectos por pulir, la versión 1.0 es estable, fluida y fun
 
 ## 📸 Preview:
 <p align="center">
+  <img src="https://github.com/user-attachments/assets/3fefd686-7866-4c7e-b7e3-92ba21712408" width="22%" />
   <img src="https://github.com/user-attachments/assets/505ffa7d-4606-4a6a-8f0f-82fb9491eb1f" width="22%" />
   <img src="https://github.com/user-attachments/assets/80b8dab3-dba8-4be0-aff8-ddf20fbe2e3a" width="22%" />
   <img src="https://github.com/user-attachments/assets/f20e51b2-09b2-4989-8e51-ca8babecaae8" width="22%" />
-  <img src="https://github.com/user-attachments/assets/3fefd686-7866-4c7e-b7e3-92ba21712408" width="22%" />
+  
 </p>
